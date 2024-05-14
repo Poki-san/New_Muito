@@ -1,6 +1,6 @@
 import { DimensionValue, Text, TouchableHighlight } from "react-native";
 import React from "react";
-import { Белый } from "../../GLOBAL";
+import { Белый, Бирюзовый50 } from "../../GLOBAL";
 // import { styles } from "../../style/style";
 
 interface ButtonMyProps {
@@ -24,12 +24,12 @@ export function ButtonMy(props:ButtonMyProps) {
     return (
         <TouchableHighlight 
             activeOpacity={props.activeOpacity??0.8} 
-            underlayColor={props.onPressColor??'gray'} 
+            underlayColor={props.onPressColor??Бирюзовый50} 
             onPress={!props.inactive?props.onPress:null}
             style={{
-                backgroundColor: !props.inactive? (props.backgroundColor ?? 'black') : 'gray',
+                backgroundColor: !props.inactive? (props.backgroundColor ?? 'black') : Бирюзовый50,
                 borderWidth: props.borderWidth??1,
-                borderColor: !props.inactive? (props.borderColor ?? (props.backgroundColor ?? 'black')) : 'gray',
+                borderColor: !props.inactive? (props.borderColor ?? (props.backgroundColor ?? 'black')) : Бирюзовый50,
                 borderRadius: props.borderRadius?? 16,
                 height: props.height ?? 42,
                 justifyContent: 'center',

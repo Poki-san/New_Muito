@@ -6,7 +6,7 @@ import { RenderProps } from 'react-native-paper/lib/typescript/components/TextIn
 interface InputProps {
     securePass?:boolean, 
     icon?:any, 
-    placeholder?:string, 
+    // placeholder?:string, 
     title?:string, 
     label?:string, 
     value?:string, 
@@ -30,14 +30,15 @@ interface InputProps {
     editable?: boolean,
     keyboardType?: KeyboardTypeOptions, 
     placeholderTextColor?: ColorValue,
-    render?: (props: RenderProps) => React.ReactNode
+    render?: (props: RenderProps) => React.ReactNode,
+    maxLength?: number
 }
 
 export const Input = forwardRef((props:InputProps, ref)=>{
     const [secure, setSecure] = useState(true)
     return (
         <View style={{gap:4, width:"100%"}}>
-            {(props.title && props.value?.length>0) && <Text style={[{color:'#FFFFFF66', fontSize:10, fontFamily:'Poppins', paddingLeft:14, marginBottom:-5}]}>{props.title}</Text>}
+            {/* {(props.title) && <Text style={[{color:'#FFFFFF66', fontSize:10, fontFamily:'Poppins', paddingLeft:14, marginBottom:-5}]}>{props.title}</Text>} */}
             <View style={{position:'relative', width:'100%', justifyContent: 'center'}}>
                 {props.icon && 
                     <View style={{position:'absolute', zIndex:99999, left:14}}>
@@ -63,8 +64,9 @@ export const Input = forwardRef((props:InputProps, ref)=>{
                     secureTextEntry={props.securePass ? secure:false} 
                     underlineStyle={{display:"none"}}
                     textColor='white'
-                    style={[props.style, {paddingLeft:props.icon && 30, fontFamily:'Poppins', backgroundColor:props.backgroundColor ?? 'white', borderRadius:props.borderRadius??8, borderTopLeftRadius:props.borderRadius??8, borderTopRightRadius:props.borderRadius??8, height:40, color:'white'}]}
+                    style={[props.style, {paddingLeft:props.icon && 30, fontFamily:'Poppins', backgroundColor:props.backgroundColor ?? 'white', borderRadius:props.borderRadius??16, borderTopLeftRadius:props.borderRadius??16, borderColor:'#FFFFFF66', borderTopRightRadius:props.borderRadius??16, height:40, color:'white'}]}
                     value={props.value}
+                    maxLength={props.maxLength}
                     onChangeText={props.onChangeText}
                 />
                 {(!!props.errorText && props.touched)&&<Text style={[{color:'red', paddingLeft:14}]}>{props.errorText}</Text>}
