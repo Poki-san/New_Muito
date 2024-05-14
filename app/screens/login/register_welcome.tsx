@@ -36,7 +36,6 @@ export function RegisterOrgScreen() {
                                     <RegDiamondIcon/>
                                     <Text style={{fontSize:14, flex:1, color:'white', fontFamily:'PoppinsSemiBold', lineHeight:21}}>Отбирай подходящих красивых гостей</Text>
                                 </View>
-                                
                             </View>
                             <Image source={require('../../../assets/image/line.png')} style={{width:'100%', height:1}}/>
                             <View style={{gap:8}}>
