@@ -159,15 +159,15 @@ export const ModalNewPass = forwardRef((props:{},ref)=>{
                     borderTopLeftRadius:0,
                 },
                 container: {
-                    borderTopLeftRadius:20,
-                    borderTopRightRadius:20,
+                    borderTopLeftRadius:16,
+                    borderTopRightRadius:16,
                     paddingHorizontal:16,
                     backgroundColor:Фон
                 }
             }}>
             <ScrollView scrollEnabled={false} style={{flexGrow:1}} keyboardShouldPersistTaps='always'>
                 <KeyboardAvoidingView
-                    behavior={Platform.OS === "ios" ? "padding" : undefined}
+                    behavior={Platform.OS === "ios" ? "padding" : 'height'}
                     keyboardVerticalOffset={Platform.OS === "ios" && statusBarHeight}
                     style={{ flex: 1 }}
                 >

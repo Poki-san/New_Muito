@@ -13,7 +13,7 @@ interface InputProps {
     onChangeText?: (text: string) => void, 
     required?:boolean, 
     backgroundColor?:string, 
-    height?:any, 
+    // height?:any, 
     borderRadius?:number, 
     isClear?:boolean, 
     style?: StyleProp<TextStyle>, 
@@ -31,7 +31,8 @@ interface InputProps {
     keyboardType?: KeyboardTypeOptions, 
     placeholderTextColor?: ColorValue,
     render?: (props: RenderProps) => React.ReactNode,
-    maxLength?: number
+    maxLength?: number,
+    mode?: "flat" | "outlined"
 }
 
 export const Input = forwardRef((props:InputProps, ref)=>{
@@ -56,6 +57,7 @@ export const Input = forwardRef((props:InputProps, ref)=>{
                     keyboardType={props.keyboardType}
                     multiline={props.multiline}
                     onFocus={props.onFocus}
+                    mode={props.mode}
                     autoFocus={props.autoFocus}
                     label={props.label && <Placeholder required={props.required} placeholderColor={(!!props.errorText && props.touched)?'black' : 'gray'} style={props.styleLabel} placeholderText={props.label}/>}
                     placeholder={props.title}
@@ -64,7 +66,8 @@ export const Input = forwardRef((props:InputProps, ref)=>{
                     secureTextEntry={props.securePass ? secure:false} 
                     underlineStyle={{display:"none"}}
                     textColor='white'
-                    style={[props.style, {paddingLeft:props.icon && 30, fontFamily:'Poppins', backgroundColor:props.backgroundColor ?? 'white', borderRadius:props.borderRadius??16, borderTopLeftRadius:props.borderRadius??16, borderColor:'#FFFFFF66', borderTopRightRadius:props.borderRadius??16, height:40, color:'white'}]}
+                    outlineStyle={{borderWidth:0, padding:0}}
+                    style={[{paddingLeft:props.icon && 30, fontFamily:'Poppins', backgroundColor:props.backgroundColor ?? 'white', borderRadius:props.borderRadius??16, borderTopLeftRadius:props.borderRadius??16, borderColor:'#FFFFFF66', borderTopRightRadius:props.borderRadius??16, height:40, color:'white'}, props.style]}
                     value={props.value}
                     maxLength={props.maxLength}
                     onChangeText={props.onChangeText}

@@ -1,3 +1,5 @@
 export * from './template'
 export * from './login/login'
 export * from './login/register_welcome'
+export * from './login/register_org'
+export * from './login/register_guest'
