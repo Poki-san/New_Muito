@@ -102,7 +102,7 @@ function StepOne(props:{onPress?:()=>void}) {
     const [paths, setPaths] = useState('')  
     return (
         <View style={{marginTop:11, flex:1}}>
-            <Text style={[styles.bodyText,{fontFamily:'PoppinsMedium', color:'#ffffff90'}]}>Вы можете добавить личную фотографию, логотип или картинку.</Text>
+            <Text style={[styles.bodyText,{fontFamily:'Poppins', color:'#ffffff90'}]}>Вы можете добавить личную фотографию, логотип или картинку.</Text>
             <View style={{flex:1, marginTop:25, alignItems:'center', justifyContent:"space-between"}}>
                 <BlurView experimentalBlurMethod='dimezisBlurView' intensity={30} tint='systemChromeMaterialDark' style={{width:290, height:290, borderRadius:16, borderWidth:2, borderColor:'#B5B5B54D', overflow:"hidden"}}>
                     <TouchableOpacity activeOpacity={0.7} onPress={()=>img.current?.open()} style={{width:290, height:290, alignItems:"center", justifyContent:"center"}}>
@@ -130,7 +130,7 @@ function StepOne(props:{onPress?:()=>void}) {
 function StepTwo(props:{onPress?:()=>void}) {
     return (
         <View style={{marginTop:11, flex:1}}>
-            <Text style={[styles.bodyText,{fontFamily:'PoppinsMedium', color:'#ffffff90'}]}>Данные обязательные для заполнения</Text>
+            <Text style={[styles.bodyText,{fontFamily:'Poppins', color:'#ffffff90'}]}>Данные обязательные для заполнения</Text>
             <View style={{flex:1, marginTop:25, alignItems:'center', justifyContent:"space-between"}}>
                 <View style={{gap:21, width:"100%"}}>
                     <View style={{gap:8}}>
@@ -156,7 +156,7 @@ function StepThree(props:{onPress?:()=>void}) {
     const [date, setDate] = useState({text:'',server:new Date()})
     return (
         <View style={{marginTop:11, flex:1}}>
-            <Text style={[styles.bodyText,{fontFamily:'PoppinsMedium', color:'#ffffff90'}]}>Данные обязательные для заполнения</Text>
+            <Text style={[styles.bodyText,{fontFamily:'Poppins', color:'#ffffff90'}]}>Данные обязательные для заполнения</Text>
             <View style={{flex:1, marginTop:25, alignItems:'center', justifyContent:"space-between"}}>
                 <View style={{gap:21, width:"100%"}}>
                     <View style={{gap:8}}>

@@ -1,7 +1,7 @@
 import * as React from "react"
-import Svg, { ClipPath, Defs, G, Path } from "react-native-svg"
+import Svg, { ClipPath, Defs, G, Path, Rect } from "react-native-svg"
 
-export function ModalCloseIcon() {
+export function ModalCloseIcon({opacity=0.5}) {
   return (
     <Svg
       width={24}
@@ -12,7 +12,7 @@ export function ModalCloseIcon() {
       <Path
         d="M17.5 9.25l-5.5 5.5-5.5-5.5"
         stroke="#fff"
-        strokeOpacity={0.5}
+        strokeOpacity={opacity}
         strokeWidth={1.5}
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -149,7 +149,26 @@ export function RegDiamondIcon(props) {
   )
 }
 
-export function CameraIcon(props) {
+export function CameraIcon({color="#fff", opacity=0.3}) {
+  return (
+    <Svg
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      fill="none"
+    >
+      <Path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M7.249 3.275a4.548 4.548 0 013.784-2.025h1.934c1.521 0 2.941.76 3.784 2.025a3.047 3.047 0 001.939 1.298l.135.027a4.882 4.882 0 013.925 4.787v3.864c0 1.74 0 3.103-.112 4.188-.113 1.106-.35 2.007-.878 2.787a5.749 5.749 0 01-1.534 1.534c-.78.528-1.68.765-2.787.878-1.085.112-2.449.112-4.188.112H10.749c-1.74 0-3.103 0-4.188-.112-1.106-.113-2.007-.35-2.787-.878a5.75 5.75 0 01-1.534-1.534c-.528-.78-.765-1.68-.878-2.787-.112-1.085-.112-2.449-.112-4.188V9.388A4.882 4.882 0 015.175 4.6l.135-.027A3.048 3.048 0 007.25 3.275zM12 17a4 4 0 100-8 4 4 0 000 8z"
+        fill={color}
+        fillOpacity={opacity}
+      />
+    </Svg>
+  )
+}
+
+export function SmileIcon(props) {
   return (
     <Svg
       width={24}
@@ -162,9 +181,8 @@ export function CameraIcon(props) {
       <Path
         fillRule="evenodd"
         clipRule="evenodd"
-        d="M7.249 3.275a4.548 4.548 0 013.784-2.025h1.934c1.521 0 2.941.76 3.784 2.025a3.047 3.047 0 001.939 1.298l.135.027a4.882 4.882 0 013.925 4.787v3.864c0 1.74 0 3.103-.112 4.188-.113 1.106-.35 2.007-.878 2.787a5.749 5.749 0 01-1.534 1.534c-.78.528-1.68.765-2.787.878-1.085.112-2.449.112-4.188.112H10.749c-1.74 0-3.103 0-4.188-.112-1.106-.113-2.007-.35-2.787-.878a5.75 5.75 0 01-1.534-1.534c-.528-.78-.765-1.68-.878-2.787-.112-1.085-.112-2.449-.112-4.188V9.388A4.882 4.882 0 015.175 4.6l.135-.027A3.048 3.048 0 007.25 3.275zM12 17a4 4 0 100-8 4 4 0 000 8z"
-        fill="#fff"
-        fillOpacity={0.3}
+        d="M1.25 12C1.25 6.063 6.063 1.25 12 1.25S22.75 6.063 22.75 12 17.937 22.75 12 22.75 1.25 17.937 1.25 12zm7.35 2.55a.75.75 0 00-1.2.9 5.743 5.743 0 004.6 2.3 5.743 5.743 0 004.6-2.3.75.75 0 10-1.2-.9 4.243 4.243 0 01-3.4 1.7 4.242 4.242 0 01-3.4-1.7zM10 10a1 1 0 11-2 0 1 1 0 012 0zm5 1a1 1 0 100-2 1 1 0 000 2z"
+        fill="#83FDF4"
       />
     </Svg>
   )
@@ -283,6 +301,28 @@ export function CloseIcon(props) {
       >
         <Path d="M9.165 9.518l7.67 7.965M16.835 9.518l-7.67 7.965" />
       </G>
+    </Svg>
+  )
+}
+
+export function OKIcon(props) {
+  return (
+    <Svg
+      width={27}
+      height={27}
+      viewBox="0 0 27 27"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <Rect width={27} height={27} rx={13.5} fill="#83FDF4" />
+      <Path
+        d="M7 13.904L11.073 18 20 9"
+        stroke="#000"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </Svg>
   )
 }
