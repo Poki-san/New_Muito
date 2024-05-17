@@ -2,8 +2,10 @@ import { NavigationContainerRef } from "@react-navigation/native";
 import { TransitionSpecs, createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 import { BackHandler } from "react-native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 export const MainStack = createStackNavigator();
+export const MainBottom = createBottomTabNavigator();
 
 export const navigationRef = React.createRef<NavigationContainerRef>()
 

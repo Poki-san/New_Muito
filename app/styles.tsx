@@ -68,4 +68,11 @@ export const styles = StyleSheet.create({
         color:'#000000',
         fontFamily:'Poppins'
     },
+    shadow:{
+        shadowColor: "black",
+        shadowOffset: {width: 0, height: 4},
+        shadowOpacity: 0.25,
+        shadowRadius: 2.22,
+        elevation: 10,
+    }
 });

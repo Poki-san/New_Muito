@@ -2,7 +2,7 @@ import { ImageBackground, KeyboardAvoidingView, Platform, ScrollView, View } fro
 import { MainLayout } from '../component';
 import { height, statusBarHeight, width } from '../GLOBAL';
  
-export function Screen() {
+export function ProfileScreen() {
     return ( 
         <ImageBackground style={{width:width, height:height}} source={require('../../assets/image/back.png')}>
             <MainLayout isStatusBar>
