@@ -6,7 +6,7 @@ export function ProfileScreen() {
     return ( 
         <ImageBackground style={{width:width, height:height}} source={require('../../assets/image/back.png')}>
             <MainLayout isStatusBar>
-                <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='always' contentContainerStyle={{flexGrow:1, marginHorizontal:16, marginVertical:10}}>
+                <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='always' contentContainerStyle={{flexGrow:1}}>
                     <KeyboardAvoidingView
                         behavior={Platform.OS === "ios" ? "padding" : 'height'}
                         keyboardVerticalOffset={Platform.OS === "ios" && statusBarHeight}

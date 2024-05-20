@@ -25,8 +25,9 @@ export function ButtonMy(props:ButtonMyProps) {
         <TouchableHighlight 
             activeOpacity={props.activeOpacity??0.8} 
             underlayColor={props.onPressColor??Бирюзовый50} 
-            onPress={!props.inactive?props.onPress:null}
+            onPress={(!props.inactive && !props.disabled)?props.onPress:null}
             style={{
+                opacity:props.disabled ? 0.3 : 1,
                 backgroundColor: !props.inactive? (props.backgroundColor ?? 'black') : Бирюзовый50,
                 borderWidth: props.borderWidth??1,
                 borderColor: !props.inactive? (props.borderColor ?? (props.backgroundColor ?? 'black')) : Бирюзовый50,
