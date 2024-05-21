@@ -25,6 +25,8 @@ const AppStack = observer(() =>{
           <MainStack.Screen name="RegisterOrg" component={screens.RegisterOrgScreen} />
           <MainStack.Screen name="RegisterGuest" component={screens.RegisterGuestScreen} />
           <MainStack.Screen name="Main" component={MainScreenBottom} />
+          <MainStack.Screen name="EventPeople" component={screens.EventPeopleScreen} />
+          <MainStack.Screen name="People" component={screens.PeopleScreen} />
         </MainStack.Navigator>
       </NavigationContainer>
     )
