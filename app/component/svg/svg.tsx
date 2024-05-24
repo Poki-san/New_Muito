@@ -1,5 +1,5 @@
 import * as React from "react"
-import Svg, { ClipPath, Defs, G, Path, Rect } from "react-native-svg"
+import Svg, { Circle, ClipPath, Defs, G, Path, Rect } from "react-native-svg"
 
 // Меню
 export function HeartMenuIcon({color='#fff'}) {
@@ -596,6 +596,139 @@ export function CloseEyeIcon(props) {
         d="M2.53 1.47a.75.75 0 00-1.06 1.06l1.289 1.29C1.299 5.128.583 6.842.583 8c0 1.068.607 2.58 1.793 3.812C3.593 13.075 5.451 14.083 8 14.083c1.601 0 2.935-.398 4.01-1.013l1.46 1.46a.75.75 0 101.06-1.06l-1.883-1.884-8.233-8.232L2.53 1.47zM9.34 10.4L8.178 9.239a1.25 1.25 0 01-1.414-1.415L5.597 6.659a2.75 2.75 0 003.742 3.742zm-3.15-6.76A7.101 7.101 0 018 3.416c2.118 0 3.593.825 4.543 1.812.98 1.017 1.374 2.173 1.374 2.771 0 .422-.198 1.15-.701 1.925a5.628 5.628 0 01-.205.294.75.75 0 001.204.895c.092-.123.178-.248.26-.372.613-.946.942-1.954.942-2.742 0-1.068-.607-2.58-1.793-3.812C12.407 2.925 10.549 1.917 8 1.917a8.6 8.6 0 00-2.56.38.75.75 0 10.453 1.43c.097-.031.196-.06.297-.087z"
         fill="#fff"
       />
+    </Svg>
+  )
+}
+
+export function MiniHeartIcon(props) {
+  return (
+    <Svg
+      width={18}
+      height={18}
+      viewBox="0 0 18 18"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <Path
+        d="M9 15.75c.75 0 7.5-3.75 7.5-9 0-2.625-2.25-4.467-4.5-4.5-1.125-.016-2.25.375-3 1.5-.75-1.125-1.894-1.5-3-1.5-2.25 0-4.5 1.875-4.5 4.5 0 5.25 6.75 9 7.5 9z"
+        fill="#83FDF4"
+      />
+    </Svg>
+  )
+}
+
+export function BlockArrowIcon(props) {
+  return (
+    <Svg
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <Path
+        d="M9.25 6.5l5.5 5.5-5.5 5.5"
+        stroke="#83FDF4"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Svg>
+  )
+}
+
+export function MessageIcon(props) {
+  return (
+    <Svg
+      width={38}
+      height={38}
+      viewBox="0 0 38 38"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <G filter="url(#filter0_b_28375_5272)">
+        <Circle cx={19} cy={19} r={19} fill="#88FFF9" />
+      </G>
+      <Path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M19 9.917a9.083 9.083 0 00-8.246 12.896l.007.015c.41.886.619 1.336.439 1.963a2.901 2.901 0 01-.166.405l-.08.174c-.105.233-.247.566-.278.942a1.583 1.583 0 001.839 1.691c.551-.092 1.029-.339 1.361-.51.08-.042.15-.078.212-.108.34-.161.606-.238 1.012-.143l.005.002.018.005.065.02.225.076c.192.066.456.16.815.289.847.303 1.748.45 2.772.45a9.083 9.083 0 000-18.167z"
+        fill="#181818"
+      />
+      <Defs></Defs>
+    </Svg>
+  )
+}
+
+export function MapPinIcon(props) {
+  return (
+    <Svg
+      width={20}
+      height={20}
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <Path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M1.75 8.75C1.75 4.114 5.477.917 10 .917s8.25 3.197 8.25 7.833c0 3.516-1.574 6.1-3.36 7.79-.89.842-1.837 1.469-2.682 1.888-.82.406-1.62.655-2.208.655-.587 0-1.388-.249-2.208-.655a11.202 11.202 0 01-2.683-1.888C3.324 14.85 1.75 12.266 1.75 8.75zM10 11.666a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"
+        fill="#B5B5B5"
+      />
+    </Svg>
+  )
+}
+
+export function ClockIcon(props) {
+  return (
+    <Svg
+      width={20}
+      height={20}
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <G clipPath="url(#clip0_28412_3561)">
+        <Path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M3.864.303a.75.75 0 010 1.06l-2.5 2.5a.75.75 0 01-1.061-1.06l2.5-2.5a.75.75 0 011.06 0zM10 .917a9.083 9.083 0 100 18.167A9.083 9.083 0 0010 .917zm0 5a.75.75 0 01.75.75v2.932l2.166 1.444a.75.75 0 11-.832 1.248l-2.5-1.667A.75.75 0 019.25 10V6.667a.75.75 0 01.75-.75zm6.136-4.553a.75.75 0 111.061-1.06l2.5 2.5a.75.75 0 11-1.06 1.06l-2.5-2.5z"
+          fill="#B5B5B5"
+        />
+      </G>
+      <Defs>
+        <ClipPath id="clip0_28412_3561">
+          <Path fill="#fff" d="M0 0H20V20H0z" />
+        </ClipPath>
+      </Defs>
+    </Svg>
+  )
+}
+
+export function CrossIcon(props) {
+  return (
+    <Svg
+      width={26}
+      height={27}
+      viewBox="0 0 26 27"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <G
+        opacity={0.6}
+        stroke="#fff"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <Path d="M9.165 9.518l7.67 7.965M16.835 9.518l-7.67 7.965" />
+      </G>
     </Svg>
   )
 }

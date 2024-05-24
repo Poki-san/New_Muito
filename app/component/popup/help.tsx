@@ -1,22 +1,24 @@
-import { KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import React, { forwardRef, useRef } from 'react'
+import { KeyboardAvoidingView, Platform, ScrollView, Text, View } from "react-native";
+import React, { forwardRef, useRef, useState } from 'react'
 import RBSheet from '@nonam4/react-native-bottom-sheet';
 import { statusBarHeight, Белый50, Фон } from "../../GLOBAL";
 import { styles } from "../../styles";
-import { CameraMiniIcon, ImgIcon, ModalCloseIcon } from "../svg/svg";
-import { addImage } from "../../functions/addImage";
+import { ModalCloseIcon } from "../svg/svg";
+import { Input } from "../ui/input";
+import { ButtonMy } from "../ui/ButtonMy";
 
 /**
- * Модалка для вызова вариантов изображения
+ * Модалка для отправки сообщения
  * @param ref для взаимодействия с модальным окном
  */
-export const ModalImg = forwardRef((props:{allowsMultipleSelection?: boolean, selectionLimit?: number,onPath?:(path?:any[])=>void},ref)=>{
+export const ModalEmailHelp = forwardRef((props:{},ref)=>{
     const code = useRef<RBSheet>()
+    const [text, setText] = useState('')
     return (
         <>
             <RBSheet
                 ref={ref}
-                height={150}
+                height={353}
                 closeOnDragDown={true}
                 // dragFromTopOnly
                 closeOnPressMask={true} 
@@ -43,19 +45,14 @@ export const ModalImg = forwardRef((props:{allowsMultipleSelection?: boolean, se
                         style={{ flex: 1 }}
                     >
                         <View style={{alignItems:"center", marginBottom:10}}><ModalCloseIcon/></View>
-                        <View style={{gap:18}}>
-                            <Text style={[styles.h4,{color:'white', textAlign:'center'}]}>Добавить фото</Text>
-                            <TouchableOpacity activeOpacity={0.7} onPress={async()=>{
-                                const path = await addImage('Lib',false,props.allowsMultipleSelection??false,props.selectionLimit??3)
-                                props.onPath(path)
-                            }} style={{flexDirection:'row', alignItems:'center', gap:8}}>
-                                <ImgIcon/>
-                                <Text style={[styles.bodyText,{color:'white'}]}>Галерея</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity activeOpacity={0.7} style={{flexDirection:'row', alignItems:'center', gap:8}}>
-                                <CameraMiniIcon/>
-                                <Text style={[styles.bodyText,{color:'white'}]}>Камера</Text>
-                            </TouchableOpacity>
+                        <View style={{gap:13}}>
+                            <Text style={[styles.h4,{color:'white', textAlign:'center'}]}>Нужна наша помощь?</Text>
+                            <Input backgroundColor='#FFFFFF00' placeholderTextColor={'#FFFFFF99'} title='Email' style={{borderWidth:1, borderColor:'#FFFFFF99'}}/>
+                            <View style={{gap:4}}>
+                                <Text style={[styles.smallText,{color:'#FFFFFF90', marginRight:10, textAlign:'right'}]}>{text.length}/300</Text>
+                                <Input mode='outlined' value={text} onChangeText={setText} backgroundColor='#FFFFFF00' maxLength={300} placeholderTextColor={'#FFFFFF99'} title='Опишите проблему' style={{borderWidth:1, borderColor:'#FFFFFF99', height:140}} multiline/>
+                            </View>
+                            <ButtonMy text='Войти' onPress={()=>{}} backgroundColor='#88FFF9' colorText='#171717'/>
                         </View>
                     </KeyboardAvoidingView>
                 </ScrollView>

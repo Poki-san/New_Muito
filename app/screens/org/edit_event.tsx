@@ -1,7 +1,7 @@
 import { Image, KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { ButtonMy, Input, MainLayout } from '../../component';
+import { ButtonMy, Input, MainLayout, TagBlock } from '../../component';
 import { statusBarHeight, width, Бирюзовый } from '../../GLOBAL';
-import { BackArrowIcon, CalendarIcon, ClockIcon, CrossIcon, MapPinIcon } from '../../component/svg/svg';
+import { BackArrowIcon, CalendarIcon, ClockIcon, CrossIcon, MapPinIcon, PlusIcon } from '../../component/svg/svg';
 import { goBack } from '../../functions/navigate';
 import { styles } from '../../styles';
 import { useRef, useState } from 'react';
@@ -10,7 +10,9 @@ import { ModalImg } from '../../component/popup/img';
 import RBSheet from '@nonam4/react-native-bottom-sheet';
 import { showToastable } from 'react-native-toastable';
  
-export function AddEventScreen() {
+export function EditEventScreen() {
+    const [text, setText] = useState('')
+    const [text2, setText2] = useState('')
     const [paths, setPaths] = useState([])
     const img = useRef<RBSheet>(null)
     
@@ -18,7 +20,7 @@ export function AddEventScreen() {
         <MainLayout isStatusBar backgroundColor='#181818'>
             <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='always' contentContainerStyle={{flexGrow:1}}>
                 <KeyboardAvoidingView
-                    behavior={Platform.OS === "ios" ? "padding" : undefined}
+                    behavior={Platform.OS === "ios" ? "padding" : 'height'}
                     keyboardVerticalOffset={Platform.OS === "ios" && statusBarHeight}
                     style={{ flex: 1 }}
                 >
@@ -27,7 +29,7 @@ export function AddEventScreen() {
                             <TouchableOpacity activeOpacity={0.7} onPress={goBack} style={{width:42, height:42, alignItems:"center", justifyContent:"center", backgroundColor:'#221E1E80', borderRadius:16}}>
                                 <BackArrowIcon/>
                             </TouchableOpacity>
-                            <Text style={[styles.additional, {color:'white'}]}>Новый эвент</Text>
+                            <Text style={[styles.additional, {color:'white'}]}>Редактирование</Text>
                             <View style={{width:42, height:42}}/>
                         </View>
                         <View style={{gap:8}}>
@@ -38,7 +40,7 @@ export function AddEventScreen() {
                                         <Text style={[styles.h4,{color:Бирюзовый, fontFamily:"Poppins"}]}>{paths.length != 0 ? 'Изменить':'Добавить'}</Text>
                                     </TouchableOpacity>
                                 </View>
-                                {paths.length != 0 && <View style={{flexDirection:"row", flex:1, alignItems:"center", gap:6, flexWrap:'wrap'}}>
+                                <View style={{flexDirection:"row", flex:1, alignItems:"center", gap:6, flexWrap:'wrap'}}>
                                     {paths.map((el,i)=><View key={i}>
                                         <Image source={{uri:el}} style={{width:(((width-32))/4)-(18/4), height:((width-32)/4)-(18/4), borderRadius:16, overflow:'hidden'}}/>
                                         <TouchableOpacity activeOpacity={0.7} onPress={()=>setPaths([])} style={{position:"absolute", backgroundColor:"#00000066", borderRadius:90, top:3, right:3}}>
@@ -46,14 +48,16 @@ export function AddEventScreen() {
                                         </TouchableOpacity>
                                     </View>
                                )}
-                                </View>}
+                                </View>
                             </View>
                             <View style={{gap:4}}>
-                                <Text style={[styles.smallText,{color:'#FFFFFF90', marginRight:10, textAlign:'right'}]}>0/50</Text>
+                                <Text style={[styles.smallText,{color:'#FFFFFF90', marginRight:10, textAlign:'right'}]}>{text.length}/50</Text>
                                 <TextInput
                                     placeholder='Название эвента'
                                     multiline
+                                    value={text} 
                                     maxLength={50}
+                                    onChangeText={setText} 
                                     placeholderTextColor={'#FFFFFF99'}
                                     style={[styles.bodyText,{ borderRadius:16, borderWidth:1, borderTopLeftRadius:16, borderColor:'#FFFFFF99', borderTopRightRadius:16, maxHeight:100, color:'white', paddingVertical:7, paddingLeft:17}]}
                                 />
@@ -73,11 +77,13 @@ export function AddEventScreen() {
                                 </TouchableOpacity>
                             </View>
                             <View style={{gap:4}}>
-                                <Text style={[styles.smallText,{color:'#FFFFFF90', marginRight:10, textAlign:'right'}]}>0/500</Text>
+                                <Text style={[styles.smallText,{color:'#FFFFFF90', marginRight:10, textAlign:'right'}]}>{text.length}/500</Text>
                                 <TextInput
                                     placeholder='Описание'
                                     multiline
+                                    value={text2} 
                                     maxLength={500}
+                                    onChangeText={setText2} 
                                     placeholderTextColor={'#FFFFFF99'}
                                     style={[styles.bodyText,{ borderRadius:16, borderWidth:1, borderTopLeftRadius:16, borderColor:'#FFFFFF99', borderTopRightRadius:16, maxHeight:230, color:'white', paddingVertical:7, paddingLeft:17}]}
                                 />

@@ -161,7 +161,7 @@ function StepThree(props:{onPress?:()=>void}) {
                 <View style={{gap:21, width:"100%"}}>
                     <View style={{gap:8}}>
                         <TouchableOpacity activeOpacity={0.7} onPress={()=>setIsDate(true)}>
-                            <Input editable={false} value={date.text} backgroundColor='#FFFFFF00' placeholderTextColor={'#FFFFFF99'} title='Дата рождения' style={{borderWidth:1, borderColor:'#FFFFFF99'}}/>
+                            <Input editable={false} value={date.text} backgroundColor='#FFFFFF00' placeholderTextColor={'#FFFFFF99'} title='Дата рождения' style={{borderWidth:1, borderColor:'#FFFFFF99', paddingRight:20}}/>
                             <View style={{position:'absolute', right:10, top:0, bottom:0, justifyContent:'center'}}><CalendarIcon/></View>
                         </TouchableOpacity>
                         <Input backgroundColor='#FFFFFF00' placeholderTextColor={'#FFFFFF99'} title='Инстаграм' style={{borderWidth:1, borderColor:'#FFFFFF99'}}/>

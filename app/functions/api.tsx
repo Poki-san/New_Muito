@@ -1,7 +1,7 @@
 import { URL } from '../GLOBAL'
 import NetInfo from "@react-native-community/netinfo"
 import user from '../model/token'
-import error from '../model/error';
+import error from '../model/avatar';
 import preloader from './preloader';
 import chatAuth from '../model/chatAuth';
 import { CommonActions } from '@react-navigation/native';
