@@ -13,18 +13,25 @@ export function SearchScreen() {
 
     const getDatePeriod = (start_date?:string, end_date?:string) => {
         let start = new Date(start_date);
-        console.log(start_date, end_date);
         let count=1
         let flag = true
-        let arr = {[start_date]:{selected: true, color:'red'}}
+        let arr = {[start_date]:{selected: true, startingDay: true, color:'#355855', customStyles: {
+            container: {
+              backgroundColor: 'green'
+            },
+            text: {
+              color: 'black',
+              fontWeight: 'bold'
+            }
+          }}}
         while (flag==true) {
             const newDate = start.setDate(start.getDate() + count); 
             const date = CalendarUtils.getCalendarDateString(newDate)
             if (date == end_date) {
-                arr = {...arr, [end_date]:{selected: true, color:'red'}}
+                arr = {...arr, [end_date]:{selected: true, endingDay: true, textColor:'white', color:'#528e8a'}}
                 flag = false
             } else {
-                arr = {...arr, [date]:{selected: true, color:'#FF000050'}}
+                arr = {...arr, [date]:{selected: true, textColor:'white', color:'#3d5f5d'}}
             }  
         }
         setSelected(arr)
@@ -48,45 +55,54 @@ export function SearchScreen() {
                             </View>
                             <Image source={require('../../../assets/image/line.png')} style={{height:1}}/>
                         </View>
-                        <Calendar
-                            firstDay={1}
-                            enableSwipeMonths
-                            markingType='period'
-                            onDayPress={day => {
-                                if (selectedSE.start.text == '') {
-                                    setSelectedSE({start:{text:day.dateString, obj:day}, end:selectedSE.end})
-                                    setSelected({[day.dateString]:{selected: true, color:'red'}})
-                                } else {
-                                    if (selectedSE.end.text == '') {
-                                        setSelectedSE({start:selectedSE.start, end:{text:day.dateString, obj:day}})
-                                        getDatePeriod(selectedSE.start.text, day.dateString)
-                                    } else{
-                                        const d1: Date = new Date(day.dateString);
-                                        const d2: Date = new Date(selectedSE.end.text);
-                                        if (d1.getTime()<d2.getTime()) {
-                                            setSelectedSE({start:{text:day.dateString, obj:day}, end:selectedSE.end})
-                                            getDatePeriod(day.dateString, selectedSE.end.text)
-                                        } else{
-                                            setSelectedSE({start:selectedSE.start, end:{text:day.dateString, obj:day}})
-                                            getDatePeriod(selectedSE.start.text, day.dateString)
+                        <View style={{backgroundColor:'#1C1A1A'}}>
+                            <Calendar
+                                firstDay={1}
+                                enableSwipeMonths
+                                markingType='period'
+                                onDayPress={day => {
+                                    if (selectedSE.start.text == '') {
+                                        setSelectedSE({start:{text:day.dateString, obj:day}, end:selectedSE.end})
+                                        setSelected({[day.dateString]:{selected: true, color:'#355855', customStyles: { container: {borderRadius: 90}}}})
+                                    } else {
+                                        if (selectedSE.end.text == '') {
+                                            const d1: Date = new Date(day.dateString);
+                                            const d2: Date = new Date(selectedSE.start.text);
+                                            if (d1.getTime()<d2.getTime()) {
+                                                setSelectedSE({start:{text:day.dateString, obj:day}, end:{text:selectedSE.start.text, obj:day}})
+                                                getDatePeriod(day.dateString, selectedSE.start.text)
+                                            } else {                                                
+                                                setSelectedSE({start:selectedSE.start, end:{text:day.dateString, obj:day}})
+                                                getDatePeriod(selectedSE.start.text, day.dateString)
+                                            }
+                                        } else {
+                                            const d1: Date = new Date(day.dateString);
+                                            const d2: Date = new Date(selectedSE.end.text);
+                                            if (d1.getTime()<d2.getTime()) {
+                                                setSelectedSE({start:{text:day.dateString, obj:day}, end:selectedSE.end})
+                                                getDatePeriod(day.dateString, selectedSE.end.text)
+                                            } else{
+                                                setSelectedSE({start:selectedSE.start, end:{text:day.dateString, obj:day}})
+                                                getDatePeriod(selectedSE.start.text, day.dateString)
+                                            }
                                         }
                                     }
+                                }}
+                                style={{ borderRadius:30, paddingVertical:10, marginTop:16, marginBottom:20 }}
+                                markedDates={selected}
+                                renderArrow={direction => (
+                                    direction==='left' ? 
+                                        <View style={{padding:15, borderRadius:360, backgroundColor:'white', alignItems:'center', justifyContent:"center"}}>
+                                            
+                                        </View> : 
+                                        <View style={{transform:[{rotate:'180deg'}],padding:15, borderRadius:360, backgroundColor:'white', alignItems:'center', justifyContent:"center"}}>
+                                            
+                                        </View>
+                                    )
                                 }
-                            }}
-                            style={{ borderRadius:30, paddingVertical:10, marginTop:16, marginBottom:20 }}
-                            markedDates={selected}
-                            renderArrow={direction => (
-                                direction==='left' ? 
-                                    <View style={{padding:15, borderRadius:360, backgroundColor:'white', alignItems:'center', justifyContent:"center"}}>
-                                        
-                                    </View> : 
-                                    <View style={{transform:[{rotate:'180deg'}],padding:15, borderRadius:360, backgroundColor:'white', alignItems:'center', justifyContent:"center"}}>
-                                        
-                                    </View>
-                                )
-                            }
-                            theme={ThemeCalender}
-                        />
+                                theme={ThemeCalender}
+                            />
+                        </View>
                     </KeyboardAvoidingView>
                 </ScrollView>
             </MainLayout>
@@ -95,32 +111,35 @@ export function SearchScreen() {
 }
 
 export const ThemeCalender = {
-    backgroundColor: 'white',
-    calendarBackground: 'white',
-    todayTextColor: '#333',
-    todayBackgroundColor: 'white',
-    selectedDayBackgroundColor: 'gray',
-    selectedDayTextColor: '#333',
-  
-    textDisabledColor: '#33333365',
+    backgroundColor: '#221E1E80',
+    calendarBackground: '#221E1E80',
+    todayTextColor: 'white',
+    todayBackgroundColor: '#1f1c1c',
+    selectedDayBackgroundColor: '#355855',
+    selectedDayTextColor: '#000',
+    dayTextColor:'white',
+    textDisabledColor: '#FFFFFF65',
     // textDayHeaderFontFamily: "Roboto-Regular",
     textSectionTitleColor: 'gray',
-    monthTextColor:'#333',
+    monthTextColor:'#fff',
+    selectedBorderRadius:16,
     // textMonthFontFamily: "Roboto-Medium",
     textMonthFontSize: 18,
     textDayStyle: {
       fontSize: 14,
       // fontFamily: "Roboto-Regular",
       lineHeight: 16,
-      color: '#333',
+      color: 'white',
     },
     "stylesheet.calendar.main":{
         container:{
             paddingLeft: 10,
             paddingRight: 10,
-            borderRadius:30,
+            borderRadius:16,
+            borderWidth:1,
+            borderColor:'#B5B5B54D',
             overflow:'hidden',
-            backgroundColor:'white',
+            backgroundColor:'#221E1E80',
         }
     },
     "stylesheet.calendar.header": {
@@ -129,7 +148,7 @@ export const ThemeCalender = {
         flexDirection: "row",
         left: 7,
         gap: 20,
-        backgroundColor:'white',
+        backgroundColor:'#1C1A1A',
         borderRadius:360,
         paddingVertacal:5,
         paddingHorizontal:7
@@ -139,14 +158,5 @@ export const ThemeCalender = {
         justifyContent: "flex-end",
         alignItems: "center"
       }
-    },
-    "stylesheet.day.basic": {
-      base: {
-        width: 35,
-        height: 35,
-        alignItems: "center",
-        justifyContent: "center",
-        borderRadius:360
-      },
-    },
+    }
   };
