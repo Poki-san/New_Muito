@@ -1,23 +1,22 @@
-import { KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import React, { forwardRef, useRef } from 'react'
+import { KeyboardAvoidingView, Platform, ScrollView, Text, View } from "react-native";
+import React, { forwardRef } from 'react'
 import RBSheet from '@nonam4/react-native-bottom-sheet';
 import { statusBarHeight, Белый50, Фон } from "../../GLOBAL";
 import { styles } from "../../styles";
-import { CameraMiniIcon, ImgIcon, ModalCloseIcon } from "../svg/svg";
-import { addImage } from "../../functions/addImage";
+import { ModalCloseIcon, WarningIcon } from "../svg/svg";
 import { ButtonMy } from "../ui/ButtonMy";
 import { navigate } from "../../functions/navigate";
 
 /**
- * Модалка для удаления профиля
+ * Модалка ошибка скана
  * @param ref для взаимодействия с модальным окном
  */
-export const ModalDel = forwardRef((props:{},ref)=>{
+export const ModalErrScan = forwardRef((props:{},ref)=>{
     return (
         <>
             <RBSheet
                 ref={ref}
-                height={150}
+                height={219}
                 closeOnDragDown={true}
                 // dragFromTopOnly
                 closeOnPressMask={true} 
@@ -44,11 +43,15 @@ export const ModalDel = forwardRef((props:{},ref)=>{
                         style={{ flex: 1 }}
                     >
                         <View style={{alignItems:"center", marginBottom:10}}><ModalCloseIcon/></View>
-                        <View style={{gap:18}}>
-                            <Text style={[styles.h4,{color:'white', textAlign:'center',marginHorizontal:40}]}>Ваш профиль и все данные будут удалены навсегда</Text>
+                        <View style={{gap:25}}>
+                            <View style={{gap:9}}>
+                                <View style={{alignItems:"center"}}><WarningIcon/></View>
+                                <Text style={[styles.h4,{color:'white', textAlign:'center',marginHorizontal:40}]}>Пользователь не найден</Text>
+                                <Text style={[styles.bodyText,{color:'white', textAlign:'center',marginHorizontal:40}]}>Попробуйте другой QR-код или повторите попытку</Text>
+                            </View>
                             <View style={{flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}>
-                                <ButtonMy text='Отмена' onPress={()=>ref?.current?.close()} backgroundColor='#88FFF9' width={'48%'} colorText='#171717'/>
-                                <ButtonMy text='Удалить' onPress={()=>{
+                                <ButtonMy text='Повторить' onPress={()=>ref?.current?.close()} backgroundColor='#88FFF9' width={'48%'} colorText='#171717'/>
+                                <ButtonMy text='Отмена' onPress={()=>{
                                     ref?.current?.close()
                                     setTimeout(() => navigate('Auth'), 300);
                                 }} borderColor='#88FFF9' onPressColor='#393939' backgroundColor='#171717' width={'48%'} colorText='#FFF'/>

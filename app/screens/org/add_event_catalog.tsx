@@ -24,7 +24,7 @@ export function AddEventCatalogScreen() {
                     >
                         <View style={{marginTop:statusBarHeight+16, marginBottom:16}}>
                             <View style={{marginHorizontal:16, marginBottom:16}}>
-                                <Text style={[styles.additional, {color:'white'}]}>Мои эвенты</Text>
+                                <Text style={[styles.h4, {color:'white'}]}>Мои эвенты</Text>
                             </View>
                             <Image source={require('../../../assets/image/line.png')} style={{height:1}}/>
                         </View>

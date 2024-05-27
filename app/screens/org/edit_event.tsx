@@ -29,7 +29,7 @@ export function EditEventScreen() {
                             <TouchableOpacity activeOpacity={0.7} onPress={goBack} style={{width:42, height:42, alignItems:"center", justifyContent:"center", backgroundColor:'#221E1E80', borderRadius:16}}>
                                 <BackArrowIcon/>
                             </TouchableOpacity>
-                            <Text style={[styles.additional, {color:'white'}]}>Редактирование</Text>
+                            <Text style={[styles.h4, {color:'white'}]}>Редактирование</Text>
                             <View style={{width:42, height:42}}/>
                         </View>
                         <View style={{gap:8}}>

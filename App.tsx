@@ -7,6 +7,19 @@ import { height, width, Бирюзовый50 } from './app/GLOBAL';
 import Toastable from 'react-native-toastable';
 import { styles } from './app/styles';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import 'moment/locale/ru';
+import moment from 'moment';
+import { LocaleConfig } from 'react-native-calendars';
+
+LocaleConfig.locales["ru"] = {
+  monthNames: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
+  monthNamesShort: ["Янв", "Февр", "Март", "Апрель", "Май", "Июнь", "Июль.", "Авг", "Сент", "Окт", "Нояб", "Дек"],
+  dayNames: ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"],
+  dayNamesShort: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
+  today: "Сегодня",
+};
+
+LocaleConfig.defaultLocale = "ru";
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);

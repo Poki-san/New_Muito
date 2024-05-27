@@ -1,15 +1,15 @@
 import { Image, KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import { MainLayout, ProfileBlock } from '../component';
-import { statusBarHeight, width } from '../GLOBAL';
-import { CameraIcon, EditIcon, MiniHeartIcon } from '../component/svg/svg';
-import { styles } from '../styles';
-import { ModalImg } from '../component/popup/img';
+import { MainLayout, ProfileBlock } from '../../component';
+import { statusBarHeight, width } from '../../GLOBAL';
+import { CameraIcon, EditIcon, MiniHeartIcon } from '../../component/svg/svg';
+import { styles } from '../../styles';
+import { ModalImg } from '../../component/popup/img';
 import { useRef, useState } from 'react';
 import RBSheet from '@nonam4/react-native-bottom-sheet';
-import avatar from '../model/avatar';
+import avatar from '../../model/avatar';
 import { observer } from 'mobx-react-lite';
-import { ModalEmailHelp } from '../component/popup/help';
-import { navigate } from '../functions/navigate';
+import { ModalEmailHelp } from '../../component/popup/help';
+import { navigate } from '../../functions/navigate';
  
 export const ProfileScreen = observer(() => {
     const img = useRef<RBSheet>(null)
@@ -43,14 +43,14 @@ export const ProfileScreen = observer(() => {
                                 </View>
                             </View>
                         </View>
-                        <Image style={{width:width, height:1, marginVertical:16, opacity:0.9}} source={require('../../assets/image/line.png')}/>
+                        <Image style={{width:width, height:1, marginVertical:16, opacity:0.9}} source={require('../../../assets/image/line.png')}/>
                         <View style={{paddingHorizontal:16, width:'100%', gap:8, flex:1}}>
                             <ProfileBlock text='Скрытые анкеты' onPress={()=>navigate('NoWatch')}/>
                             <ProfileBlock text='Редактировать профиль' onPress={()=>navigate('EditOrg')}/>
                             <ProfileBlock text='Изменить пароль'/>
                             <ProfileBlock text='Помощь' msgIcon={true} onPress={()=>help.current.open()}/>
                         </View>
-                        <TouchableOpacity activeOpacity={0.7} style={{width:'100%', marginBottom:80}}>
+                        <TouchableOpacity activeOpacity={0.7} onPress={()=>navigate('Auth')} style={{width:'100%', marginBottom:80}}>
                             <Text style={[styles.smallText,{color:"#FFFFFF99", textAlign:'center'}]}>Выйти из аккаунта</Text>
                         </TouchableOpacity>
                     </View>

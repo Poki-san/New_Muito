@@ -119,7 +119,7 @@ export const styles = StyleSheet.create({
         paddingHorizontal:16, 
         paddingBottom:16, 
         borderRadius:16, 
-        overflow:'hidden',
+        overflow:'hidden'
     },
     noLikeContainer:{
         borderRadius:180, 
@@ -214,7 +214,7 @@ export const styles = StyleSheet.create({
         alignItems:"center",
         justifyContent:'center',
         width:'33.3%',
-        borderRadius:16
+        borderRadius:15
     },
     blurTagEventContainer:{
         borderRadius:16, 
@@ -247,5 +247,17 @@ export const styles = StyleSheet.create({
         borderRadius:16, 
         height:width*0.5, 
         backgroundColor:'#00000044'
+    },
+    buttonEvent:{
+        backgroundColor:Бирюзовый, 
+        width:55, 
+        height:55, 
+        position:'absolute', 
+        bottom:16, 
+        right:16, 
+        zIndex:9, 
+        borderRadius:90,
+        justifyContent:"center",
+        alignItems:"center"
     }
 });
