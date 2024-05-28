@@ -34,7 +34,8 @@ export function LoginScreen() {
                                             <Text style={{fontSize:12, color:'#88FFF966', textAlign:"right"}}>Забыли пароль?</Text>
                                         </TouchableOpacity>
                                     </View>
-                                    <ButtonMy text='Войти' onPress={()=>navigate('MainGuest')} backgroundColor='#88FFF9' colorText='#171717'/>
+                                    <ButtonMy text='Войти Организатор' onPress={()=>navigate('Main')} backgroundColor='#88FFF9' colorText='#171717'/>
+                                    <ButtonMy text='Войти Гость' onPress={()=>navigate('MainGuest')} backgroundColor='#88FFF9' colorText='#171717'/>
                                 </BlurView>
                                 :
                                 <BlurView experimentalBlurMethod='dimezisBlurView' intensity={30} tint='systemChromeMaterialDark' style={styles.blurContainer}>

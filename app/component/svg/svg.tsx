@@ -86,7 +86,6 @@ export function ProfileMenuIcon({color='#fff'}) {
   )
 }
 
-
 export function SearchIcon({color='#fff'}) {
   return (
     <Svg
@@ -965,6 +964,49 @@ export function ScanIcon(props) {
         d="M10.107 21.667H8.19a3.867 3.867 0 01-3.857-3.857v-1.917M21.667 15.893v1.917a3.867 3.867 0 01-3.857 3.857h-1.917M15.893 4.333h1.917a3.867 3.867 0 013.857 3.857v1.917M4.333 10.107V8.19A3.868 3.868 0 018.19 4.333h1.918M4.333 13h17.334"
         stroke="#1C1A1A"
         strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Svg>
+  )
+}
+
+export function ArrowCalendarLeft(props) {
+  return (
+    <Svg
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <Path
+        d="M14.75 17.5L9.25 12l5.5-5.5"
+        stroke="#fff"
+        strokeOpacity={0.6}
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Svg>
+  )
+}
+
+export function ArrowCalendarRight(props) {
+  return (
+    <Svg
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <Path
+        d="M9.25 6.5l5.5 5.5-5.5 5.5"
+        stroke="#fff"
+        strokeWidth={1.5}
         strokeLinecap="round"
         strokeLinejoin="round"
       />

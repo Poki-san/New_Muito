@@ -29,7 +29,7 @@ export function Tags(props:{default?:string, data:{name:string, value:string, co
     )
 }
 
-export function TagsNoScroll(props:{default?:string, data:{name:string, value:string, colorText?:string, color?:string}[], style?: StyleProp<ViewStyle>, onPress?:(value:any[])=>void}) {
+export function TagsNoScroll(props:{default?:string, data:{name:string, value:string, incolorText?:string, incolor?:string, colorText?:string, color?:string}[], style?: StyleProp<ViewStyle>, oneTag?:boolean, onPress?:(value:any[])=>void, paddingV?:number, noBorder?:boolean}) {
     const [active, setActive] = useState([])
     // useEffect(()=>setActive(props.default),[props.default])
     return (
@@ -40,21 +40,26 @@ export function TagsNoScroll(props:{default?:string, data:{name:string, value:st
                         key={i}
                         activeOpacity={0.7}
                         onPress={()=>{
-                            const tmp = active
+                            let tmp = active
                             const index = tmp?.findIndex(value => value == el?.value)
-                            if (index==-1) {
-                                if (tmp.length != 10) {
-                                    tmp.push(el.value)
-                                }
+                            if (props.oneTag == true) {
+                                tmp = []
+                                tmp[0]=el.value
                             } else {
-                                tmp.splice(index,1)
+                                if (index==-1) {
+                                    if (tmp.length != 10) {
+                                        tmp.push(el.value)
+                                    }
+                                } else {
+                                    tmp.splice(index,1)
+                                }
                             }
                             !!props.onPress && props.onPress(tmp)
                             setActive([...tmp])
                         }}
-                        style={{borderColor:Бирюзовый50, paddingVertical:6, backgroundColor:active?.findIndex(value => value == el?.value)!=-1 ? (el.color ?? Бирюзовый) : '#17171A', paddingHorizontal:13, borderWidth:1, borderRadius:20}}
+                        style={{borderColor:Бирюзовый50, paddingVertical:(props.paddingV ?? 6), backgroundColor:active?.findIndex(value => value == el?.value)!=-1 ? (el.color ?? Бирюзовый) : (el.incolor ?? '#17171A'), paddingHorizontal:13, borderWidth:props.noBorder ?0 : 1, borderRadius:20}}
                     >
-                        <Text style={[styles.smallText,{color:active?.findIndex(value => value == el?.value)!=-1 ?'#17171A' :'white'}]}>{el.name}</Text>
+                        <Text style={[styles.smallText,{color:active?.findIndex(value => value == el?.value)!=-1 ? (el.colorText ?? '#17171A') : (el.incolorText ??'white')}]}>{el.name}</Text>
                     </TouchableOpacity>
                 )) 
             }

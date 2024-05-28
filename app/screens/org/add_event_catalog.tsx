@@ -38,23 +38,34 @@ export function AddEventCatalogScreen() {
                         : 
                         <><BlurView experimentalBlurMethod='dimezisBlurView' intensity={75} tint='systemChromeMaterialDark'  style={{borderRadius:16, overflow:"hidden", borderWidth:1, borderColor:'#374A4E99', flexDirection:"row", justifyContent:'space-between', alignItems:"center", marginHorizontal:16, marginBottom:16}}>
                             <TouchableOpacity activeOpacity={0.7} onPress={()=>setTag(0)} style={{
-                                paddingHorizontal:24,
-                                paddingVertical:10,
+                                paddingHorizontal:10,
+                                paddingVertical:8,
                                 alignItems:"center",
                                 justifyContent:'center',
-                                width:'50%',
+                                width:'33.3%',
                                 backgroundColor:tag==0 ? '#374A4E' : '#374A4E00',
                                 borderRadius:16
                             }}>
-                                <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Опубликованные <Text style={{color:'#FFFFFF80'}}>5</Text></Text>
+                                <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Новые <Text style={{color:'#FFFFFF80'}}>5</Text></Text>
                             </TouchableOpacity>
                             <TouchableOpacity activeOpacity={0.7} onPress={()=>setTag(1)} style={{
-                                paddingHorizontal:24,
-                                paddingVertical:10,
+                                paddingHorizontal:10,
+                                paddingVertical:8,
                                 alignItems:"center",
                                 justifyContent:'center',
-                                width:'50%',
+                                width:'33.3%',
                                 backgroundColor:tag==1 ? '#374A4E' : '#374A4E00',
+                                borderRadius:16
+                            }}>
+                                <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Прошедшие <Text style={{color:'#FFFFFF80'}}>3</Text></Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity activeOpacity={0.7} onPress={()=>setTag(2)} style={{
+                                paddingHorizontal:10,
+                                paddingVertical:8,
+                                alignItems:"center",
+                                justifyContent:'center',
+                                width:'33.3%',
+                                backgroundColor:tag==2 ? '#374A4E' : '#374A4E00',
                                 borderRadius:16
                             }}>
                                 <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Черновики <Text style={{color:'#FFFFFF80'}}>2</Text></Text>

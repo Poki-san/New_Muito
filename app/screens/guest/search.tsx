@@ -1,42 +1,19 @@
-import { Image, ImageBackground, KeyboardAvoidingView, Platform, ScrollView, Text, View } from 'react-native';
-import { MainLayout } from '../../component';
-import { height, statusBarHeight, width } from '../../GLOBAL';
+import { Image, ImageBackground, KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { EventItem, MainLayout } from '../../component';
+import { height, statusBarHeight, width, Бирюзовый } from '../../GLOBAL';
 import { styles } from '../../styles';
 import { CalendarIcon } from '../../component/svg/svg';
-import { Calendar,CalendarUtils } from "react-native-calendars";
-import { useState } from 'react';
- 
+import { TagsNoScroll } from '../../component/ui/tags';
+import { BlurView } from 'expo-blur';
+import { useRef, useState } from 'react';
+import { ModalDatePoint } from '../../component/popup/date';
+import RBSheet from '@nonam4/react-native-bottom-sheet';
+import { ModalReview } from '../../component/popup/img copy';
+
 export function SearchScreen() {
-    const [selectedSE, setSelectedSE] = useState({start:{text:'',obj:{}},end:{text:'',obj:{}}})
-    const [selected, setSelected] = useState({})
-
-
-    const getDatePeriod = (start_date?:string, end_date?:string) => {
-        let start = new Date(start_date);
-        let count=1
-        let flag = true
-        let arr = {[start_date]:{selected: true, startingDay: true, color:'#355855', customStyles: {
-            container: {
-              backgroundColor: 'green'
-            },
-            text: {
-              color: 'black',
-              fontWeight: 'bold'
-            }
-          }}}
-        while (flag==true) {
-            const newDate = start.setDate(start.getDate() + count); 
-            const date = CalendarUtils.getCalendarDateString(newDate)
-            if (date == end_date) {
-                arr = {...arr, [end_date]:{selected: true, endingDay: true, textColor:'white', color:'#528e8a'}}
-                flag = false
-            } else {
-                arr = {...arr, [date]:{selected: true, textColor:'white', color:'#3d5f5d'}}
-            }  
-        }
-        setSelected(arr)
-        return;
-      };
+    const [events, setEvents] = useState([1,2,3,4,5])
+    const date = useRef<RBSheet>(null)
+    
     return ( 
         <ImageBackground style={{width:width, height:height}} source={require('../../../assets/image/back.png')}>
             <MainLayout isStatusBar>
@@ -47,116 +24,46 @@ export function SearchScreen() {
                         style={{ flex: 1 }}
                     >
                         <View style={{marginTop:statusBarHeight+16, marginBottom:16}}>
-                            <View style={{marginHorizontal:16, marginBottom:16, flexDirection:'row', alignItems:'center', justifyContent:"space-between"}}>
+                            <View style={{marginHorizontal:16, marginBottom:8, flexDirection:'row', alignItems:'center', justifyContent:"space-between"}}>
                                 <Text style={[styles.h4, {color:'white'}]}>Мероприятия</Text>
-                                <View style={{borderRadius:16, width:42, alignItems:'center', justifyContent:"center", height:42, backgroundColor:'#00000033'}}>
+                                <TouchableOpacity onPress={()=>date.current?.open()} style={{borderRadius:16, width:42, alignItems:'center', justifyContent:"center", height:42, backgroundColor:'#00000033'}}>
                                     <CalendarIcon color='#fff'/>
-                                </View>
+                                </TouchableOpacity>
+                            </View>
+                            <View style={{marginHorizontal:16, marginBottom:8, flexDirection:'row', alignItems:'center', gap:8}}>
+                                <TouchableOpacity style={{borderRadius:90, borderWidth:2, borderColor:Бирюзовый, overflow:'hidden', width:63, height:63}} activeOpacity={0.7}>
+                                    <Image source={require('../../../assets/image/event.jpg')} style={{height:'100%', width:'100%'}}/>
+                                    <View style={{backgroundColor:"#00000044", position:"absolute", justifyContent:"center", alignItems:"center", top:0, left:0, width:63, height:63}}>
+                                        <Text style={[styles.smallText,{color:'white', fontSize:10, textAlign:"center"}]}>DJ сет</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={{borderRadius:90, overflow:'hidden', width:63, height:63}} activeOpacity={0.7}>
+                                    <Image source={require('../../../assets/image/event.jpg')} style={{height:'100%', width:'100%'}}/>
+                                    <View style={{backgroundColor:"#00000044", position:"absolute", justifyContent:"center", alignItems:"center", top:0, left:0, width:63, height:63}}>
+                                        <Text style={[styles.smallText,{color:'white', fontSize:10, textAlign:"center"}]}>Рестораны</Text>
+                                    </View>
+                                </TouchableOpacity>
                             </View>
                             <Image source={require('../../../assets/image/line.png')} style={{height:1}}/>
                         </View>
-                        <View style={{backgroundColor:'#1C1A1A'}}>
-                            <Calendar
-                                firstDay={1}
-                                enableSwipeMonths
-                                markingType='period'
-                                onDayPress={day => {
-                                    if (selectedSE.start.text == '') {
-                                        setSelectedSE({start:{text:day.dateString, obj:day}, end:selectedSE.end})
-                                        setSelected({[day.dateString]:{selected: true, color:'#355855', customStyles: { container: {borderRadius: 90}}}})
-                                    } else {
-                                        if (selectedSE.end.text == '') {
-                                            const d1: Date = new Date(day.dateString);
-                                            const d2: Date = new Date(selectedSE.start.text);
-                                            if (d1.getTime()<d2.getTime()) {
-                                                setSelectedSE({start:{text:day.dateString, obj:day}, end:{text:selectedSE.start.text, obj:day}})
-                                                getDatePeriod(day.dateString, selectedSE.start.text)
-                                            } else {                                                
-                                                setSelectedSE({start:selectedSE.start, end:{text:day.dateString, obj:day}})
-                                                getDatePeriod(selectedSE.start.text, day.dateString)
-                                            }
-                                        } else {
-                                            const d1: Date = new Date(day.dateString);
-                                            const d2: Date = new Date(selectedSE.end.text);
-                                            if (d1.getTime()<d2.getTime()) {
-                                                setSelectedSE({start:{text:day.dateString, obj:day}, end:selectedSE.end})
-                                                getDatePeriod(day.dateString, selectedSE.end.text)
-                                            } else{
-                                                setSelectedSE({start:selectedSE.start, end:{text:day.dateString, obj:day}})
-                                                getDatePeriod(selectedSE.start.text, day.dateString)
-                                            }
-                                        }
-                                    }
-                                }}
-                                style={{ borderRadius:30, paddingVertical:10, marginTop:16, marginBottom:20 }}
-                                markedDates={selected}
-                                renderArrow={direction => (
-                                    direction==='left' ? 
-                                        <View style={{padding:15, borderRadius:360, backgroundColor:'white', alignItems:'center', justifyContent:"center"}}>
-                                            
-                                        </View> : 
-                                        <View style={{transform:[{rotate:'180deg'}],padding:15, borderRadius:360, backgroundColor:'white', alignItems:'center', justifyContent:"center"}}>
-                                            
-                                        </View>
-                                    )
-                                }
-                                theme={ThemeCalender}
-                            />
+                        <View style={{marginHorizontal:16}}>
+                            <TagsNoScroll paddingV={10} oneTag onPress={(data)=>console.log(data)} noBorder data={[{value:'1', name:'Сегодня', incolor:'#00000033', color:'#374A4E', colorText:'#FFFFFF', incolorText:'#FFFFFFAB'}, {value:'2', name:'Завтра', color:'#374A4E', incolor:'#00000033', incolorText:'#FFFFFFAB', colorText:'#FFFFFF'}, {value:'3', incolor:'#00000033', incolorText:'#FFFFFFAB', name:'Оплачиваемые', color:'#374A4E', colorText:'#FFFFFF'}]}/>
                         </View>
+                        {events.length != 0 ? <View style={{marginHorizontal:16, flex:1, marginTop:16, gap:8, marginBottom:76}}>
+                            {events.map((el,i)=><EventItem size={92} noEdit key={i}/>)}
+                        </View> :
+                        <View style={{marginTop:16, flex:1}}>
+                            <BlurView intensity={75} experimentalBlurMethod='dimezisBlurView' style={styles.blurNoWoman} tint='systemChromeMaterialDark'>
+                                <Text style={[styles.bodyText,{color:'white',textAlign:"center"}]}>{'По этому запросу ничего не найдено.\nПопробуйте изменить набор фильтров'}</Text>
+                                <TouchableOpacity activeOpacity={0.7}>
+                                    <Text style={[styles.button,{color:Бирюзовый, paddingTop:8}]}>Сбросить фильтр</Text>
+                                </TouchableOpacity>
+                            </BlurView>
+                        </View>}
                     </KeyboardAvoidingView>
+                    <ModalDatePoint ref={date}/>
                 </ScrollView>
             </MainLayout>
         </ImageBackground>
     )
 }
-
-export const ThemeCalender = {
-    backgroundColor: '#221E1E80',
-    calendarBackground: '#221E1E80',
-    todayTextColor: 'white',
-    todayBackgroundColor: '#1f1c1c',
-    selectedDayBackgroundColor: '#355855',
-    selectedDayTextColor: '#000',
-    dayTextColor:'white',
-    textDisabledColor: '#FFFFFF65',
-    // textDayHeaderFontFamily: "Roboto-Regular",
-    textSectionTitleColor: 'gray',
-    monthTextColor:'#fff',
-    selectedBorderRadius:16,
-    // textMonthFontFamily: "Roboto-Medium",
-    textMonthFontSize: 18,
-    textDayStyle: {
-      fontSize: 14,
-      // fontFamily: "Roboto-Regular",
-      lineHeight: 16,
-      color: 'white',
-    },
-    "stylesheet.calendar.main":{
-        container:{
-            paddingLeft: 10,
-            paddingRight: 10,
-            borderRadius:16,
-            borderWidth:1,
-            borderColor:'#B5B5B54D',
-            overflow:'hidden',
-            backgroundColor:'#221E1E80',
-        }
-    },
-    "stylesheet.calendar.header": {
-      headerContainer: {
-        position: "absolute",
-        flexDirection: "row",
-        left: 7,
-        gap: 20,
-        backgroundColor:'#1C1A1A',
-        borderRadius:360,
-        paddingVertacal:5,
-        paddingHorizontal:7
-      },
-      header: {
-        flexDirection: "row",
-        justifyContent: "flex-end",
-        alignItems: "center"
-      }
-    }
-  };

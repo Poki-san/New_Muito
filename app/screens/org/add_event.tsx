@@ -9,10 +9,13 @@ import { TagsNoScroll } from '../../component/ui/tags';
 import { ModalImg } from '../../component/popup/img';
 import RBSheet from '@nonam4/react-native-bottom-sheet';
 import { showToastable } from 'react-native-toastable';
+import { ModalDate } from '../../component/popup/date';
  
 export function AddEventScreen() {
     const [paths, setPaths] = useState([])
+    const [dateTxt, setDateTxt] = useState('')
     const img = useRef<RBSheet>(null)
+    const date = useRef<RBSheet>(null)
     
     return ( 
         <MainLayout isStatusBar backgroundColor='#181818'>
@@ -63,12 +66,12 @@ export function AddEventScreen() {
                                 <View style={{position:'absolute', right:10, top:0, bottom:0, justifyContent:'center'}}><MapPinIcon/></View>
                             </TouchableOpacity>
                             <View style={{flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
-                                <TouchableOpacity activeOpacity={0.7} style={{width:"68%"}} onPress={()=>{}}>
-                                    <Input editable={false} value='00.00.0000-00.00.0000' backgroundColor='#FFFFFF00' placeholderTextColor={'#FFFFFF99'} title='Дата проведения' style={{borderWidth:1, borderColor:'#FFFFFF99', paddingRight:20}}/>
+                                <TouchableOpacity activeOpacity={0.7} style={{width:"70%"}} onPress={()=>date.current?.open()}>
+                                    <Input editable={false} value={dateTxt} backgroundColor='#FFFFFF00' placeholderTextColor={'#FFFFFF99'} title='Дата проведения' style={{borderWidth:1, borderColor:'#FFFFFF99', paddingRight:20}}/>
                                     <View style={{position:'absolute', right:10, top:0, bottom:0, justifyContent:'center'}}><CalendarIcon/></View>
                                 </TouchableOpacity>
-                                <TouchableOpacity activeOpacity={0.7} style={{width:'30%'}} onPress={()=>{}}>
-                                    <Input editable={false} value='00:00' backgroundColor='#FFFFFF00' placeholderTextColor={'#FFFFFF99'} title='Начало' style={{borderWidth:1, borderColor:'#FFFFFF99', paddingRight:20}}/>
+                                <TouchableOpacity activeOpacity={0.7} style={{width:'28%'}} onPress={()=>{}}>
+                                    <Input editable={false} value='00:00' backgroundColor='#FFFFFF00' placeholderTextColor={'#FFFFFF99'} title='Начало' style={{borderWidth:1, borderColor:'#FFFFFF99', paddingRight:19}}/>
                                     <View style={{position:'absolute', right:10, top:0, bottom:0, justifyContent:'center'}}><ClockIcon/></View>
                                 </TouchableOpacity>
                             </View>
@@ -103,6 +106,9 @@ export function AddEventScreen() {
                         </View>
                     </View>
                     <ModalImg ref={img} onPath={setPaths}/>
+                    <ModalDate ref={date} onPeroid={(start,end)=>{
+                        setDateTxt(start+' '+end)
+                    }}/>
                 </KeyboardAvoidingView>
             </ScrollView>
         </MainLayout>
