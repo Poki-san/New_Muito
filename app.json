@@ -1,8 +1,8 @@
 {
   "expo": {
     "name": "Muito",
-    "slug": "Muito",
-    "version": "1.0.0",
+    "slug": "event-party",
+    "version": "2.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -16,18 +16,21 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "buildNumber": "2.41",
+      "bundleIdentifier": "event-lux"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "versionCode": 32,
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO"
       ],
-      "package": "com.muito"
+      "package": "com.lux_event"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -47,7 +50,7 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "016d329d-b9ba-4625-930f-2da822ed5807"
+        "projectId": "503c0f87-f464-40af-94a4-4b0c75931435"
       }
     }
   }
