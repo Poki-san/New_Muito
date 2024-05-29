@@ -35,6 +35,8 @@ const AppStack = observer(() =>{
           <MainStack.Screen name="Event" component={screens.EventScreen}/>
 
           <MainStack.Screen name="MainGuest" component={MainGuestScreenBottom}/>
+          <MainStack.Screen name="EditGuest" component={screens.EditGuestScreen}/>
+          <MainStack.Screen name="EditPass" component={screens.EditPassScreen}/>
         </MainStack.Navigator>
       </NavigationContainer>
     )

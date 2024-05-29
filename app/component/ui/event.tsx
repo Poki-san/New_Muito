@@ -1,19 +1,19 @@
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 import { styles } from '../../styles';
 import { BlurView } from 'expo-blur';
-import { AlchIcon, CaliyanIcon, EatIcon, EditIcon,InstaEventIcon,InstaIcon,MiniInfIcon,MoneyIcon,TaxiIcon,TrashIcon } from '../../component/svg/svg';
+import { AlchIcon, CaliyanIcon, CheckIcon, EatIcon, EditIcon,InstaEventIcon,InstaIcon,MiniInfIcon,MoneyIcon,TaxiIcon,TrashIcon } from '../../component/svg/svg';
 import { navigate } from '../../functions/navigate';
 import { ButtonMy } from './ButtonMy';
 import { ModalDelEvent } from '../popup/del_event';
 import RBSheet from '@nonam4/react-native-bottom-sheet';
 import { useRef } from 'react';
-import { ModalReview } from '../popup/img copy';
+import { ModalReview } from '../popup/review';
  
-export function EventItem(props:{tag?:number, size?:number, noEdit?:boolean}) {
+export function EventItem(props:{tag?:number, size?:number, check?:boolean, noEdit?:boolean, type?:'guest'|'org'}) {
     const del = useRef<RBSheet>()
     const review = useRef<RBSheet>(null)
     return ( 
-        <TouchableOpacity activeOpacity={0.7} onPress={()=>navigate('Event')}>
+        <TouchableOpacity activeOpacity={0.7} onPress={()=>navigate('Event',{type:props.type})}>
             <BlurView intensity={75} tint='systemChromeMaterialDark' style={{borderRadius:16, overflow:"hidden", borderWidth:1, borderColor:'#FFFFFF99', padding:8, flexDirection:"row",gap:10}}>
                 <View>
                     <Image source={require('../../../assets/image/event.jpg')} style={{height:props.size??72,aspectRatio:1, borderRadius:16}}/>
@@ -24,6 +24,9 @@ export function EventItem(props:{tag?:number, size?:number, noEdit?:boolean}) {
                         <TouchableOpacity activeOpacity={0.7} onPress={()=>navigate('EditEvent')} style={{width:33, height:33, borderRadius:180, backgroundColor:'#374A4E90', alignItems:"center", justifyContent:"center"}}>
                             <EditIcon/>
                         </TouchableOpacity>
+                    </View>}
+                    {props.check && <View style={{position:"absolute", top:3, left:3}}>
+                        <CheckIcon/>
                     </View>}
                 </View>
                 <View style={{flex:1, justifyContent:"space-between",gap:6}}>

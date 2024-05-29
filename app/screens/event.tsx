@@ -1,24 +1,42 @@
 import { Image, ImageBackground, KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import { MainLayout, ModalErrScan, PeopleModal } from '../../component';
-import { height, statusBarHeight, width, Бирюзовый } from '../../GLOBAL';
-import { styles } from '../../styles';
+import { MainLayout, ModalErrScan, PeopleModal, ScanModal, ModalQrCode, ModalWarning, ModalReview } from '../component';
+import { height, statusBarHeight, width, Бирюзовый } from '../GLOBAL';
+import { styles } from '../styles';
 import { BlurView } from 'expo-blur';
-import { goBack } from '../../functions/navigate';
-import { AlchIcon, BackArrowIcon, CaliyanIcon, EatIcon, EditIcon, InstaEventIcon, InstaIcon, MiniHeartIcon, MiniInfIcon, MoneyIcon, ScanIcon, SettingIcon, TGEventIcon, TaxiIcon, TrashIcon } from '../../component/svg/svg';
+import { goBack } from '../functions/navigate';
+import { AlchIcon, BackArrowIcon, CaliyanIcon, EatIcon, EditIcon, GOIcon, InstaEventIcon, InstaIcon, MiniHeartIcon, MiniInfIcon, MoneyIcon, QRIcon, ScanIcon, SettingIcon, TGEventIcon, TaxiIcon, TrashIcon, WarningIcon,  } from '../component/svg/svg';
 import { useRef, useState } from 'react';
-import { ScanModal } from '../../component/popup/scan';
 import RBSheet from '@nonam4/react-native-bottom-sheet';
+import { showToastable } from 'react-native-toastable';
  
-export function EventScreen() {
+export function EventScreen(props?:{route?:{params:{type?:''}}}) {
     const [alert, setAlert] = useState(false)
     const [scan, setScan] = useState(false)
     const [people, setPeople] = useState(false)
+    const [go, setGo] = useState(false)
     const [tag, setTag] = useState(0)
     const errScan = useRef<RBSheet>(null)
+    const qr = useRef<RBSheet>(null)
+    const warning = useRef<RBSheet>(null)
+    const review = useRef<RBSheet>(null)
+    const type = props.route.params.type=='' ? 'org' : props.route.params.type
+    // review.current?.open()
     return ( 
         <MainLayout isStatusBar backgroundColor='#181818'>
-            <TouchableOpacity activeOpacity={0.7} onPress={()=>setScan(true)} style={styles.buttonEvent}>
-                <ScanIcon/>
+            <TouchableOpacity activeOpacity={0.7} onPress={()=>{
+                if (type=='org') {
+                    setScan(true)
+                } else {
+                    if (go) {
+                        qr.current?.open()
+                    } else {
+                        showToastable({message:'Ваша заявка отпралена'})
+                        setGo(true)
+                    }
+                }
+            }} style={styles.buttonEvent}>
+                {type=='org' ? <ScanIcon/> :
+                go ?  <QRIcon/> :<GOIcon/>}
             </TouchableOpacity>
             <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='always' contentContainerStyle={{flexGrow:1}}>
                 <KeyboardAvoidingView
@@ -26,7 +44,7 @@ export function EventScreen() {
                     keyboardVerticalOffset={Platform.OS === "ios" && statusBarHeight}
                     style={{ flex: 1 }}
                 >
-                    <ImageBackground source={require('../../../assets/image/event.jpg')} resizeMode='cover' style={{width:width, height:height*0.5, borderBottomLeftRadius:16, borderBottomRightRadius:16, marginBottom:16, overflow:'hidden'}}>
+                    <ImageBackground source={require('../../assets/image/event.jpg')} resizeMode='cover' style={{width:width, height:height*0.5, borderBottomLeftRadius:16, borderBottomRightRadius:16, marginBottom:16, overflow:'hidden'}}>
                         {alert &&<View onTouchStart={()=>setAlert(false)} style={{position:"absolute", top:0, left:0, width:width*2, height:height*2, zIndex:1}} />}
                         <View style={{flexDirection:"row", alignItems:"center", gap:8, marginTop:statusBarHeight+7, marginHorizontal:16, justifyContent:"space-between"}}>
                             <TouchableOpacity activeOpacity={0.7} onPress={goBack}>
@@ -40,6 +58,11 @@ export function EventScreen() {
                                 </BlurView>
                             </TouchableOpacity>
                             {alert && <View style={[styles.alertContainer,{right:0}]}>
+                                {type != 'org' ? <TouchableOpacity onPress={()=>warning.current?.open()} activeOpacity={0.7} style={{flexDirection:"row", gap:7, alignItems:"center"}}>
+                                    <WarningIcon/>
+                                    <Text style={[styles.bodyText,{color:'#BC1115'}]}>Пожаловаться</Text>
+                                </TouchableOpacity>
+                                :<>
                                 <TouchableOpacity activeOpacity={0.7} style={{flexDirection:"row", gap:7, alignItems:"center"}}>
                                     <EditIcon/>
                                     <Text style={[styles.bodyText,{color:'white'}]}>Редактировать</Text>
@@ -47,11 +70,11 @@ export function EventScreen() {
                                 <TouchableOpacity activeOpacity={0.7} style={{flexDirection:"row", gap:7, alignItems:"center"}}>
                                     <TrashIcon color='#BC1115' fillOpacity={1}/>
                                     <Text style={[styles.bodyText,{color:'#BC1115'}]}>Удалить</Text>
-                                </TouchableOpacity>
+                                </TouchableOpacity></>}
                             </View>}
                         </View>
                         <View style={[styles.blurLikeContainer,{position:"absolute", bottom:0, paddingBottom:11}]}>
-                            <BlurView tint='systemChromeMaterialDark' style={{gap:7, paddingHorizontal:15, paddingTop:12, paddingBottom:12, borderRadius:16, overflow:'hidden'}} intensity={40} experimentalBlurMethod='dimezisBlurView'>
+                            <BlurView tint='systemChromeMaterialDark' style={{gap:7, paddingHorizontal:15, paddingTop:12, paddingBottom:12, borderRadius:16, overflow:'hidden'}} intensity={55} experimentalBlurMethod='dimezisBlurView'>
                                 <View style={{flexDirection:'row', alignItems:"center", justifyContent:'space-between'}}>
                                     <Text style={[styles.bodyText,{color:'white', fontFamily:'PoppinsMedium'}]}>18:00</Text>
                                     <Text style={[styles.bodyText,{color:'white', fontFamily:'PoppinsMedium'}]}>10 <Text style={{fontSize:12, color:'#FFFFFF99'}}>авг</Text></Text>
@@ -122,7 +145,7 @@ export function EventScreen() {
                         </View>}
                         {tag==2 && <View style={{flexDirection:"row", justifyContent:'space-between'}}>
                             <View style={{flexDirection:"row", gap:8}}>
-                                <Image style={{width:39, height:39, borderRadius:8, overflow:'hidden'}} source={require('../../../assets/image/people.jpg')}/>
+                                <Image style={{width:39, height:39, borderRadius:8, overflow:'hidden'}} source={require('../../assets/image/people.jpg')}/>
                                 <View style={{gap:4}}>
                                     <Text style={[styles.bodyText,{color:'white'}]}>Александр</Text>
                                     <View style={{flexDirection:"row", alignItems:"center", gap:4}}>
@@ -151,6 +174,9 @@ export function EventScreen() {
             }} onRequestClose={()=>setScan(false)}/>}
             {people&&<PeopleModal visible={people} onRequestClose={()=>setPeople(false)}/>}
             <ModalErrScan ref={errScan}/>
+            <ModalQrCode ref={qr}/>
+            <ModalWarning ref={warning}/>
+            <ModalReview event title='Оцените мероприятие' ref={review}/>
         </MainLayout>
     )
 }

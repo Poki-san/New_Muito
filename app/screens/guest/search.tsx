@@ -3,12 +3,11 @@ import { EventItem, MainLayout } from '../../component';
 import { height, statusBarHeight, width, Бирюзовый } from '../../GLOBAL';
 import { styles } from '../../styles';
 import { CalendarIcon } from '../../component/svg/svg';
-import { TagsNoScroll } from '../../component/ui/tags';
+import { Tags, TagsNoScroll } from '../../component/ui/tags';
 import { BlurView } from 'expo-blur';
 import { useRef, useState } from 'react';
 import { ModalDatePoint } from '../../component/popup/date';
 import RBSheet from '@nonam4/react-native-bottom-sheet';
-import { ModalReview } from '../../component/popup/img copy';
 
 export function SearchScreen() {
     const [events, setEvents] = useState([1,2,3,4,5])
@@ -47,10 +46,10 @@ export function SearchScreen() {
                             <Image source={require('../../../assets/image/line.png')} style={{height:1}}/>
                         </View>
                         <View style={{marginHorizontal:16}}>
-                            <TagsNoScroll paddingV={10} oneTag onPress={(data)=>console.log(data)} noBorder data={[{value:'1', name:'Сегодня', incolor:'#00000033', color:'#374A4E', colorText:'#FFFFFF', incolorText:'#FFFFFFAB'}, {value:'2', name:'Завтра', color:'#374A4E', incolor:'#00000033', incolorText:'#FFFFFFAB', colorText:'#FFFFFF'}, {value:'3', incolor:'#00000033', incolorText:'#FFFFFFAB', name:'Оплачиваемые', color:'#374A4E', colorText:'#FFFFFF'}]}/>
+                            <Tags paddingV={5} style={{paddingHorizontal:0}} onPress={(data)=>console.log(data)} noBorder data={[{value:'1', name:'Сегодня', colorInActive:'#00000033', color:'#374A4E', colorText:'#FFFFFF', colorTextInActive:'#FFFFFFAB'}, {value:'2', name:'Завтра', color:'#374A4E', colorInActive:'#00000033', colorTextInActive:'#FFFFFFAB', colorText:'#FFFFFF'}, {value:'3', colorInActive:'#00000033', colorTextInActive:'#FFFFFFAB', name:'Оплачиваемые', color:'#374A4E', colorText:'#FFFFFF'}, {value:'4', colorInActive:'#00000033', colorTextInActive:'#FFFFFFAB', name:'Еда', color:'#374A4E', colorText:'#FFFFFF'}, {value:'5', colorInActive:'#00000033', colorTextInActive:'#FFFFFFAB', name:'Алкоголь', color:'#374A4E', colorText:'#FFFFFF'}]}/>
                         </View>
                         {events.length != 0 ? <View style={{marginHorizontal:16, flex:1, marginTop:16, gap:8, marginBottom:76}}>
-                            {events.map((el,i)=><EventItem size={92} noEdit key={i}/>)}
+                            {events.map((el,i)=><EventItem size={92} noEdit key={i} type={'guest'}/>)}
                         </View> :
                         <View style={{marginTop:16, flex:1}}>
                             <BlurView intensity={75} experimentalBlurMethod='dimezisBlurView' style={styles.blurNoWoman} tint='systemChromeMaterialDark'>

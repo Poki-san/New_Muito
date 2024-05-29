@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import React, { forwardRef, useRef } from 'react'
 import RBSheet from '@nonam4/react-native-bottom-sheet';
 import { ButtonMy } from "../ui/ButtonMy";
@@ -68,6 +68,13 @@ export const ModalRecovery = forwardRef((props:{},ref)=>{
  */
 export const ModalRecoveryCode = forwardRef((props:{onPress?:()=>void},ref)=>{
     const newPass = useRef<RBSheet>()
+
+    const refInput = {
+        one:useRef<TextInput>(null),
+        two:useRef<TextInput>(null),
+        three:useRef<TextInput>(null),
+        four:useRef<TextInput>(null)
+    }
     return (
         <>
             <RBSheet
@@ -107,16 +114,38 @@ export const ModalRecoveryCode = forwardRef((props:{onPress?:()=>void},ref)=>{
                            
                             <View style={{flexDirection:"row", justifyContent:"space-between", marginBottom:-6, marginHorizontal:16}}>
                                 <View style={{width:64}}>
-                                    <Input backgroundColor={Фон} style={{borderWidth:1, textAlign:'center', paddingHorizontal:16, paddingVertical:12}} maxLength={1}/>
+                                    <Input backgroundColor={Фон} ref={refInput.four} keyboardType='number-pad' onChangeText={(value)=>{
+                                        if (value.length > 0) {
+                                            refInput.one.current.focus()
+                                        }
+                                    }} style={{borderWidth:1, textAlign:'center', paddingHorizontal:16, paddingVertical:12}} maxLength={1}/>
                                 </View>
                                 <View style={{width:64}}>
-                                    <Input backgroundColor={Фон} style={{borderWidth:1, textAlign:'center', paddingHorizontal:16, paddingVertical:12}} maxLength={1}/>
+                                    <Input backgroundColor={Фон} keyboardType='number-pad' onChangeText={(value)=>{
+                                        if (value.length > 0) {
+                                            refInput.two.current.focus()
+                                        }
+                                        if (value.length == 0) {
+                                            refInput.four.current.focus()
+                                        }
+                                    }} ref={refInput.one} style={{borderWidth:1, textAlign:'center', paddingHorizontal:16, paddingVertical:12}} maxLength={1}/>
                                 </View>
                                 <View style={{width:64}}>
-                                    <Input backgroundColor={Фон} style={{borderWidth:1, textAlign:'center', paddingHorizontal:16, paddingVertical:12}} maxLength={1}/>
+                                    <Input backgroundColor={Фон} keyboardType='number-pad' onChangeText={(value)=>{
+                                        if (value.length > 0) {
+                                            refInput.three.current.focus()
+                                        }
+                                        if (value.length == 0) {
+                                            refInput.one.current.focus()
+                                        }
+                                    }} ref={refInput.two} style={{borderWidth:1, textAlign:'center', paddingHorizontal:16, paddingVertical:12}} maxLength={1}/>
                                 </View>
                                 <View style={{width:64}}>
-                                    <Input backgroundColor={Фон} style={{borderWidth:1, textAlign:'center', paddingHorizontal:16, paddingVertical:12}} maxLength={1}/>
+                                    <Input backgroundColor={Фон} onChangeText={(value)=>{
+                                        if (value.length == 0) {
+                                            refInput.two.current.focus()
+                                        }
+                                    }} keyboardType='number-pad' ref={refInput.three} style={{borderWidth:1, textAlign:'center', paddingHorizontal:16, paddingVertical:12}} maxLength={1}/>
                                 </View>
                             </View>
                             <Text style={[styles.bodyText,{color:Белый50, textAlign:'center', marginBottom:8}]}>Введите код из письма</Text>

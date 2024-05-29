@@ -3,12 +3,12 @@ import { Белый, Бирюзовый, Бирюзовый50, Фон } from '..
 import { useEffect, useState } from 'react';
 import { styles } from '../../styles';
  
-export function Tags(props:{default?:string, data:{name:string, value:string, colorText?:string, color?:string, colorTextInActive?:string, colorInActive?:string}[], styleContainer?: StyleProp<ViewStyle>, style?: StyleProp<ViewStyle>, onPress?:(value:string)=>void}) {
+export function Tags(props:{default?:string, data:{name:string, value:string, colorText?:string, color?:string, colorTextInActive?:string, colorInActive?:string}[], styleContainer?: StyleProp<ViewStyle>, style?: StyleProp<ViewStyle>, paddingV?:number, noBorder?:boolean, onPress?:(value:string)=>void}) {
     const [active, setActive] = useState('-1')
     useEffect(()=>setActive(props.default),[props.default])
     return (
         <View>
-            <ScrollView showsHorizontalScrollIndicator={false} style={[{marginVertical:20},props.styleContainer]} contentContainerStyle={[{gap:15, paddingHorizontal:16, flexGrow:1},props.style]} horizontal>
+            <ScrollView showsHorizontalScrollIndicator={false} style={[{marginVertical:props.paddingV??20},props.styleContainer]} contentContainerStyle={[{gap:15, paddingHorizontal:16, flexGrow:1},props.style]} horizontal>
                 {props.data&& 
                     props.data.map((el,i)=>(
                         <TouchableOpacity 
@@ -18,7 +18,7 @@ export function Tags(props:{default?:string, data:{name:string, value:string, co
                                 !!props.onPress && props.onPress(el.value)
                                 setActive(el.value)
                             }}
-                            style={{borderColor:active == el.value ? (el.color ?? Бирюзовый50) : (el.colorInActive ?? Фон), paddingVertical:6, backgroundColor:active == el.value ? (el.color ?? '#17171A') : Белый, paddingHorizontal:13, borderWidth:1, borderRadius:20}}
+                            style={{borderColor:active == el.value ? (el.color ?? Бирюзовый50) : (el.colorInActive ?? Фон), paddingVertical:6, backgroundColor:active == el.value ? (el.color ?? '#17171A') : (el.colorInActive ?? Белый), paddingHorizontal:13, borderWidth:1, borderRadius:20}}
                         >
                             <Text style={[styles.smallText,{color:active == el.value ? (el.colorText ?? Белый) : (el.colorTextInActive ?? 'white')}]}>{el.name}</Text>
                         </TouchableOpacity>

@@ -3,21 +3,20 @@ import React, { forwardRef, useRef, useState } from 'react'
 import RBSheet from '@nonam4/react-native-bottom-sheet';
 import { statusBarHeight, Белый50, Бирюзовый, Фон } from "../../GLOBAL";
 import { styles } from "../../styles";
-import { CameraMiniIcon, HeartMenuIcon, ImgIcon, ModalCloseIcon } from "../svg/svg";
-import { addImage } from "../../functions/addImage";
+import { HeartMenuIcon, ModalCloseIcon } from "../svg/svg";
 import { ButtonMy } from "../ui/ButtonMy";
 
 /**
  * Модалка для вызова вариантов изображения
  * @param ref для взаимодействия с модальным окном
  */
-export const ModalReview = forwardRef((props:{},ref)=>{
+export const ModalReview = forwardRef((props:{noImg?:boolean, event?:boolean, title?:string},ref)=>{
     const [review, setReview] = useState([false,false,false,false,false])
     return (
         <>
             <RBSheet
                 ref={ref}
-                height={260}
+                height={props.event ?213 :260}
                 closeOnDragDown={true}
                 // dragFromTopOnly
                 closeOnPressMask={true} 
@@ -45,8 +44,11 @@ export const ModalReview = forwardRef((props:{},ref)=>{
                     >
                         <View style={{alignItems:"center", marginBottom:10}}><ModalCloseIcon/></View>
                         <View style={{gap:13, alignItems:'center'}}>
-                            <Text style={[styles.h4,{color:'white', textAlign:'center'}]}>Оцените участницу мероприятия</Text>
-                            <Image style={{aspectRatio:1, height:55, borderRadius:16, overflow:"hidden"}} source={require('../../../assets/image/people.jpg')}/>
+                            <View style={{gap:4}}>
+                                <Text style={[styles.h4,{color:'white', textAlign:'center'}]}>{props.title ?props.title :'Оцените участницу мероприятия'}</Text>
+                                {props.event && <Text style={[styles.h4,{color:'white', textAlign:'center'}]}>Название вечеринки Paty Dens Nou</Text>}
+                            </View>
+                            {!props.event && <Image style={{aspectRatio:1, height:55, borderRadius:16, overflow:"hidden"}} source={require('../../../assets/image/people.jpg')}/>}
                             <View style={{flexDirection:"row", alignItems:"center", justifyContent:"center", gap:13}}>
                                 {review.map((el,i)=>
                                     <TouchableOpacity key={i} activeOpacity={0.7} onPress={()=>{

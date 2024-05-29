@@ -290,7 +290,7 @@ function StepThree(props:{onPress?:()=>void}) {
             <View style={{flex:1, marginTop:25, alignItems:'center', justifyContent:"space-between"}}>
                 <View style={{width:"100%"}}>
                     {tagsTest.map((el,i)=>(
-                        <View key={i} style={{gap:8, marginBottom:8}}>
+                        <View key={i} style={{gap:8, marginBottom:16}}>
                             <Text style={[styles.bodyText,{color:'#ffffff'}]}>{el.title}</Text>
                             <View style={{flexDirection:'row', alignItems:"center", flexWrap:'wrap', gap:8}}>
                                 {el.tags.map((el2,i2)=>(

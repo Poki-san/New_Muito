@@ -19,7 +19,8 @@ export async function addImage(event:string, allowsEditing=false, allowsMultiple
                     aspect: [414, 417],
                     quality: 1,
                     allowsMultipleSelection: allowsMultipleSelection,
-                    selectionLimit:selectionLimit
+                    selectionLimit:selectionLimit,
+                    orderedSelection:true
                 });
                 delete result.cancelled;
                 const paths = []

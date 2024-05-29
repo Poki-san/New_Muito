@@ -19,15 +19,15 @@ export const ModalDate = forwardRef((props:{onPeroid?:(start?:string, end?:strin
         let start = new Date(start_date);
         let count=1
         let flag = true
-        let arr = {[start_date]:{selected: true, startingDay: true, endingDay: false, customStyles: { container: {borderRadius: 90}}, textColor:'black', color:'#355855'}}
+        let arr = {[start_date]:{selected: true, startingDay: true, endingDay: false, textColor:'black', color:'#355855'}}
         while (flag==true) {
             const newDate = start.setDate(start.getDate() + count); 
             const date = CalendarUtils.getCalendarDateString(newDate)
             if (date == end_date) {
-                arr = {...arr, [end_date]:{selected: true, startingDay: false, customStyles: { container: {borderRadius: 90}},  endingDay: true, textColor:'white', color:'#528e8a'}}
+                arr = {...arr, [end_date]:{selected: true, startingDay: false, endingDay: true, textColor:'white', color:'#528e8a'}}
                 flag = false
             } else {
-                arr = {...arr, [date]:{selected: true, startingDay: false, customStyles: { container: {borderRadius: 90}}, endingDay: false, textColor:'white', color:'#3d5f5d'}}
+                arr = {...arr, [date]:{selected: true, startingDay: false, endingDay: false, textColor:'white', color:'#3d5f5d'}}
             }  
         }
         setSelected(arr)
@@ -74,7 +74,7 @@ export const ModalDate = forwardRef((props:{onPeroid?:(start?:string, end?:strin
                                     onDayPress={day => {
                                         if (selectedSE.start.text == '') {
                                             setSelectedSE({start:{text:day.dateString, obj:day}, end:selectedSE.end})
-                                            setSelected({[day.dateString]:{selected: true, color:'#355855', customStyles: { container: {borderRadius: 90}}}})
+                                            setSelected({[day.dateString]:{selected: true, startingDay: true, endingDay: true, color:'#355855'}})
                                         } else {
                                             if (selectedSE.end.text == '') {
                                                 const d1: Date = new Date(day.dateString);
@@ -135,7 +135,7 @@ export const ModalDate = forwardRef((props:{onPeroid?:(start?:string, end?:strin
  * @param ref для взаимодействия с модальным окном
  */
 export const ModalDatePoint = forwardRef((props:{onPeroid?:(date?:string)=>void},ref)=>{
-    const [selected, setSelected] = useState({})
+    const [selected, setSelected] = useState('')
     return (
         <>
             <RBSheet
@@ -173,11 +173,11 @@ export const ModalDatePoint = forwardRef((props:{onPeroid?:(date?:string)=>void}
                                     firstDay={1}
                                     enableSwipeMonths
                                     onDayPress={day => {
-                                        setSelected({[day.dateString]:{selected: true, color:'#355855', customStyles: { container: {borderRadius: 90}}}})
-                                        props.onPeroid(day.dateString)
+                                        setSelected(day.dateString)
+                                        !!props.onPeroid&&props.onPeroid(day.dateString)
                                     }}
                                     style={{ borderRadius:16, paddingVertical:10}}
-                                    markedDates={selected}
+                                    markedDates={{[selected]:{selected: true, disableTouchEvent: true, marked:false, color:'#355855'}}}
                                     renderArrow={direction => (
                                         direction==='left' ? 
                                             <View style={{padding:7, alignItems:'center', justifyContent:"center"}}>
@@ -203,7 +203,7 @@ const ThemeCalender = {
     backgroundColor: '#221E1E80',
     calendarBackground: '#221E1E80',
     todayTextColor: 'white',
-    todayBackgroundColor: '#1f1c1c',
+    todayBackgroundColor: '#00000066',
     selectedDayBackgroundColor: '#355855',
     selectedDayTextColor: '#000',
     dayTextColor:'white',
@@ -232,20 +232,48 @@ const ThemeCalender = {
         }
     },
     "stylesheet.calendar.header": {
-      headerContainer: {
-        position: "absolute",
-        flexDirection: "row",
-        left: 7,
-        gap: 20,
-        backgroundColor:'#1C1A1A',
-        borderRadius:360,
-        paddingVertacal:5,
-        paddingHorizontal:7
-      },
-      header: {
-        flexDirection: "row",
-        justifyContent: "flex-end",
-        alignItems: "center"
-      }
-    }
+        headerContainer: {
+            position: "absolute",
+            flexDirection: "row",
+            left: 7,
+            gap: 20,
+            backgroundColor:'#1C1A1A',
+            borderRadius:360,
+            paddingVertacal:5,
+            paddingHorizontal:7
+        },
+        header: {
+            flexDirection: "row",
+            justifyContent: "flex-end",
+            alignItems: "center"
+        }
+    },
+    "stylesheet.day.basic": {
+        base: {
+            width: 35,
+            height: 35,
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius:360,
+            overflow: 'hidden'
+        },
+    },
+    "stylesheet.day.period": {
+        base: {
+            width: 35,
+            height: 35,
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius:360,
+            overflow: 'hidden'
+        },
+        selected: {
+            width: 35,
+            height: 35,
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius:360,
+            overflow: 'hidden'
+        },
+    },
 };

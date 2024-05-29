@@ -1,7 +1,7 @@
 import { Animated, Image, ImageBackground, KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import { MainLayout,TagBlock } from '../../component';
+import { MainLayout,ModalWarning,TagBlock } from '../../component';
 import { height, statusBarHeight, width, Белый, Бирюзовый, Бирюзовый50 } from '../../GLOBAL';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { BlurView } from 'expo-blur';
 import { AlertIcon, BackArrowIcon, CloseEyeIcon, CloseIcon, HeartMenuIcon, LikeIcon, ModalCloseIcon, RegInstaIcon, SettingIcon, TGIcon } from '../../component/svg/svg';
 import { styles } from '../../styles';
@@ -9,12 +9,14 @@ import GestureRecognizer from 'react-native-swipe-gestures';
 import Carousel from 'react-native-reanimated-carousel';
 import { showToastable } from 'react-native-toastable';
 import { goBack } from '../../functions/navigate';
+import RBSheet from '@nonam4/react-native-bottom-sheet';
  
 export function PeopleScreen() {
     const [index, setIndex] = useState(0)  
     const [more, setMore] =useState(false)
     const [alert, setAlert] =useState(false)
     const animHeight = new Animated.Value(0)
+    const warning = useRef<RBSheet>(null)
     const animRotate = new Animated.Value(0)
     const Rotate = animRotate.interpolate({
         inputRange:[0,1],
@@ -83,7 +85,7 @@ export function PeopleScreen() {
                                                 </BlurView>
                                             </TouchableOpacity>
                                             {alert && <View style={styles.alertContainer}>
-                                                <TouchableOpacity activeOpacity={0.7} style={{flexDirection:"row", gap:7, alignItems:"center"}}>
+                                                <TouchableOpacity onPress={()=>warning.current?.open()} activeOpacity={0.7} style={{flexDirection:"row", gap:7, alignItems:"center"}}>
                                                     <AlertIcon/>
                                                     <Text style={[styles.bodyText,{color:'#BC1115'}]}>Пожаловаться</Text>
                                                 </TouchableOpacity>
@@ -179,6 +181,7 @@ export function PeopleScreen() {
                         </View>
                     </KeyboardAvoidingView>
                 </ScrollView>
+                <ModalWarning ref={warning}/>
             </MainLayout>
         </ImageBackground>
     )

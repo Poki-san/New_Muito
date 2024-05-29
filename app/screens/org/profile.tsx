@@ -47,7 +47,7 @@ export const ProfileScreen = observer(() => {
                         <View style={{paddingHorizontal:16, width:'100%', gap:8, flex:1}}>
                             <ProfileBlock text='Скрытые анкеты' onPress={()=>navigate('NoWatch')}/>
                             <ProfileBlock text='Редактировать профиль' onPress={()=>navigate('EditOrg')}/>
-                            <ProfileBlock text='Изменить пароль'/>
+                            <ProfileBlock text='Изменить пароль' onPress={()=>navigate('EditPass')}/>
                             <ProfileBlock text='Помощь' msgIcon={true} onPress={()=>help.current.open()}/>
                         </View>
                         <TouchableOpacity activeOpacity={0.7} onPress={()=>navigate('Auth')} style={{width:'100%', marginBottom:80}}>

@@ -11,14 +11,14 @@ import { ButtonMy } from "../ui/ButtonMy";
  * Модалка для отправки сообщения
  * @param ref для взаимодействия с модальным окном
  */
-export const ModalEmailHelp = forwardRef((props:{},ref)=>{
+export const ModalWarning = forwardRef((props:{},ref)=>{
     const code = useRef<RBSheet>()
     const [text, setText] = useState('')
     return (
         <>
             <RBSheet
                 ref={ref}
-                height={353}
+                height={300}
                 closeOnDragDown={true}
                 // dragFromTopOnly
                 closeOnPressMask={true} 
@@ -46,11 +46,11 @@ export const ModalEmailHelp = forwardRef((props:{},ref)=>{
                     >
                         <View style={{alignItems:"center", marginBottom:10}}><ModalCloseIcon/></View>
                         <View style={{gap:13}}>
-                            <Text style={[styles.h4,{color:'white', textAlign:'center'}]}>Нужна наша помощь?</Text>
-                            <Input backgroundColor='#FFFFFF00' placeholderTextColor={'#FFFFFF99'} title='Email' style={{borderWidth:1, borderColor:'#FFFFFF99'}}/>
+                            <Text style={[styles.h4,{color:'white', textAlign:'center'}]}>Хотите пожаловаться?</Text>
+                            {/* <Input backgroundColor='#FFFFFF00' placeholderTextColor={'#FFFFFF99'} title='Email' style={{borderWidth:1, borderColor:'#FFFFFF99'}}/> */}
                             <View style={{gap:4}}>
                                 <Text style={[styles.smallText,{color:'#FFFFFF90', marginRight:10, textAlign:'right'}]}>{text.length}/300</Text>
-                                <Input mode='outlined' value={text} onChangeText={setText} backgroundColor='#FFFFFF00' maxLength={300} placeholderTextColor={'#FFFFFF99'} title='Опишите проблему' style={{borderWidth:1, borderColor:'#FFFFFF99', height:140}} multiline/>
+                                <Input mode='outlined' value={text} onChangeText={setText} backgroundColor='#FFFFFF00' maxLength={300} placeholderTextColor={'#FFFFFF99'} title='Опишите причину' style={{borderWidth:1, borderColor:'#FFFFFF99', height:140}} multiline/>
                             </View>
                             <ButtonMy text='Отправить' onPress={()=>{}} backgroundColor='#88FFF9' colorText='#171717'/>
                         </View>
