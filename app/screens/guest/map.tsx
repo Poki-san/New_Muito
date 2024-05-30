@@ -1,12 +1,13 @@
 import { Image, KeyboardAvoidingView, Platform, Text, TouchableOpacity, View } from 'react-native';
 import { EventItem, MainLayout, ModalDatePoint } from '../../component';
-import { height, statusBarHeight, width, Бирюзовый } from '../../GLOBAL';
+import { height, statusBarHeight, width, Белый, Бирюзовый } from '../../GLOBAL';
 import { ClusteredYamap, Marker } from 'react-native-yamap-shim';
 import { useEffect, useRef, useState } from 'react';
 import coordinate from '../../model/coordinate';
 import { CalendarIcon } from '../../component/svg/svg';
 import { styles } from '../../styles';
 import RBSheet from '@nonam4/react-native-bottom-sheet';
+import { BlurView } from 'expo-blur';
  
 export function MapGuestScreen() {
     const [countLoad, setCountLoader] = useState(0)
@@ -40,8 +41,12 @@ export function MapGuestScreen() {
                 style={{ flex: 1, marginTop:statusBarHeight }}
             >
                 <View style={{borderTopLeftRadius:16, borderTopRightRadius:16, overflow:"hidden"}}>
-                    <View style={{paddingHorizontal:16, position:"absolute", top:8, left:0, right:0,  flexDirection:'row', alignItems:'center', justifyContent:"space-between"}}>
-                        <View/>
+                    <View style={{paddingHorizontal:16, position:"absolute", gap:6, top:8, left:0, right:0,  flexDirection:'row', alignItems:'center', justifyContent:"space-between"}}>
+                        <View style={{width:42, height:42}}/>
+                        <BlurView intensity={75} experimentalBlurMethod='dimezisBlurView' style={{flexDirection:"row", paddingHorizontal:10, paddingVertical:8,
+                        overflow:"hidden", borderRadius:16, alignItems:'center', gap:4}} tint='systemChromeMaterialDark'>
+                            <Text style={[styles.h4,{color:Белый, textAlign:"center"}]}>Мероприятия рядом</Text>
+                        </BlurView>
                         <TouchableOpacity onPress={()=>date.current?.open()} style={{borderRadius:16, width:42, alignItems:'center', justifyContent:"center", height:42, backgroundColor:'#00000033'}}>
                             <CalendarIcon color='#fff'/>
                         </TouchableOpacity>
