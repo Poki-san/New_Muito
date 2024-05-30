@@ -1,13 +1,17 @@
-import { Image, KeyboardAvoidingView, Platform, View } from 'react-native';
-import { EventItem, MainLayout } from '../../component';
+import { Image, KeyboardAvoidingView, Platform, Text, TouchableOpacity, View } from 'react-native';
+import { EventItem, MainLayout, ModalDatePoint } from '../../component';
 import { height, statusBarHeight, width, Бирюзовый } from '../../GLOBAL';
 import { ClusteredYamap, Marker } from 'react-native-yamap-shim';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import coordinate from '../../model/coordinate';
+import { CalendarIcon } from '../../component/svg/svg';
+import { styles } from '../../styles';
+import RBSheet from '@nonam4/react-native-bottom-sheet';
  
 export function MapGuestScreen() {
     const [countLoad, setCountLoader] = useState(0)
     const [event, setEvent] = useState(false)
+    const date = useRef<RBSheet>(null)
     const [markers, setMarkers] = useState([{
         point: {
             lat: 55.754215,
@@ -36,6 +40,12 @@ export function MapGuestScreen() {
                 style={{ flex: 1, marginTop:statusBarHeight }}
             >
                 <View style={{borderTopLeftRadius:16, borderTopRightRadius:16, overflow:"hidden"}}>
+                    <View style={{paddingHorizontal:16, flexDirection:'row', alignItems:'center', justifyContent:"space-between"}}>
+                        <View/>
+                        <TouchableOpacity onPress={()=>date.current?.open()} style={{borderRadius:16, width:42, alignItems:'center', justifyContent:"center", height:42, backgroundColor:'#00000033'}}>
+                            <CalendarIcon color='#fff'/>
+                        </TouchableOpacity>
+                    </View>
                     <ClusteredYamap
                         key={up}
                         clusterColor={Бирюзовый}
@@ -71,6 +81,7 @@ export function MapGuestScreen() {
                     </View>}
                 </View>
             </KeyboardAvoidingView>
+            <ModalDatePoint ref={date}/>
         </MainLayout>
     )
 }

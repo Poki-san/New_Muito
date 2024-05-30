@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { ButtonMy, Input, MainLayout, ModalRecovery } from '../component';
 import { statusBarHeight } from '../GLOBAL';
 import { styles } from '../styles';

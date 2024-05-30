@@ -3,7 +3,7 @@ import { EventItem, MainLayout } from '../../component';
 import { height, statusBarHeight, width, Бирюзовый } from '../../GLOBAL';
 import { styles } from '../../styles';
 import { CalendarIcon } from '../../component/svg/svg';
-import { Tags, TagsNoScroll } from '../../component/ui/tags';
+import { Tags } from '../../component/ui/tags';
 import { BlurView } from 'expo-blur';
 import { useRef, useState } from 'react';
 import { ModalDatePoint } from '../../component/popup/date';
