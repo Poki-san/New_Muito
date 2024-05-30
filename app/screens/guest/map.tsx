@@ -40,7 +40,7 @@ export function MapGuestScreen() {
                 style={{ flex: 1, marginTop:statusBarHeight }}
             >
                 <View style={{borderTopLeftRadius:16, borderTopRightRadius:16, overflow:"hidden"}}>
-                    <View style={{paddingHorizontal:16, flexDirection:'row', alignItems:'center', justifyContent:"space-between"}}>
+                    <View style={{paddingHorizontal:16, position:"absolute", top:8, left:0, right:0,  flexDirection:'row', alignItems:'center', justifyContent:"space-between"}}>
                         <View/>
                         <TouchableOpacity onPress={()=>date.current?.open()} style={{borderRadius:16, width:42, alignItems:'center', justifyContent:"center", height:42, backgroundColor:'#00000033'}}>
                             <CalendarIcon color='#fff'/>
