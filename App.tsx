@@ -8,8 +8,11 @@ import Toastable from 'react-native-toastable';
 import { styles } from './app/styles';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import 'moment/locale/ru';
-import moment from 'moment';
 import { LocaleConfig } from 'react-native-calendars';
+
+import YaMap from 'react-native-yamap-shim';
+import coordinate from './app/model/coordinate';
+YaMap.init('9686e034-f846-4d6c-a556-fc6f621bd36a');
 
 LocaleConfig.locales["ru"] = {
   monthNames: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
@@ -34,8 +37,17 @@ export default function App() {
         'PoppinsSemiBold': require('./assets/fonts/Poppins-SemiBold.ttf'),
         'PoppinsBold': require('./assets/fonts/Poppins-Bold.ttf'),
       }
+      
       await Font.loadAsync(font)
-
+      
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        console.log('Permission to access location was denied');
+      }
+      const location = await Location.getCurrentPositionAsync({});
+      if (!!location.coords.latitude && !!location.coords.longitude) {
+        coordinate.Input(location.coords.latitude, location.coords.longitude)
+      }
       
       await new Promise(resolve => setTimeout(resolve, 2000));
       setAppIsReady(true);
