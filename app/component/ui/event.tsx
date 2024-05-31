@@ -1,20 +1,21 @@
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 import { styles } from '../../styles';
 import { BlurView } from 'expo-blur';
-import { AlchIcon, CaliyanIcon, CheckIcon, EatIcon, EditIcon,InstaEventIcon,InstaIcon,MiniInfIcon,MoneyIcon,TaxiIcon,TrashIcon } from '../../component/svg/svg';
+import { CheckIcon, EditIcon, InstaIcon, MiniInfIcon, MoneyIcon, TaxiIcon, TrashIcon } from '../../component/svg/svg';
 import { navigate } from '../../functions/navigate';
 import { ButtonMy } from './ButtonMy';
 import { ModalDelEvent } from '../popup/del_event';
 import RBSheet from '@nonam4/react-native-bottom-sheet';
 import { useRef } from 'react';
 import { ModalReview } from '../popup/review';
+import { width } from '../../GLOBAL';
  
 export function EventItem(props:{tag?:number, size?:number, check?:boolean, noEdit?:boolean, type?:'guest'|'org'}) {
     const del = useRef<RBSheet>()
     const review = useRef<RBSheet>(null)
     return ( 
-        <TouchableOpacity activeOpacity={0.7} onPress={()=>navigate('Event',{type:props.type})}>
-            <BlurView intensity={75} tint='systemChromeMaterialDark' style={{borderRadius:16, overflow:"hidden", borderWidth:1, borderColor:'#FFFFFF99', padding:8, flexDirection:"row",gap:10}}>
+        <TouchableOpacity activeOpacity={0.7} style={{width:width-32}} onPress={()=>navigate('Event',{type:props.type})}>
+            <BlurView intensity={75} tint='systemChromeMaterialDark' style={{borderRadius:16, overflow:"hidden", borderWidth:1, borderColor:'#FFFFFF99', padding:8, flexDirection:"row",gap:10, width:'100%'}}>
                 <View>
                     <Image source={require('../../../assets/image/event.jpg')} style={{height:props.size??72,aspectRatio:1, borderRadius:16}}/>
                     {!props.noEdit &&<View style={{flexDirection:"row", justifyContent:"space-between", alignItems:"center", marginTop:8}}>

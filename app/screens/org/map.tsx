@@ -1,7 +1,7 @@
 import { Image, KeyboardAvoidingView, Platform, Text, TouchableOpacity, View } from 'react-native';
 import { MainLayout } from '../../component';
 import { height, statusBarHeight, width, Белый, Бирюзовый, Бирюзовый50 } from '../../GLOBAL';
-import { ClusteredYamap, Marker } from 'react-native-yamap-shim';
+import { ClusteredYamap, Marker } from 'react-native-yamap-plus';
 import { useEffect, useState } from 'react';
 import { styles } from '../../styles';
 import { RegInstaIcon } from '../../component/svg/svg';

@@ -1,7 +1,7 @@
 import { Image, KeyboardAvoidingView, Platform, Text, TouchableOpacity, View } from 'react-native';
 import { EventItem, MainLayout, ModalDatePoint } from '../../component';
 import { height, statusBarHeight, width, Белый, Бирюзовый } from '../../GLOBAL';
-import { ClusteredYamap, Marker } from 'react-native-yamap-shim';
+import { ClusteredYamap, Marker } from 'react-native-yamap-plus';
 import { useEffect, useRef, useState } from 'react';
 import coordinate from '../../model/coordinate';
 import { CalendarIcon } from '../../component/svg/svg';
@@ -41,13 +41,13 @@ export function MapGuestScreen() {
                 style={{ flex: 1, marginTop:statusBarHeight }}
             >
                 <View style={{borderTopLeftRadius:16, borderTopRightRadius:16, overflow:"hidden"}}>
-                    <View style={{paddingHorizontal:16, position:"absolute", gap:6, top:8, left:0, right:0,  flexDirection:'row', alignItems:'center', justifyContent:"space-between"}}>
+                    <View style={{paddingHorizontal:16, position:"absolute", gap:6, top:8, left:0, right:0,  flexDirection:'row', alignItems:'center', justifyContent:"space-between", zIndex:3}}>
                         <View style={{width:42, height:42}}/>
-                        <BlurView intensity={75} experimentalBlurMethod='dimezisBlurView' style={{flexDirection:"row", paddingHorizontal:10, paddingVertical:8,
+                        <BlurView intensity={75} style={{flexDirection:"row", paddingHorizontal:10, paddingVertical:8,
                         overflow:"hidden", borderRadius:16, alignItems:'center', gap:4}} tint='systemChromeMaterialDark'>
                             <Text style={[styles.h4,{color:Белый, textAlign:"center"}]}>Мероприятия рядом</Text>
                         </BlurView>
-                        <TouchableOpacity onPress={()=>date.current?.open()} style={{borderRadius:16, width:42, alignItems:'center', justifyContent:"center", height:42, backgroundColor:'#00000033'}}>
+                        <TouchableOpacity onPress={()=>date.current?.open()} style={{borderRadius:16, width:42, alignItems:'center', justifyContent:"center", height:42, backgroundColor:'#00000088'}}>
                             <CalendarIcon color='#fff'/>
                         </TouchableOpacity>
                     </View>
@@ -81,7 +81,7 @@ export function MapGuestScreen() {
                             onPress={() => setEvent(true)}
                         />}
                     />
-                    {event&&<View style={{position:"absolute", bottom:74, alignItems:"center", left:0, right:0, paddingHorizontal:16}}>
+                    {event&&<View  style={{marginHorizontal:16, position:'absolute', bottom:0, marginBottom:76}}>
                         <EventItem size={92} noEdit type={'guest'}/>
                     </View>}
                 </View>

@@ -9,8 +9,8 @@ import { styles } from './app/styles';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import 'moment/locale/ru';
 import { LocaleConfig } from 'react-native-calendars';
-
-import YaMap from 'react-native-yamap-shim';
+import * as Location from 'expo-location'
+import YaMap from 'react-native-yamap-plus';
 import coordinate from './app/model/coordinate';
 YaMap.init('9686e034-f846-4d6c-a556-fc6f621bd36a');
 
