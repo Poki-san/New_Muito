@@ -12,12 +12,11 @@
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
+  
   [YMKMapKit setLocale:@"ru_RU"];
   [YMKMapKit setApiKey:@"9686e034-f846-4d6c-a556-fc6f621bd36a"];
 
-  return YES;
-
-  // return [super application:application didFinishLaunchingWithOptions:launchOptions];
+  return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
