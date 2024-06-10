@@ -3,7 +3,7 @@ import { ButtonMy, Input, MainLayout } from '../../component';
 import { height, statusBarHeight, tagsTest, width, Бирюзовый, Бирюзовый50 } from '../../GLOBAL';
 import { BlurView } from 'expo-blur';
 import { styles } from '../../styles';
-import { CalendarIcon, CameraIcon, CloseIcon, ModalCloseIcon, OKIcon, SmileIcon } from '../../component/svg/svg';
+import { CalendarIcon, CameraIcon, CloseIcon, LogoIcon, ModalCloseIcon, OKIcon, SmileIcon } from '../../component/svg/svg';
 import { goBack, navigate } from '../../functions/navigate';
 import { useEffect, useRef, useState } from 'react';
 import { ModalImg } from '../../component/popup/img';
@@ -11,7 +11,7 @@ import RBSheet from '@nonam4/react-native-bottom-sheet';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { delElement } from '../../functions/arrayFormater';
 import { showToastable } from 'react-native-toastable';
-import { CameraView, useCameraPermissions, CameraCapturedPicture } from 'expo-camera';
+import { CameraView, useCameraPermissions } from 'expo-camera';
  
 export function RegisterGuestScreen() {
     const [step, setStep] = useState(0)
@@ -57,7 +57,7 @@ export function RegisterGuestScreen() {
                     keyboardVerticalOffset={Platform.OS === "ios" && statusBarHeight}
                     style={{ flex: 1 }}
                 >
-                    <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='always' contentContainerStyle={{flexGrow:1, marginHorizontal:16, marginVertical:10, justifyContent:"space-between"}}>
+                    <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='always' contentContainerStyle={{flexGrow:1, marginHorizontal:16, marginVertical:Platform.OS=='ios'?statusBarHeight:10, justifyContent:"space-between"}}>
                         <View style={{gap:10}}>
                             <TouchableOpacity activeOpacity={0.7} onPress={()=>{
                                 switch (step) {
@@ -68,11 +68,13 @@ export function RegisterGuestScreen() {
                                         setStep(step-1)
                                         break;
                                 }
-                            }} style={{borderRadius:90, transform:[{rotate:'90deg'}],backgroundColor:'#221E1E80', padding:6, position:'absolute', top:statusBarHeight+8, zIndex:1}}>
+                            }} style={{borderRadius:90, transform:[{rotate:'90deg'}],backgroundColor:'#221E1E80', padding:6, position:'absolute', top:Platform.OS=='ios'?28:statusBarHeight+8, zIndex:1}}>
                                 <ModalCloseIcon/>
                             </TouchableOpacity>
                             {step == 0 && <View style={{marginTop:17}}>
-                                <Text style={{fontSize:60, fontWeight:'500', color:'#83FDF4', fontFamily:'OswaldMedium', textAlign:'center'}}>MUITO</Text>
+                                <View style={{marginTop:statusBarHeight, marginBottom:13, alignItems:"center"}}>
+                                    <LogoIcon/>
+                                </View>
                                 <Text style={{color:'#ffffff', fontFamily:'PoppinsBold', textAlign:'center', marginTop:-8}}>Приложение красивых людей</Text>
                             </View>}
                         </View>
@@ -96,7 +98,7 @@ export function RegisterGuestScreen() {
                                 </TouchableOpacity>
                             </View>
                         </View>}
-                        {(step != 0 && step != 5 && step != 6) &&<View style={{marginTop:statusBarHeight+44, flex:1}}>
+                        {(step != 0 && step != 5 && step != 6) &&<View style={{marginTop:statusBarHeight+40, marginBottom:15, flex:1}}>
                             <View style={{marginTop:16, gap:8}}>
                                 <Text style={[styles.h4,{fontSize:18, color:'white'}]}>Заполнение анкеты</Text>
                                 <View style={{height:2, width:'100%',backgroundColor:'#FFFFFF33'}}>
@@ -119,7 +121,7 @@ export function RegisterGuestScreen() {
                                 setStepCamera(true)
                             }
                         }}/>}
-                        {step == 6 && <StepPhoto photo={path} onPress={()=>{}}/>}
+                        {step == 6 && <StepPhoto photo={path} onPress={()=>navigate('MainGuest')}/>}
                     </ScrollView>
                 </KeyboardAvoidingView>
             </MainLayout>
@@ -132,7 +134,7 @@ export function RegisterGuestScreen() {
                 <View style={{position:"absolute", zIndex:3, top:0, left:0, right:0, bottom:0, alignItems:'center', justifyContent:'center', width:width, height:height}}>
                     <Text style={[styles.additional,{color:'white', marginTop:180}]}>Посторйтесь недвигаться</Text>
                 </View>
-                <View style={{position:"absolute", zIndex:3, left:0, right:0, bottom:20, alignItems:'center', width:width, height:80}}>
+                <View style={{position:"absolute", zIndex:3, left:0, right:0, bottom:Platform.OS=='ios'?statusBarHeight:20, alignItems:'center', width:width, height:80}}>
                     <TouchableOpacity disabled={step==6} activeOpacity={0.7} onPress={async()=>{
                         setStep(6)
                         const photo = await camera.current?.takePictureAsync({quality: 0.5})
@@ -155,7 +157,7 @@ function StepOne(props:{onPress?:()=>void}) {
         <View style={{marginTop:11, flex:1}}>
             <Text style={[styles.bodyText,{fontFamily:'Poppins', color:'#ffffff90'}]}>Добавление фотографий</Text>
             <View style={{flex:1, marginTop:25, alignItems:'center', justifyContent:"space-between"}}>
-                <View>
+                <View style={{marginBottom:10}}>
                     <BlurView experimentalBlurMethod='dimezisBlurView' intensity={30} tint='systemChromeMaterialDark' style={{width:290, height:290, borderRadius:16, borderWidth:2, borderColor:'#B5B5B54D', overflow:"hidden"}}>
                         <TouchableOpacity onPress={()=>{
                             setActive(0)

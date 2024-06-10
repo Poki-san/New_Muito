@@ -16,7 +16,7 @@ export const ModalErrScan = forwardRef((props:{},ref)=>{
         <>
             <RBSheet
                 ref={ref}
-                height={219}
+                height={Platform.OS=='ios'?230: 219}
                 closeOnDragDown={true}
                 // dragFromTopOnly
                 closeOnPressMask={true} 

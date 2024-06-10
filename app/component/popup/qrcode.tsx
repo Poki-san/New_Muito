@@ -19,7 +19,7 @@ export const ModalQrCode = forwardRef((props:{},ref)=>{
         <>
             <RBSheet
                 ref={ref}
-                height={365}
+                height={Platform.OS=="ios"?375:365}
                 closeOnDragDown={true}
                 // dragFromTopOnly
                 closeOnPressMask={true} 

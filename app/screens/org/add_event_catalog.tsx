@@ -71,8 +71,8 @@ export function AddEventCatalogScreen() {
                                 <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Черновики <Text style={{color:'#FFFFFF80'}}>2</Text></Text>
                             </TouchableOpacity>
                         </BlurView>
-                        <View style={{marginHorizontal:16, flex:1, gap:8, marginBottom:80}}>
-                            {events.map((el,i)=><EventItem key={i} tag={tag}/>)}
+                        <View style={{marginHorizontal:16, flex:1, gap:8, marginBottom:Platform.OS=='ios'?100:80}}>
+                            {events.map((el,i)=><EventItem key={i} type='org' tag={tag}/>)}
                         </View></>}
                     </KeyboardAvoidingView>
                 </ScrollView>

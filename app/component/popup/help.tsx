@@ -18,7 +18,7 @@ export const ModalEmailHelp = forwardRef((props:{},ref)=>{
         <>
             <RBSheet
                 ref={ref}
-                height={353}
+                height={Platform.OS=='ios'?365:353}
                 closeOnDragDown={true}
                 // dragFromTopOnly
                 closeOnPressMask={true} 

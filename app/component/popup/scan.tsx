@@ -1,6 +1,6 @@
 import { ImageBackground, Modal, Platform, TouchableOpacity, View } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
-import { height, width, Бирюзовый } from '../../GLOBAL';
+import { height, statusBarHeight, width, Бирюзовый } from '../../GLOBAL';
 import { MainLayout } from '../layouts/MainLayout';
 import { CloseIcon } from '../svg/svg';
 import { BlurView } from 'expo-blur';
@@ -12,8 +12,8 @@ export function ScanModal(props:{visible?: boolean, onRequestClose?: () => void,
         // <ImageBackground style={{width:width, height:'100%'}} source={require('../../../assets/image/back.png')}>
             <MainLayout isStatusBar>
                 <Modal visible={props.visible} onRequestClose={props.onRequestClose}>
-                <TouchableOpacity activeOpacity={0.7} style={{zIndex:999, position:"absolute", top:24, right:0,width:34, height:34}} onPress={props.onRequestClose}>
-                    <View style={{padding:8, overflow:"hidden", borderRadius:16, alignItems:'center', gap:4, marginRight:16}} >
+                <TouchableOpacity activeOpacity={0.7} style={{zIndex:999, position:"absolute", top:statusBarHeight+10, right:0,width:34, height:34,}} onPress={props.onRequestClose}>
+                    <View style={{padding:8, zIndex:1, overflow:"hidden", borderRadius:16, alignItems:'center', gap:4, marginRight:23}} >
                         <CloseIcon color={Бирюзовый}/>
                     </View>
                 </TouchableOpacity>

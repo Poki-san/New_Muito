@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleProp, ViewStyle, SafeAreaView, StatusBarStyle, View, Platform, StatusBar } from "react-native";
+import { Черный } from "../../GLOBAL";
 
 interface MainLayoutProps { 
     children?:any, 
@@ -26,8 +27,8 @@ export class MainLayout extends React.PureComponent<MainLayoutProps>{
         return(
             <View style={{backgroundColor:this.props.backgroundColor, flexGrow:1}}>
                 <StatusBar barStyle={this.props.barStyle ?? 'light-content'} translucent backgroundColor={'transparent'}/>
-                {this.props.children}
-                <SafeAreaView style={ { flex: 0, zIndex:9999 }}/>
+                <View style={{flex:1}}>{this.props.children}</View>
+                <SafeAreaView style={ { flex: 0, zIndex:9999, backgroundColor:Черный }}/>
             </View>
         )    
     }

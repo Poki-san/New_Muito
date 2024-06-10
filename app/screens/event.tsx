@@ -45,7 +45,7 @@ export function EventScreen(props?:{route?:{params:{type?:''}}}) {
                     style={{ flex: 1 }}
                 >
                     <ImageBackground source={require('../../assets/image/event.jpg')} resizeMode='cover' style={{width:width, height:height*0.5, borderBottomLeftRadius:16, borderBottomRightRadius:16, marginBottom:16, overflow:'hidden'}}>
-                        {alert &&<View onTouchStart={()=>setAlert(false)} style={{position:"absolute", top:0, left:0, width:width*2, height:height*2, zIndex:1}} />}
+                        {alert &&<View onTouchStart={()=>setAlert(false)} style={{position:"absolute", top:0, left:0, width:width*2, height:height*2, zIndex:Platform.OS=='ios'? 0:1}} />}
                         <View style={{flexDirection:"row", alignItems:"center", gap:8, marginTop:statusBarHeight+7, marginHorizontal:16, justifyContent:"space-between"}}>
                             <TouchableOpacity activeOpacity={0.7} onPress={goBack}>
                                 <BlurView intensity={30} tint='systemChromeMaterialDark' style={styles.backArrowContainer}>

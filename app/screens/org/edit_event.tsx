@@ -1,5 +1,5 @@
 import { Image, KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { ButtonMy, Input, MainLayout, TagBlock } from '../../component';
+import { ButtonMy, Input, MainLayout, ModalDate, TagBlock } from '../../component';
 import { statusBarHeight, width, Бирюзовый } from '../../GLOBAL';
 import { BackArrowIcon, CalendarIcon, ClockIcon, CrossIcon, MapPinIcon, PlusIcon } from '../../component/svg/svg';
 import { goBack } from '../../functions/navigate';
@@ -14,7 +14,9 @@ export function EditEventScreen() {
     const [text, setText] = useState('')
     const [text2, setText2] = useState('')
     const [paths, setPaths] = useState([])
+    const [dateTxt, setDateTxt] = useState('')
     const img = useRef<RBSheet>(null)
+    const date = useRef<RBSheet>(null)
     
     return ( 
         <MainLayout isStatusBar backgroundColor='#181818'>
@@ -59,7 +61,7 @@ export function EditEventScreen() {
                                     maxLength={50}
                                     onChangeText={setText} 
                                     placeholderTextColor={'#FFFFFF99'}
-                                    style={[styles.bodyText,{ borderRadius:16, borderWidth:1, borderTopLeftRadius:16, borderColor:'#FFFFFF99', borderTopRightRadius:16, maxHeight:100, color:'white', paddingVertical:7, paddingLeft:17}]}
+                                    style={[styles.bodyText,{ borderRadius:16, borderWidth:1, borderTopLeftRadius:16, borderColor:'#FFFFFF99', borderTopRightRadius:16, maxHeight:100, color:'white', paddingVertical:Platform.OS=='ios'?13:7, paddingLeft:17}]}
                                 />
                             </View>
                             <TouchableOpacity activeOpacity={0.7} onPress={()=>{}}>
@@ -67,8 +69,8 @@ export function EditEventScreen() {
                                 <View style={{position:'absolute', right:10, top:0, bottom:0, justifyContent:'center'}}><MapPinIcon/></View>
                             </TouchableOpacity>
                             <View style={{flexDirection:"row", alignItems:"center", justifyContent:"space-between"}}>
-                                <TouchableOpacity activeOpacity={0.7} style={{width:"68%"}} onPress={()=>{}}>
-                                    <Input editable={false} value='00.00.0000-00.00.0000' backgroundColor='#FFFFFF00' placeholderTextColor={'#FFFFFF99'} title='Дата проведения' style={{borderWidth:1, borderColor:'#FFFFFF99', paddingRight:20}}/>
+                                <TouchableOpacity activeOpacity={0.7} style={{width:"68%"}} onPress={()=>date.current?.open()}>
+                                    <Input editable={false} value={dateTxt} backgroundColor='#FFFFFF00' placeholderTextColor={'#FFFFFF99'} title='Дата проведения' style={{borderWidth:1, borderColor:'#FFFFFF99', paddingRight:20}}/>
                                     <View style={{position:'absolute', right:10, top:0, bottom:0, justifyContent:'center'}}><CalendarIcon/></View>
                                 </TouchableOpacity>
                                 <TouchableOpacity activeOpacity={0.7} style={{width:'30%'}} onPress={()=>{}}>
@@ -85,7 +87,7 @@ export function EditEventScreen() {
                                     maxLength={500}
                                     onChangeText={setText2} 
                                     placeholderTextColor={'#FFFFFF99'}
-                                    style={[styles.bodyText,{ borderRadius:16, borderWidth:1, borderTopLeftRadius:16, borderColor:'#FFFFFF99', borderTopRightRadius:16, maxHeight:230, color:'white', paddingVertical:7, paddingLeft:17}]}
+                                    style={[styles.bodyText,{ borderRadius:16, borderWidth:1, borderTopLeftRadius:16, borderColor:'#FFFFFF99', borderTopRightRadius:16, maxHeight:230, color:'white', paddingVertical:Platform.OS=="ios"?13:7, paddingLeft:17}]}
                                 />
                             </View>
                             <View style={{gap:8, marginTop:8}}>
@@ -109,6 +111,9 @@ export function EditEventScreen() {
                         </View>
                     </View>
                     <ModalImg ref={img} onPath={setPaths}/>
+                    <ModalDate ref={date} onPeroid={(start,end)=>{
+                        setDateTxt(start+' '+end)
+                    }}/>
                 </KeyboardAvoidingView>
             </ScrollView>
         </MainLayout>

@@ -18,7 +18,7 @@ export const ModalRecovery = forwardRef((props:{},ref)=>{
         <>
             <RBSheet
                 ref={ref}
-                height={210}
+                height={Platform.OS=='ios'? 223:210}
                 closeOnDragDown={true}
                 // dragFromTopOnly
                 closeOnPressMask={true} 
@@ -79,7 +79,7 @@ export const ModalRecoveryCode = forwardRef((props:{onPress?:()=>void},ref)=>{
         <>
             <RBSheet
                 ref={ref}
-                height={330}
+                height={Platform.OS=="ios" ?345:330}
                 closeOnDragDown={true}
                 dragFromTopOnly
                 closeOnPressMask={true} 
@@ -174,7 +174,7 @@ export const ModalNewPass = forwardRef((props:{},ref)=>{
     return (
         <RBSheet
             ref={ref}
-            height={245}
+            height={Platform.OS=='ios'?260 :245}
             closeOnDragDown={true}
             // dragFromTopOnly
             closeOnPressMask={true} 

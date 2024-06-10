@@ -7,6 +7,7 @@ import { ModalRecovery } from '../../component/popup/recoveryPass';
 import { useRef, useState } from 'react';
 import RBSheet from '@nonam4/react-native-bottom-sheet';
 import { navigate } from '../../functions/navigate';
+import { LogoIcon } from '../../component/svg/svg';
  
 export function LoginScreen() {
     const recovery = useRef<RBSheet>()
@@ -14,14 +15,14 @@ export function LoginScreen() {
     return ( 
         <ImageBackground style={{width:width, height:height}} source={require('../../../assets/image/back.png')}>
             <MainLayout isStatusBar>
-                <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='always' contentContainerStyle={{flexGrow:1, marginHorizontal:16, marginVertical:10}}>
+                <View style={{flexGrow:1, marginHorizontal:16, marginVertical:10}}>
                     <KeyboardAvoidingView
                         behavior={Platform.OS === "ios" ? "padding" : 'height'}
                         keyboardVerticalOffset={Platform.OS === "ios" && statusBarHeight}
                         style={{ flex: 1 }}
                     >
-                        <View style={{gap:10,flex:1}}>
-                            <Text style={{fontSize:60, fontWeight:'500', color:'#83FDF4', fontFamily:'OswaldMedium', textAlign:'center', marginTop:17}}>MUITO</Text>
+                        <View style={{gap:10,flex:1, marginTop:statusBarHeight+7, alignItems:"center"}}>
+                            <LogoIcon/>
                         </View>
                         <View style={{gap:24}}>
                             {!register ? 
@@ -45,7 +46,7 @@ export function LoginScreen() {
                                     <ButtonMy text='Организатор' onPress={()=>navigate('RegisterWelcome',{type:'org'})} backgroundColor='#88FFF900' colorText='#FFFFFF' borderWidth={1} borderColor='#FFFFFF80'/>
                                 </BlurView>
                             }
-                            <View style={{gap:10, alignItems:"center"}}>
+                            <View style={{gap:10, alignItems:"center", marginBottom:Platform.OS=='ios'?0:4}}>
                                 <Text style={{color:'white', fontWeight:'500', opacity:0.6}}>{!register?'Нет аккаута':'Уже есть аккаунт?'}</Text>
                                 <TouchableOpacity activeOpacity={0.7} onPress={()=>setRegister(!register)}>
                                     <Text style={{color:'white', fontWeight:'700', fontFamily:'PoppinsBold', fontSize:16}}>{!register?'Регистрация':'Вход'}</Text>
@@ -53,7 +54,8 @@ export function LoginScreen() {
                             </View>
                         </View>
                     </KeyboardAvoidingView>
-                </ScrollView>
+                    {Platform.OS == 'ios' &&<View style={{height:statusBarHeight}}/>}
+                </View>
             </MainLayout>
             <ModalRecovery ref={recovery}/>
         </ImageBackground>

@@ -1,9 +1,9 @@
-import { Image, ImageBackground, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Image, ImageBackground, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { ButtonMy, MainLayout } from '../../component';
 import { height, statusBarHeight, width, Бирюзовый } from '../../GLOBAL';
 import { BlurView } from 'expo-blur';
 import { styles } from '../../styles';
-import { ModalCloseIcon, RegBagIcon, RegDiamondIcon, RegHeartIcon, RegInstaIcon, RegMapIcon, WarningIcon } from '../../component/svg/svg';
+import { LogoIcon, ModalCloseIcon, RegBagIcon, RegDiamondIcon, RegHeartIcon, RegInstaIcon, RegMapIcon, WarningIcon } from '../../component/svg/svg';
 import { goBack, navigate } from '../../functions/navigate';
  
 export function RegisterWScreen(props?:any) {
@@ -12,12 +12,14 @@ export function RegisterWScreen(props?:any) {
     return ( 
         <ImageBackground style={{width:width, height:height}} source={require('../../../assets/image/back.png')}>
             <MainLayout isStatusBar>
-                <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{flexGrow:1, marginHorizontal:16, marginVertical:10, justifyContent:"space-between"}}>
+                <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{flexGrow:1, marginHorizontal:16, marginVertical:Platform.OS=='ios'? statusBarHeight:10, justifyContent:"space-between"}}>
                     <View style={{gap:10}}>
-                        <TouchableOpacity activeOpacity={0.7} onPress={goBack} style={{borderRadius:90, transform:[{rotate:'90deg'}],backgroundColor:'#221E1E80', padding:6, position:'absolute', top:statusBarHeight+8, zIndex:1}}>
+                        <TouchableOpacity activeOpacity={0.7} onPress={goBack} style={{borderRadius:90, transform:[{rotate:'90deg'}],backgroundColor:'#221E1E80', padding:6, position:'absolute', top:Platform.OS=="ios"? 28:statusBarHeight+8, zIndex:1}}>
                             <ModalCloseIcon/>
                         </TouchableOpacity>
-                        <Text style={{fontSize:60, fontWeight:'500', color:'#83FDF4', fontFamily:'OswaldMedium', textAlign:'center', marginTop:17}}>MUITO</Text>
+                        <View style={{marginTop:statusBarHeight+17, alignItems:"center"}}>
+                            <LogoIcon/>
+                        </View>
                     </View>
                     <View>
                         {type == 'org'&&

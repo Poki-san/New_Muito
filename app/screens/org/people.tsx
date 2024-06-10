@@ -55,16 +55,16 @@ export function PeopleScreen() {
     }
     return ( 
         <ImageBackground style={{width:width, height:height}} source={require('../../../assets/image/back.png')}>
-            <MainLayout isStatusBar>
-                <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='always' contentContainerStyle={{flexGrow:1}}>
+            <MainLayout isStatusBar backgroundColor='#17171A'>
+                <View style={{flexGrow:1}}>
                     <KeyboardAvoidingView
                         behavior={Platform.OS === "ios" ? "padding" : 'height'}
                         keyboardVerticalOffset={Platform.OS === "ios" && statusBarHeight}
                         style={{ flex: 1 }}
                     >
-                        <Animated.View style={{height:'87%', backgroundColor:'#17171A'}}>
+                        <Animated.View style={{height:'85%', backgroundColor:'#17171A', borderBottomLeftRadius:20, borderBottomRightRadius:20, overflow:"hidden"}}>
                             <View style={styles.containerWomanBlock}>
-                            {alert &&<View onTouchStart={()=>setAlert(false)} style={{position:"absolute", top:0, left:0, width:width*2, height:height*2, zIndex:1}} />}
+                            {alert &&<View onTouchStart={()=>setAlert(false)} style={{position:"absolute", top:0, left:0, width:width*2, height:height*2, zIndex:Platform.OS=='ios'? 0:1}} />}
                                 <View>
                                     <View style={{marginTop:statusBarHeight+10, flexDirection:"row"}}>
                                         <View style={{flexDirection:'row', width:"100%", justifyContent:"space-between", alignItems:'center'}}>
@@ -84,7 +84,7 @@ export function PeopleScreen() {
                                                     <SettingIcon color={Бирюзовый}/>
                                                 </BlurView>
                                             </TouchableOpacity>
-                                            {alert && <View style={styles.alertContainer}>
+                                            {alert && <View style={[styles.alertContainer]}>
                                                 <TouchableOpacity onPress={()=>warning.current?.open()} activeOpacity={0.7} style={{flexDirection:"row", gap:7, alignItems:"center"}}>
                                                     <AlertIcon/>
                                                     <Text style={[styles.bodyText,{color:'#BC1115'}]}>Пожаловаться</Text>
@@ -157,13 +157,13 @@ export function PeopleScreen() {
                                 height={height*0.87}
                                 defaultIndex={index}
                                 onSnapToItem={setIndex}
-                                style={{zIndex:9999, borderBottomLeftRadius:20, borderBottomRightRadius:20, position:"relative"}}
+                                style={{zIndex:9999, borderBottomLeftRadius:20, borderBottomRightRadius:20, overflow:"hidden", position:"relative"}}
                                 renderItem={({item})=>(
-                                    <Image style={{width:width, height:'100%'}} resizeMode='cover' source={require('../../../assets/image/people.jpg')}/>
+                                    <Image style={{width:width, height:'100%', borderBottomLeftRadius:20, borderBottomRightRadius:20, overflow:"hidden"}} resizeMode='cover' source={require('../../../assets/image/people.jpg')}/>
                                 )}
                             />
                         </Animated.View>
-                        <View style={{height:'13%', backgroundColor:'#17171A'}}>
+                        <View style={{height:'15%', backgroundColor:'#17171A'}}>
                             {alert &&<View onTouchStart={()=>setAlert(false)} style={{position:"absolute", top:0, left:0, width:width*2, height:height*2, zIndex:1}} />}
                             <View style={{marginHorizontal:16,  marginTop:13, flexDirection:"row", justifyContent:'space-evenly'}}>
                                 <TouchableOpacity activeOpacity={0.7} onPress={()=>{}} style={{flexDirection:'row', alignItems:"center", gap:10}}>
@@ -180,7 +180,7 @@ export function PeopleScreen() {
                             </View>
                         </View>
                     </KeyboardAvoidingView>
-                </ScrollView>
+                </View>
                 <ModalWarning ref={warning}/>
             </MainLayout>
         </ImageBackground>

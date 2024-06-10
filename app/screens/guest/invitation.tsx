@@ -13,9 +13,9 @@ export function InvitationScreen() {
     return ( 
         <ImageBackground style={{width:width, height:height}} source={require('../../../assets/image/back.png')}>
             <MainLayout isStatusBar>
-                {events.length != 0 && <TouchableOpacity activeOpacity={0.7} onPress={()=>navigate('AddEvent')} style={styles.addEventContainer}>
+                {/* {events.length != 0 && <TouchableOpacity activeOpacity={0.7} onPress={()=>navigate('AddEvent')} style={styles.addEventContainer}>
                     <PlusIcon/>
-                </TouchableOpacity>}
+                </TouchableOpacity>} */}
                 <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='always' contentContainerStyle={{flexGrow:1}}>
                     <KeyboardAvoidingView
                         behavior={Platform.OS === "ios" ? "padding" : 'height'}
@@ -31,9 +31,9 @@ export function InvitationScreen() {
                         {events.length == 0 ?
                         <BlurView experimentalBlurMethod='dimezisBlurView' intensity={75} tint='systemChromeMaterialDark'  style={{borderRadius:16, overflow:"hidden", borderWidth:1, borderColor:'#374A4E99', marginHorizontal:16, flex:1, marginBottom:80, justifyContent:"center", alignItems:"center", gap:15}}>
                             <Text style={[styles.h3,{fontSize:20, color:"white"}]}>У вас нет мероприятий</Text>
-                            <TouchableOpacity activeOpacity={0.7} onPress={()=>navigate('AddEvent')} style={{width:60, height:60, borderRadius:90, backgroundColor:Бирюзовый, justifyContent:"center", alignItems:"center"}}>
+                            {/* <TouchableOpacity activeOpacity={0.7} onPress={()=>navigate('AddEvent')} style={{width:60, height:60, borderRadius:90, backgroundColor:Бирюзовый, justifyContent:"center", alignItems:"center"}}>
                                 <PlusIcon/>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                         </BlurView> 
                         : 
                         <><BlurView experimentalBlurMethod='dimezisBlurView' intensity={75} tint='systemChromeMaterialDark'  style={{borderRadius:16, overflow:"hidden", borderWidth:1, borderColor:'#374A4E99', flexDirection:"row", justifyContent:'space-between', alignItems:"center", marginHorizontal:16, marginBottom:16}}>

@@ -58,7 +58,7 @@ export function AddEventScreen() {
                                     multiline
                                     maxLength={50}
                                     placeholderTextColor={'#FFFFFF99'}
-                                    style={[styles.bodyText,{ borderRadius:16, borderWidth:1, borderTopLeftRadius:16, borderColor:'#FFFFFF99', borderTopRightRadius:16, maxHeight:100, color:'white', paddingVertical:7, paddingLeft:17}]}
+                                    style={[styles.bodyText,{ borderRadius:16, borderWidth:1, borderTopLeftRadius:16, borderColor:'#FFFFFF99', borderTopRightRadius:16, maxHeight:100, color:'white', paddingVertical:Platform.OS=='ios'?13:7, paddingLeft:17}]}
                                 />
                             </View>
                             <TouchableOpacity activeOpacity={0.7} onPress={()=>{}}>
@@ -82,7 +82,7 @@ export function AddEventScreen() {
                                     multiline
                                     maxLength={500}
                                     placeholderTextColor={'#FFFFFF99'}
-                                    style={[styles.bodyText,{ borderRadius:16, borderWidth:1, borderTopLeftRadius:16, borderColor:'#FFFFFF99', borderTopRightRadius:16, maxHeight:230, color:'white', paddingVertical:7, paddingLeft:17}]}
+                                    style={[styles.bodyText,{ borderRadius:16, borderWidth:1, borderTopLeftRadius:16, borderColor:'#FFFFFF99', borderTopRightRadius:16, maxHeight:230, color:'white', paddingVertical:Platform.OS=='ios'?13:7, paddingLeft:17}]}
                                 />
                             </View>
                             <View style={{gap:8, marginTop:8}}>

@@ -18,7 +18,7 @@ export const ModalDelEvent = forwardRef((props:{},ref)=>{
         <>
             <RBSheet
                 ref={ref}
-                height={135}
+                height={Platform.OS=='ios'?145:135}
                 closeOnDragDown={true}
                 // dragFromTopOnly
                 closeOnPressMask={true} 

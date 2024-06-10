@@ -65,7 +65,7 @@ export function LikeScreen() {
                         {!noWoman ? <>
                             <Animated.View style={{height:'78%', opacity:animOpacity, zIndex:3, backgroundColor:'#17171A'}}>
                                 <View style={styles.containerWomanBlock}>
-                                    {alert &&<View onTouchStart={()=>setAlert(false)} style={{position:"absolute", top:0, left:0, width:width*2, height:height*2, zIndex:1}} />}
+                                    {alert &&<View onTouchStart={()=>setAlert(false)} style={{position:"absolute", top:0, left:0, width:width*2, height:height*2, zIndex:Platform.OS=="ios"?0:1}} />}
                                     <View>
                                         <View style={{marginTop:statusBarHeight+10, flexDirection:"row"}}>
                                             <View style={{flexDirection:'row', width:"100%", justifyContent:"space-between", alignItems:'center'}}>

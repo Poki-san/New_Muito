@@ -18,7 +18,7 @@ export const ModalWarning = forwardRef((props:{},ref)=>{
         <>
             <RBSheet
                 ref={ref}
-                height={300}
+                height={Platform.OS=='ios'? 325:300}
                 closeOnDragDown={true}
                 // dragFromTopOnly
                 closeOnPressMask={true} 

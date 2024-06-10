@@ -45,7 +45,7 @@ export function EventPeopleScreen() {
                                 <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Принятые <Text style={{color:'#FFFFFF80'}}>2</Text></Text>
                             </TouchableOpacity>
                         </BlurView>
-                        <View style={{alignItems:"center"}}>
+                        <View style={{alignItems:"center", marginBottom:Platform.OS == 'ios' ? 20:0}}>
                             <View style={styles.eventPeopleImgContainer}>
                                 {[1,2,3,4,5].map((el,i)=><PeopleItem key={i}/>)}
                             </View>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import * as Font from 'expo-font';
 import AppStack from './app/navigate/navigate'
 import { MainLayout } from './app/component';
-import { Image, Text, View } from 'react-native';
+import { Image, SafeAreaView, Text, View } from 'react-native';
 import { height, width, Бирюзовый50 } from './app/GLOBAL';
 import Toastable from 'react-native-toastable';
 import { styles } from './app/styles';
@@ -12,6 +12,7 @@ import { LocaleConfig } from 'react-native-calendars';
 import * as Location from 'expo-location'
 import YaMap from 'react-native-yamap-plus';
 import coordinate from './app/model/coordinate';
+import { useFonts } from 'expo-font';
 YaMap.init('9686e034-f846-4d6c-a556-fc6f621bd36a');
 
 LocaleConfig.locales["ru"] = {
@@ -26,19 +27,23 @@ LocaleConfig.defaultLocale = "ru";
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
+  // const [fontsLoaded] = useFonts({
+  //   'OswaldMedium': require('./assets/fonts/Oswald-Medium.ttf'),
+  //   'Poppins': require('./assets/fonts/Poppins-Regular.ttf'),
+  //   'PoppinsMedium': require('./assets/fonts/Poppins-Medium.ttf'),
+  //   'PoppinsSemiBold': require('./assets/fonts/Poppins-SemiBold.ttf'),
+  //   'PoppinsBold': require('./assets/fonts/Poppins-Bold.ttf'),
+  // })
   async function preload() {
     try {
-      const font = {
-        'Oswald': require('./assets/fonts/Oswald-Regular.ttf'),
+      
+      Font.loadAsync({
         'OswaldMedium': require('./assets/fonts/Oswald-Medium.ttf'),
-        'OswaldSemiBold': require('./assets/fonts/Oswald-SemiBold.ttf'),
         'Poppins': require('./assets/fonts/Poppins-Regular.ttf'),
         'PoppinsMedium': require('./assets/fonts/Poppins-Medium.ttf'),
         'PoppinsSemiBold': require('./assets/fonts/Poppins-SemiBold.ttf'),
         'PoppinsBold': require('./assets/fonts/Poppins-Bold.ttf'),
-      }
-      
-      await Font.loadAsync(font)
+      })
       
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
@@ -59,8 +64,9 @@ export default function App() {
 
   useEffect(()=>{    
     preload().catch(e => console.log(e))
+    
   },[])
-  return (appIsReady?
+  return ((appIsReady)?
     <SafeAreaProvider>
       <MainLayout>
         <Toastable

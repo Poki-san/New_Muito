@@ -1,5 +1,5 @@
-import { StyleSheet } from "react-native";
-import { width, Бирюзовый } from "./GLOBAL";
+import { Platform, StyleSheet } from "react-native";
+import { statusBarHeight, width, Бирюзовый } from "./GLOBAL";
 
 export const styles = StyleSheet.create({
     blurContainer: {
@@ -235,7 +235,7 @@ export const styles = StyleSheet.create({
         height:55, 
         borderRadius:180, 
         backgroundColor:Бирюзовый, 
-        bottom:75, 
+        bottom:Platform.OS=='ios'? 100 :75, 
         zIndex:999, 
         right:16
     },

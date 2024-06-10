@@ -3,7 +3,7 @@ import { ButtonMy, Input, MainLayout } from '../../component';
 import { height, statusBarHeight, width, Бирюзовый } from '../../GLOBAL';
 import { BlurView } from 'expo-blur';
 import { styles } from '../../styles';
-import { CalendarIcon, CameraIcon, CloseIcon, ModalCloseIcon } from '../../component/svg/svg';
+import { CalendarIcon, CameraIcon, CloseIcon, LogoIcon, ModalCloseIcon } from '../../component/svg/svg';
 import { goBack, navigate } from '../../functions/navigate';
 import { useEffect, useRef, useState } from 'react';
 import { ModalImg } from '../../component/popup/img';
@@ -40,7 +40,7 @@ export function RegisterOrgScreen() {
                     keyboardVerticalOffset={Platform.OS === "ios" && statusBarHeight}
                     style={{ flex: 1 }}
                 >
-                    <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='always' contentContainerStyle={{flexGrow:1, marginHorizontal:16, marginVertical:10, justifyContent:"space-between"}}>
+                    <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='always' contentContainerStyle={{flexGrow:1, marginHorizontal:16, marginVertical:Platform.OS=='ios'? statusBarHeight:10, justifyContent:"space-between"}}>
                         <View style={{gap:10}}>
                             <TouchableOpacity activeOpacity={0.7} onPress={()=>{
                                 switch (step) {
@@ -51,11 +51,13 @@ export function RegisterOrgScreen() {
                                         setStep(step-1)
                                         break;
                                 }
-                            }} style={{borderRadius:90, transform:[{rotate:'90deg'}],backgroundColor:'#221E1E80', padding:6, position:'absolute', top:statusBarHeight+8, zIndex:1}}>
+                            }} style={{borderRadius:90, transform:[{rotate:'90deg'}],backgroundColor:'#221E1E80', padding:6, position:'absolute', top:Platform.OS=='ios'? 28:statusBarHeight+8, zIndex:1}}>
                                 <ModalCloseIcon/>
                             </TouchableOpacity>
                             {step == 0 && <View style={{marginTop:17}}>
-                                <Text style={{fontSize:60, fontWeight:'500', color:'#83FDF4', fontFamily:'OswaldMedium', textAlign:'center'}}>MUITO</Text>
+                                <View style={{marginTop:statusBarHeight, marginBottom:13, alignItems:"center"}}>
+                                    <LogoIcon/>
+                                </View>
                                 <Text style={{color:'#ffffff', fontFamily:'PoppinsBold', textAlign:'center', marginTop:-8}}>Добавим смысла в праздник</Text>
                             </View>}
                         </View>
@@ -88,7 +90,7 @@ export function RegisterOrgScreen() {
                             </View>
                             {step == 1 && <StepOne onPress={()=>setStep(2)}/>}
                             {step == 2 && <StepTwo onPress={()=>setStep(3)}/>}
-                            {step == 3 && <StepThree onPress={()=>{}}/>}
+                            {step == 3 && <StepThree onPress={()=>navigate('Main')}/>}
                         </View>}
                     </ScrollView>
                 </KeyboardAvoidingView>    

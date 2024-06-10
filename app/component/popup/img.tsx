@@ -16,7 +16,7 @@ export const ModalImg = forwardRef((props:{allowsMultipleSelection?: boolean, se
         <>
             <RBSheet
                 ref={ref}
-                height={150}
+                height={Platform.OS=='ios'?160 :150}
                 closeOnDragDown={true}
                 // dragFromTopOnly
                 closeOnPressMask={true} 
