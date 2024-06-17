@@ -1,11 +1,11 @@
 import { URL } from '../GLOBAL'
 import NetInfo from "@react-native-community/netinfo"
 import user from '../model/token'
-import error from '../model/avatar';
+import error from '../model/error';
 import preloader from './preloader';
-import chatAuth from '../model/chatAuth';
 import { CommonActions } from '@react-navigation/native';
 import { navigationRef } from '../navigate/navigateProps';
+import { Platform } from 'react-native';
 
 /**
  * Отправляет запрос и получает данные в виде JSON
@@ -59,12 +59,12 @@ async function apiFetch(url:string, method?:string, token?:boolean, values?:obje
                     const result = await jsonOutput.json();
                     // console.log(result);
                     if (!!result?.exception) {
-                        error.Input(true,'Что-то пошло не так!')
+                        setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 300);
+                        
                     }
                     return {...result, status:jsonOutput.status};
                 } else {
                     user.userClear()
-                    chatAuth.reconnectInput(false)
                     const bottomReset = CommonActions.reset({
                         index: 0,
                         routes: [{name: 'Auth'}],
@@ -73,14 +73,14 @@ async function apiFetch(url:string, method?:string, token?:boolean, values?:obje
                 }
                 
         } catch (err) {
-            error.Input(true,'Что-то пошло не так!')
+            setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 300);
         } finally {
             preloader.Input(false);
         }
     } else {
         preloader.Input(false);
         const temp = {noInet:true};
-        error.Input(true,'Нету подключения к интернету!')
+        setTimeout(() => error.Input(true,'Нету подключения к интернету!','Упс!...', Platform.OS=='ios'?175:145), 300);
         return temp;
     }
 }

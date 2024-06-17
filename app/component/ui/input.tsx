@@ -2,6 +2,9 @@ import { View, Text, StyleProp, TextStyle, ColorValue, KeyboardTypeOptions } fro
 import { forwardRef, useState} from 'react';
 import { TextInput } from 'react-native-paper'
 import { RenderProps } from 'react-native-paper/lib/typescript/components/TextInput/types';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { EyeClose, EyeOpen } from '../svg/svg';
+import { styles } from '../../styles';
 
 interface InputProps {
     securePass?:boolean, 
@@ -38,7 +41,7 @@ interface InputProps {
 export const Input = forwardRef((props:InputProps, ref)=>{
     const [secure, setSecure] = useState(true)
     return (
-        <View style={{gap:4, width:"100%"}}>
+        <View style={{width:"100%"}}>
             {/* {(props.title) && <Text style={[{color:'#FFFFFF66', fontSize:10, fontFamily:'Poppins', paddingLeft:14, marginBottom:-5}]}>{props.title}</Text>} */}
             <View style={{position:'relative', width:'100%', justifyContent: 'center'}}>
                 {props.icon && 
@@ -67,12 +70,11 @@ export const Input = forwardRef((props:InputProps, ref)=>{
                     underlineStyle={{display:"none"}}
                     textColor='white'
                     outlineStyle={{borderWidth:0, padding:0}}
-                    style={[{paddingLeft:props.icon && 30, fontFamily:'Poppins', backgroundColor:props.backgroundColor ?? 'white', borderRadius:props.borderRadius??16, borderTopLeftRadius:props.borderRadius??16, borderColor:'#FFFFFF66', borderTopRightRadius:props.borderRadius??16, height:40, color:'white'}, props.style]}
+                    style={[{paddingLeft:props.icon && 30, fontFamily:'Poppins', backgroundColor:props.backgroundColor ?? 'white', borderRadius:props.borderRadius??16, borderTopLeftRadius:props.borderRadius??16, borderColor:(!!props.errorText && props.touched)?'#FF000086':'#FFFFFF66', borderTopRightRadius:props.borderRadius??16, height:40, color:'white'}, props.style]}
                     value={props.value}
                     maxLength={props.maxLength}
                     onChangeText={props.onChangeText}
                 />
-                {(!!props.errorText && props.touched)&&<Text style={[{color:'red', paddingLeft:14}]}>{props.errorText}</Text>}
                 {/* {props.value && props.isClear && 
                 <>
                     {props.value?.length != 0 && 
@@ -82,14 +84,18 @@ export const Input = forwardRef((props:InputProps, ref)=>{
                 </>
                 } */}
 
-                {/* {props.securePass &&
-                    <TouchableOpacity 
-                        style={{position:'absolute', right:0,padding:10}} 
-                        onPress={()=>setSecure(!secure)}>
-                        {secure ? <EyeClose/> : <EyeOpen/>}
-                    </TouchableOpacity>
-                } */}
+                {props.securePass &&
+                    <View style={{position:"absolute", right:0}}>
+                        <TouchableOpacity 
+                            style={{padding:10}}
+                            activeOpacity={0.7}
+                            onPress={()=>setSecure(!secure)}>
+                            {secure ? <EyeClose/> : <EyeOpen/>}
+                        </TouchableOpacity>
+                    </View>
+                }
             </View>
+            {(!!props.errorText && props.touched)&&<Text style={[styles.smallText,{color:'#FF000086', paddingLeft:14}]}>{props.errorText}</Text>}
         </View>
     );
 })

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as Font from 'expo-font';
 import AppStack from './app/navigate/navigate'
 import { MainLayout } from './app/component';
@@ -13,7 +13,11 @@ import * as Location from 'expo-location'
 import YaMap from 'react-native-yamap-plus';
 import coordinate from './app/model/coordinate';
 import { useFonts } from 'expo-font';
-YaMap.init('9686e034-f846-4d6c-a556-fc6f621bd36a');
+import { ModalErr } from './app/component/popup/err';
+import error from './app/model/error';
+import RBSheet from '@nonam4/react-native-bottom-sheet';
+import { observer } from 'mobx-react-lite';
+// YaMap.init('9686e034-f846-4d6c-a556-fc6f621bd36a');
 
 LocaleConfig.locales["ru"] = {
   monthNames: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
@@ -25,8 +29,9 @@ LocaleConfig.locales["ru"] = {
 
 LocaleConfig.defaultLocale = "ru";
 
-export default function App() {
+const App = observer(() => {
   const [appIsReady, setAppIsReady] = useState(false);
+  const errRef = useRef<RBSheet>(null);
   // const [fontsLoaded] = useFonts({
   //   'OswaldMedium': require('./assets/fonts/Oswald-Medium.ttf'),
   //   'Poppins': require('./assets/fonts/Poppins-Regular.ttf'),
@@ -64,8 +69,12 @@ export default function App() {
 
   useEffect(()=>{    
     preload().catch(e => console.log(e))
-    
   },[])
+  useEffect(()=>{
+    if (error.switch == true) {
+      errRef.current.open()
+    }
+  },[error.switch])
   return ((appIsReady)?
     <SafeAreaProvider>
       <MainLayout>
@@ -90,6 +99,7 @@ export default function App() {
           }
         />
         <AppStack/>
+        <ModalErr ref={errRef} text={error.text} height={error.height} title={error.title}/>
       </MainLayout>
     </SafeAreaProvider>
     :
@@ -97,4 +107,6 @@ export default function App() {
       <Image style={{width:width, height:height}} source={require('./assets/image/welcome.jpg')}/>
     </View>
   );
-}
+})
+
+export default App;

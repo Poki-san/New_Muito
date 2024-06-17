@@ -5,7 +5,7 @@ export const height = Dimensions.get('window').height
 export const width = Dimensions.get('window').width
 export const statusBarHeight = Constants.statusBarHeight
 
-export const URL = ''
+export const URL = 'https://event-lux.site/api'
 export const WEBSOCKET = ''
 
 enum colors{
