@@ -6,19 +6,18 @@ import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import { CommonActions } from '@react-navigation/native';
 import Constants from 'expo-constants';
-import chatAuth from '../model/chatAuth';
+import { URL } from '../GLOBAL';
 
 export const logOut = async () => {
-    
     const verf = await apiFetch('/profile/logout', 'POST', true)
     if(!verf.noInet)
     {
-        user.userClear()
-        chatAuth.reconnectInput(false)
+        // chatAuth.reconnectInput(false)
         const bottomReset = CommonActions.reset({
             index: 0,
             routes: [{name: 'Auth'}],
           });
+        user.userClear()
         navigationRef.current?.dispatch(bottomReset)
     }
 }
@@ -53,6 +52,24 @@ export async function registerForPushNotificationsAsync() {
     } else {
         alert('Must use physical device for Push Notifications');
     }
-
+    console.log(token);
+    
     return token;
+}
+
+export const handlerDevicesSubscribe = async (userToken, expoToken) => {
+    try {
+        const requestSub = await fetch(`${URL}/api/exponent/devices/subscribe`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${userToken}`,
+            },
+            body: JSON.stringify({expo_token: expoToken})
+        })
+        const responseSub = await requestSub.json()
+    } catch (e) {
+        console.log(e)
+    }
 }

@@ -54,10 +54,9 @@ async function apiFetch(url:string, method?:string, token?:boolean, values?:obje
                   },
                 body: values? JSON.stringify(values) : undefined
             } : undefined)
-            
+                
                 if (jsonOutput.status != 401) {
                     const result = await jsonOutput.json();
-                    // console.log(result);
                     if (!!result?.exception) {
                         setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 300);
                         
@@ -120,7 +119,7 @@ export async function apiFetchFile(url:string, method:string, token:boolean, val
                 return {...result, status:jsonOutput.status};
             } else {
                 user.userClear()
-                chatAuth.reconnectInput(false)
+                // chatAuth.reconnectInput(false)
                 const bottomReset = CommonActions.reset({
                     index: 0,
                     routes: [{name: 'Auth'}],
@@ -167,7 +166,7 @@ export async function apiFetchNoPreloader(url:string, method?:string, token?:boo
                 return {...result, status:jsonOutput.status};
             } else {
                 user.userClear()
-                chatAuth.reconnectInput(false)
+                // chatAuth.reconnectInput(false)
                 const bottomReset = CommonActions.reset({
                     index: 0,
                     routes: [{name: 'Auth'}],

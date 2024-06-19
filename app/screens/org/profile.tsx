@@ -1,7 +1,7 @@
 import { Image, KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { MainLayout, ProfileBlock } from '../../component';
 import { statusBarHeight, width } from '../../GLOBAL';
-import { CameraIcon, EditIcon, MiniHeartIcon } from '../../component/svg/svg';
+import { CameraIcon, CloseIcon, EditIcon, MiniHeartIcon } from '../../component/svg/svg';
 import { styles } from '../../styles';
 import { ModalImg } from '../../component/popup/img';
 import { useRef, useState } from 'react';
@@ -10,6 +10,9 @@ import avatar from '../../model/avatar';
 import { observer } from 'mobx-react-lite';
 import { ModalEmailHelp } from '../../component/popup/help';
 import { navigate } from '../../functions/navigate';
+import { logOut } from '../../functions/auth';
+import token from '../../model/token';
+import apiFetch from '../../functions/api';
  
 export const ProfileScreen = observer(() => {
     const img = useRef<RBSheet>(null)
@@ -23,23 +26,34 @@ export const ProfileScreen = observer(() => {
                     style={{ flex: 1 }}
                 >
                     <View style={{width:'100%', flex:1, alignItems:'center', marginTop:statusBarHeight+20}}>
-                        <TouchableOpacity activeOpacity={0.7} onPress={()=>img.current?.open()} style={styles.profileCameraContainer}>
-                            {avatar.uri ? <>
-                            <Image source={{uri:avatar.uri}} style={{width:'100%', height:'100%', borderRadius:16}}/>
-                            <TouchableOpacity activeOpacity={0.7} style={{position:'absolute', alignItems:"center", justifyContent:"center", bottom:6, right:6, backgroundColor:'#221E1E80', pointerEvents:"box-only", padding:5, width:32, height:32, borderRadius:90}}>
-                                <EditIcon/>
-                            </TouchableOpacity></>
-                            : <CameraIcon/>}
+                        <View style={styles.profileCameraContainer}>
+                            {token?.data?.img ? 
+                            <>
+                                <Image source={{uri:token?.data?.img[0]?.uri}} style={{width:'100%', height:'100%', borderRadius:16}}/>
+                                <TouchableOpacity activeOpacity={0.7} onPress={async()=>{
+                                    const value = await apiFetch(`/profile/attachment/${token?.data?.img[0]?.id}`,'DELETE',true)
+                                    if (value?.status == 200) {
+                                        token?.userUpdate(value?.user, token?.token)
+                                    }
+                                }} style={{position:'absolute', alignItems:"center", justifyContent:"center", bottom:6, right:6, backgroundColor:'#221E1E80', pointerEvents:"box-only", padding:5, width:32, height:32, borderRadius:90}}>
+                                    <CloseIcon/>
+                                </TouchableOpacity>
+                            </>
+                            : 
+                            <TouchableOpacity activeOpacity={0.7} onPress={()=>img.current?.open()}>
+                                <CameraIcon/>
+                            </TouchableOpacity>
+                            }
                             
-                        </TouchableOpacity>
+                        </View>
                         <View style={{gap:4, alignItems:'center'}}>
-                            <Text style={[styles.h2,{color:"white", textAlign:"center", fontFamily:"PoppinsSemiBold"}]}>Александр</Text>
-                            <Text style={[styles.smallText,{color:"#FFFFFF99", textAlign:"center"}]}>info21@mail.com</Text>
+                            <Text style={[styles.h2,{color:"white", textAlign:"center", fontFamily:"PoppinsSemiBold"}]}>{token?.data?.login ?? token?.data?.name + ' '+ token?.data?.last_name}</Text>
+                            <Text style={[styles.smallText,{color:"#FFFFFF99", textAlign:"center"}]}>{token?.data?.email}</Text>
                             <View style={{flexDirection:"row", alignItems:"center", gap:15}}>
-                                <Text style={[styles.bodyText,{color:"#FFFFFF99", fontFamily:'PoppinsMedium'}]}>Москва</Text>
+                                {/* <Text style={[styles.bodyText,{color:"#FFFFFF99", fontFamily:'PoppinsMedium'}]}>Москва</Text> */}
                                 <View style={{flexDirection:'row', alignItems:"center", gap:4}}>
                                     <MiniHeartIcon/>
-                                    <Text style={[styles.bodyText,{color:"#FFFFFF"}]}>5.0</Text>
+                                    <Text style={[styles.bodyText,{color:"#FFFFFF"}]}>{token?.data?.rating}</Text>
                                 </View>
                             </View>
                         </View>
@@ -50,7 +64,7 @@ export const ProfileScreen = observer(() => {
                             <ProfileBlock text='Изменить пароль' onPress={()=>navigate('EditPass')}/>
                             <ProfileBlock text='Помощь' msgIcon={true} onPress={()=>help.current.open()}/>
                         </View>
-                        <TouchableOpacity activeOpacity={0.7} onPress={()=>navigate('Auth')} style={{width:'100%', marginBottom:80}}>
+                        <TouchableOpacity activeOpacity={0.7} onPress={logOut} style={{width:'100%', marginBottom:80}}>
                             <Text style={[styles.smallText,{color:"#FFFFFF99", textAlign:'center'}]}>Выйти из аккаунта</Text>
                         </TouchableOpacity>
                     </View>

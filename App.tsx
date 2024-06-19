@@ -17,7 +17,8 @@ import { ModalErr } from './app/component/popup/err';
 import error from './app/model/error';
 import RBSheet from '@nonam4/react-native-bottom-sheet';
 import { observer } from 'mobx-react-lite';
-// YaMap.init('9686e034-f846-4d6c-a556-fc6f621bd36a');
+import { load } from './app/functions/storage';
+import token from './app/model/token';
 
 LocaleConfig.locales["ru"] = {
   monthNames: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
@@ -30,6 +31,11 @@ LocaleConfig.locales["ru"] = {
 LocaleConfig.defaultLocale = "ru";
 
 const App = observer(() => {
+  if (__DEV__) {
+    console.log('Development');
+  } else {
+    YaMap.init('9686e034-f846-4d6c-a556-fc6f621bd36a');
+  }
   const [appIsReady, setAppIsReady] = useState(false);
   const errRef = useRef<RBSheet>(null);
   // const [fontsLoaded] = useFonts({
@@ -50,6 +56,11 @@ const App = observer(() => {
         'PoppinsBold': require('./assets/fonts/Poppins-Bold.ttf'),
       })
       
+      const tmp = await load('@userData')
+      token?.userInput(tmp?.user, tmp?.token)
+      console.log(tmp);
+      
+
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         console.log('Permission to access location was denied');

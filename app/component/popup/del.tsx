@@ -7,6 +7,8 @@ import { CameraMiniIcon, ImgIcon, ModalCloseIcon } from "../svg/svg";
 import { addImage } from "../../functions/addImage";
 import { ButtonMy } from "../ui/ButtonMy";
 import { navigate } from "../../functions/navigate";
+import apiFetch from "../../functions/api";
+import { logOut } from "../../functions/auth";
 
 /**
  * Модалка для удаления профиля
@@ -48,9 +50,12 @@ export const ModalDel = forwardRef((props:{},ref)=>{
                             <Text style={[styles.h4,{color:'white', textAlign:'center',marginHorizontal:40}]}>Ваш профиль и все данные будут удалены навсегда</Text>
                             <View style={{flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}>
                                 <ButtonMy text='Отмена' onPress={()=>ref?.current?.close()} backgroundColor='#88FFF9' width={'48%'} colorText='#171717'/>
-                                <ButtonMy text='Удалить' onPress={()=>{
-                                    ref?.current?.close()
-                                    setTimeout(() => navigate('Auth'), 300);
+                                <ButtonMy text='Удалить' onPress={async()=>{
+                                    const value = await apiFetch('/profile','DELETE',true)
+                                    if (value?.status == 200) {
+                                        ref?.current?.close()
+                                        logOut()
+                                    }
                                 }} borderColor='#88FFF9' onPressColor='#393939' backgroundColor='#171717' width={'48%'} colorText='#FFF'/>
                             </View>
                         </View>

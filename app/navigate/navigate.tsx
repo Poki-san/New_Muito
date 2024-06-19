@@ -9,6 +9,7 @@ import { Image, View } from "react-native";
 import { AddEventIcon, HeartMenuIcon, MapMenuIcon, ProfileMenuIcon, SearchIcon } from "../component/svg/svg";
 import { styles } from "../styles";
 import avatar from "../model/avatar";
+import token from "../model/token";
 
 const AppStack = observer(() =>{
     return (
@@ -20,11 +21,13 @@ const AppStack = observer(() =>{
               open: TransitionSpecs.FadeInFromBottomAndroidSpec,
               close: TransitionSpecs.FadeOutToBottomAndroidSpec,
             },}} 
-          initialRouteName={"Auth"}>
+          initialRouteName={token?.token?.length > 0 ? (token?.data?.type =='guest' ? 'MainGuest':'Main') :"Auth"}>
           <MainStack.Screen name="Auth" component={screens.LoginScreen} listeners={BackHandlerFirstScreen} />
           <MainStack.Screen name="RegisterWelcome" component={screens.RegisterWScreen} />
           <MainStack.Screen name="RegisterOrg" component={screens.RegisterOrgScreen} />
           <MainStack.Screen name="RegisterGuest" component={screens.RegisterGuestScreen} />
+          <MainStack.Screen name="Event" component={screens.EventScreen}/>
+
           <MainStack.Screen name="Main" component={MainScreenBottom} />
           <MainStack.Screen name="EventPeople" component={screens.EventPeopleScreen} />
           <MainStack.Screen name="People" component={screens.PeopleScreen} />
@@ -32,11 +35,11 @@ const AppStack = observer(() =>{
           <MainStack.Screen name="EditOrg" component={screens.EditOrgScreen}/>
           <MainStack.Screen name="AddEvent" component={screens.AddEventScreen}/>
           <MainStack.Screen name="EditEvent" component={screens.EditEventScreen}/>
-          <MainStack.Screen name="Event" component={screens.EventScreen}/>
 
           <MainStack.Screen name="MainGuest" component={MainGuestScreenBottom}/>
           <MainStack.Screen name="EditGuest" component={screens.EditGuestScreen}/>
           <MainStack.Screen name="EditPass" component={screens.EditPassScreen}/>
+          <MainStack.Screen name="Verf" component={screens.VerfScreen}/>
         </MainStack.Navigator>
       </NavigationContainer>
     )

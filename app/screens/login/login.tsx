@@ -12,6 +12,9 @@ import { Formik } from 'formik';
 import * as yup from 'yup'
 import apiFetch from '../../functions/api';
 import error from '../../model/error';
+import { save } from '../../functions/storage';
+import token from '../../model/token';
+import { handlerDevicesSubscribe, registerForPushNotificationsAsync } from '../../functions/auth';
 
 const validationsSchemaLogin = yup.object().shape({
     email: yup.string().email('Не верный формат').required('Поле не может быть пустым'),
@@ -35,6 +38,8 @@ export function LoginScreen() {
                             <LogoIcon/>
                         </View>
                         <View style={{gap:24, paddingBottom:19}}>
+
+                            {/* Проверка (Вход или Регистрация) включина */}
                             {!register ? 
                                 <Formik
                                     initialValues={{
@@ -45,21 +50,50 @@ export function LoginScreen() {
                                     onSubmit={async(values) => {
                                         Keyboard.dismiss()
                                         const value = await apiFetch('/login',"POST",false,values)
+
+                                        //Проверка на статус ответа сервера
                                         switch (value?.status) {
                                             case 200:
                                             case 201:
                                             case 202:
-                                                console.log(value);
-                                                
+                                                //Проверка на тип пользователя
+                                                switch (value?.user?.type) {
+                                                    case "organizer":
+                                                        token.userInput(value?.user, value?.token)
+                                                        save('@userData',value)
+                                                        registerForPushNotificationsAsync().then(token => {
+                                                            !!token && !!value?.token && handlerDevicesSubscribe(value?.token, token)
+                                                        });
+                                                        navigate("Main")
+                                                        break;
+                                                    case "guest":
+                                                        token.userInput(value?.user, value?.token)
+                                                        if (value?.user?.active == 1) {
+                                                            save('@userData',value)
+                                                            registerForPushNotificationsAsync().then(token => {
+                                                                !!token && !!value?.token && handlerDevicesSubscribe(value?.token, token)
+                                                            });
+                                                            navigate("MainGuest")
+                                                        } else {
+                                                            navigate("Verf")
+                                                        }
+                                                        break;
+                                                    default:
+                                                        error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145)
+                                                        break;
+                                                }
+                                                //Конец - Проверка на тип пользователя
+
                                                 break;
                                             case 422:
                                                 setTimeout(() => error.Input(true, 'Неверный логин или пароль', 'Что-то пошло не так!', Platform.OS=='ios'?175:145), 300);
                                                 break;
-                                        
                                             default:
                                                 error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145)
                                                 break;
                                         }
+                                        //Конец - Проверка на статус ответа сервера
+
                                     }}
                                     validationSchema={validationsSchemaLogin}
                                 >
@@ -73,6 +107,7 @@ export function LoginScreen() {
                                                 touched={touched.email} 
                                                 placeholderTextColor={'#FFFFFF99'} 
                                                 keyboardType='email-address'
+                                                onBlur={handleBlur('email')}
                                                 title='Логин' 
                                                 value={values.email}
                                                 onChangeText={handleChange('email')}
@@ -83,6 +118,7 @@ export function LoginScreen() {
                                                 placeholderTextColor={'#FFFFFF99'} 
                                                 title='Пароль' 
                                                 value={values.password}
+                                                onBlur={handleBlur('password')}
                                                 onChangeText={handleChange('password')}
                                                 securePass 
                                                 style={{borderWidth:1, borderColor:(!!errors.password && touched.password)?'#FF000086':'#FFFFFF99'}}
@@ -94,8 +130,6 @@ export function LoginScreen() {
                                             </TouchableOpacity>
                                         </View>
                                         <ButtonMy text='Войти' onPress={handleSubmit} backgroundColor='#88FFF9' colorText='#171717'/>
-                                        {/* <ButtonMy text='Войти Организатор' onPress={()=>navigate('Main')} backgroundColor='#88FFF9' colorText='#171717'/>
-                                        <ButtonMy text='Войти Гость' onPress={()=>navigate('MainGuest')} backgroundColor='#88FFF9' colorText='#171717'/> */}
                                     </BlurView>)}
                                 </Formik>
                                 :
@@ -106,6 +140,8 @@ export function LoginScreen() {
                                     <ButtonMy text='Организатор' onPress={()=>navigate('RegisterWelcome',{type:'org'})} backgroundColor='#88FFF900' colorText='#FFFFFF' borderWidth={1} borderColor='#FFFFFF80'/>
                                 </BlurView>
                             }
+                            {/* Конец - Проверка (Вход или Регистрация) включина */}
+
                             <View style={{gap:10, alignItems:"center"}}>
                                 <Text style={{color:'white', fontWeight:'500', opacity:0.6}}>{!register?'Нет аккаута':'Уже есть аккаунт?'}</Text>
                                 <TouchableOpacity activeOpacity={0.7} onPress={()=>setRegister(!register)}>

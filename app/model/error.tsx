@@ -2,7 +2,7 @@ import { makeAutoObservable } from 'mobx'
 
 class error {
   switch = false
-  title = 'Ошибка'
+  title = 'Упс...'
   text = 'Что-то пошло не так!'
   height=180;
 

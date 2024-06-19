@@ -9,13 +9,14 @@ class user {
     makeAutoObservable(this)
   }
 
-  userInput(n: {token?:any}) {
-    this.data = n
-    this.token = n?.token
+  userInput(user:object, token:string) {
+    this.data = user
+    this.token = token
   } 
-  userUpdate(n:{}) {
-    this.data =  {...this.data, user: n}
-    save('@userData', this.data)
+  userUpdate(user:object, token:string) {
+    this.data =  user
+    this.token = token
+    save('@userData', {user: user, token:token})
   }
   
   userClear() {
