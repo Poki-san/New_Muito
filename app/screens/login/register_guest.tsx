@@ -16,10 +16,11 @@ import { Formik, FormikErrors, FormikTouched } from 'formik';
 import * as yup from 'yup'
 import moment from 'moment';
 import { fileExpansion, fileName } from '../../functions/addImage';
-import apiFetch, { apiFetchFile } from '../../functions/api';
+import apiFetch, { apiFetchFile, apiFetchNoStatus } from '../../functions/api';
 import token from '../../model/token';
 import { save } from '../../functions/storage';
 import { handlerDevicesSubscribe, registerForPushNotificationsAsync } from '../../functions/auth';
+import error from '../../model/error';
 
 const validationsStepOneRegister = yup.object().shape({
     email: yup.string().email('Введите корректный email').required('Обязательное поле'),
@@ -41,6 +42,10 @@ export function RegisterGuestScreen() {
     const [tags, setTags] = useState([])
     const camera = useRef<CameraView>(null)
     const [check, setCheck] = useState(false)
+
+    const [activeTag, setTag] = useState([])
+    const [activeTagCount, setTagCount] = useState([])
+
     const [permission, requestPermission] = useCameraPermissions();
     // if (!permission.granted) {
     //     // Camera permissions are not granted yet.
@@ -54,7 +59,7 @@ export function RegisterGuestScreen() {
 
     useEffect(() => {
         (async()=>{
-            const tags = await apiFetch('/hashtags?new=1','GET',false)
+            const tags = await apiFetchNoStatus('/hashtags?new=1','GET',false)
             setTags(tags);
         })();
     }, []);
@@ -130,6 +135,8 @@ export function RegisterGuestScreen() {
                                             !!token && !!result?.token && handlerDevicesSubscribe(result?.token, token)
                                         });
                                         setStep(val=>val+1)
+                                    } else {
+                                        error.Input(true,'Такой пользователь уже есть','Упс...', Platform.OS=='ios'?158 :150)
                                     }
                                     break;
                                 default:
@@ -258,12 +265,17 @@ export function RegisterGuestScreen() {
                                     handleBlur={handleBlur}
                                     setFieldValue={setFieldValue}
                                 />}
-                                {step == 3 && <StepThree 
+                                {(step == 3 && tags?.length > 0) && <StepThree 
                                     onPress={handleSubmit}
                                     setFieldValue={setFieldValue}
                                     values={values}
                                     errors={errors}
                                     touched={touched}
+                                    hashtags={tags}
+                                    activeTag={activeTag}
+                                    activeTagCount={activeTagCount}
+                                    setTag={setTag}
+                                    setTagCount={setTagCount}
                                 />}
                                 {step == 4 && <StepFour 
                                     onPress={handleSubmit}
@@ -550,6 +562,10 @@ function StepTwo(props:{
 function StepThree(props:{
     onPress?:()=>void,
     setFieldValue?:any,
+    activeTag?:any[]
+    activeTagCount?:any[]
+    setTag?:(activeTag?:any[])=>void,
+    setTagCount?:(activeTagCount?:any[])=>void,
     errors?: FormikErrors<{
         hashtags: any[];
     }>,
@@ -558,44 +574,77 @@ function StepThree(props:{
     }>,
     values?: {
         hashtags: any[];
-    }
+    },
+    hashtags?:any[]
 }) {
-    const [activeTag, setTag] = useState([])
+    const {activeTag, activeTagCount, setTag, setTagCount} = props
     
     return (
         <View style={{marginTop:11, flex:1}}>
             <Text style={[styles.bodyText,{fontFamily:'Poppins', color:'#ffffff90'}]}>Анна, выберите интересы</Text>
             <View style={{flex:1, marginTop:25, alignItems:'center', justifyContent:"space-between"}}>
                 <View style={{width:"100%"}}>
-                    {tagsTest.map((el,i)=>(
+                    {props.hashtags.map((el,i)=>(
                         <View key={i} style={{gap:8, marginBottom:16}}>
-                            <Text style={[styles.bodyText,{color:'#ffffff'}]}>{el.title}</Text>
+                            <Text style={[styles.bodyText,{color:'#ffffff'}]}>{el?.title}</Text>
                             <View style={{flexDirection:'row', alignItems:"center", flexWrap:'wrap', gap:8}}>
-                                {el.tags.map((el2,i2)=>(
+                                {el?.children.map((el2,i2)=>(
                                     <TouchableOpacity key={i2} activeOpacity={0.7} onPress={()=>{
-                                        const index = activeTag.indexOf(el2.id)
+                                        const index = activeTag.indexOf(el2?.value)
+                                        const indexCount = activeTagCount?.findIndex(value => value?.parent == el2?.parent_id)
+                                        
                                         let tmp = activeTag
-                                        if (index==-1) {
-                                            if (activeTag.length<5) {
-                                                tmp.push(el2.id) 
+                                        let tmpCount = activeTagCount
+
+                                        if (index==-1) {     
+                                            if (indexCount==-1) {
+                                                tmpCount.push({parent:el2?.parent_id, count:1})
+                                                tmp.push(el2?.value)
                                             } else {
-                                                showToastable({message:'Можно добавить только 5 тегов'})
+                                                if (tmpCount[indexCount].count<4) {
+                                                    tmpCount[indexCount].count += 1
+                                                    tmp.push(el2?.value)
+                                                } else {
+                                                    showToastable({message:'Можно добавить только 4 тегов из одной группы'})
+                                                }
                                             }
-                                        } else{
+                                        } else {
                                             tmp = delElement(tmp,index)
+
+                                            tmpCount[indexCount].count -= 1
+                                            if (tmpCount[indexCount].count==0) {
+                                                tmpCount.splice(indexCount,1)
+                                            }
                                         }
+                                        
                                         setTag([...tmp])
+                                        setTagCount([...tmpCount])
                                         props.setFieldValue('hashtags',[...tmp])
                                        
-                                    }} style={{paddingHorizontal:16, alignSelf:'flex-start', paddingVertical:8, borderRadius:16, borderWidth:1, borderColor:Бирюзовый50, backgroundColor:activeTag.indexOf(el2.id)!=-1?Бирюзовый:'transparent'}}>
-                                        <Text style={[styles.smallText,{color:'#ffffff'}]}>{el2.title}</Text>
+                                    }} style={{paddingHorizontal:16, alignSelf:'flex-start', paddingVertical:8, borderRadius:16, borderWidth:1, borderColor:Бирюзовый50, backgroundColor:activeTag.indexOf(el2?.value)!=-1?Бирюзовый:'transparent'}}>
+                                        <Text style={[styles.smallText,{color:activeTag.indexOf(el2?.value)!=-1?'#181818':'#ffffff'}]}>{el2.label}</Text>
                                     </TouchableOpacity>
                                 ))}
                             </View>
                         </View>
                     ))}
                 </View>
-                <View style={{marginTop:10, width:'100%', marginBottom:15}}><ButtonMy text='Далее' onPress={props.onPress} backgroundColor='#88FFF9' colorText='#171717'/></View>
+                <View style={{marginTop:10, width:'100%', marginBottom:15}}>
+                    <ButtonMy text='Далее' onPress={()=>{
+                        console.log(activeTagCount);
+                        let count = 0
+                        if (activeTagCount?.length == 3) {
+                            activeTagCount.forEach(el=>el?.count<=1 &&(count +=1))
+                            if (count == 0) {
+                                props.onPress()
+                            } else {
+                                showToastable({message:'Минимум 2 тега из каждой группы'})
+                            }
+                        } else {
+                            showToastable({message:'Не все группы были выбраны'})
+                        }
+                    }} backgroundColor='#88FFF9' colorText='#171717'/>
+                </View>
             </View>
         </View>
     )

@@ -96,7 +96,7 @@ const App = observer(() => {
           animationOutTiming={500}
           renderContent={(prop) =>
             <View style={{
-              backgroundColor: Бирюзовый50,
+              backgroundColor: '#88FFF9DD',
               paddingVertical: 10,
               paddingHorizontal: 12,
               zIndex: 999,

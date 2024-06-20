@@ -370,7 +370,6 @@ function StepThree(props:{
     }
 }) {
     const [isDate, setIsDate] = useState(false)
-    const [date, setDate] = useState('')
     return (
         <View style={{marginTop:11, flex:1}}>
             <Text style={[styles.bodyText,{fontFamily:'Poppins', color:'#ffffff90'}]}>Данные обязательные для заполнения</Text>
@@ -378,7 +377,7 @@ function StepThree(props:{
                 <View style={{gap:21, width:"100%"}}>
                     <View style={{gap:8}}>
                         <TouchableOpacity activeOpacity={0.7} onPress={()=>setIsDate(true)}>
-                            <Input editable={false} value={date} backgroundColor='#FFFFFF00' placeholderTextColor={'#FFFFFF99'} title='Дата рождения' style={{borderWidth:1, borderColor:'#FFFFFF99', paddingRight:20}}/>
+                            <Input editable={false} value={props.values?.birthday} backgroundColor='#FFFFFF00' placeholderTextColor={'#FFFFFF99'} title='Дата рождения' style={{borderWidth:1, borderColor:'#FFFFFF99', paddingRight:20}}/>
                             <View style={{position:'absolute', right:10, top:0, bottom:0, justifyContent:'center'}}><CalendarIcon/></View>
                         </TouchableOpacity>
                         <Input 
@@ -402,7 +401,6 @@ function StepThree(props:{
                     locale='ru_RU'
                     onConfirm={(value)=>{     
                         props.setFieldValue('birthday',moment(value).format("YYYY-MM-DD"))
-                        setDate(moment(value).format("YYYY-MM-DD"))
                         setIsDate(false)
                     }}
                     onCancel={()=>setIsDate(false)}

@@ -183,4 +183,54 @@ export async function apiFetchNoPreloader(url:string, method?:string, token?:boo
     }
 }
 
+export async function apiFetchNoStatus(url:string, method?:string, token?:boolean, values?:object) {
+    let connect:any;
+    
+    preloader.Input(true);
+    
+    await NetInfo.fetch().then(state => connect = state.isConnected);
+    if (connect) {
+        try {
+            const jsonOutput = await fetch(URL + url, method? {
+                method:method,
+                headers: token ? {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json;',
+                    'Authorization': `Bearer ${user.token}`
+                  } : {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json;'
+                  },
+                body: values? JSON.stringify(values) : undefined
+            } : undefined)
+                
+                if (jsonOutput.status != 401) {
+                    const result = await jsonOutput.json();
+                    if (!!result?.exception) {
+                        setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 300);
+                        
+                    }
+                    return result;
+                } else {
+                    user.userClear()
+                    const bottomReset = CommonActions.reset({
+                        index: 0,
+                        routes: [{name: 'Auth'}],
+                    });
+                    navigationRef.current?.dispatch(bottomReset)
+                }
+                
+        } catch (err) {
+            setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 300);
+        } finally {
+            preloader.Input(false);
+        }
+    } else {
+        preloader.Input(false);
+        const temp = {noInet:true};
+        setTimeout(() => error.Input(true,'Нету подключения к интернету!','Упс!...', Platform.OS=='ios'?175:145), 300);
+        return temp;
+    }
+}
+
 export default apiFetch 

@@ -96,7 +96,7 @@ export const styles = StyleSheet.create({
         flex:1, 
         marginHorizontal:16, 
         borderWidth:1, 
-        marginBottom:76, 
+        marginBottom:Platform.OS=='ios' ?103 :70, 
         borderRadius:16, 
         overflow:'hidden', 
         borderColor:'#B5B5B50', 

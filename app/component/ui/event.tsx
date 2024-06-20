@@ -9,15 +9,19 @@ import RBSheet from '@nonam4/react-native-bottom-sheet';
 import { useRef } from 'react';
 import { ModalReview } from '../popup/review';
 import { width } from '../../GLOBAL';
+import moment from 'moment';
  
-export function EventItem(props:{tag?:number, size?:number, check?:boolean, style?: StyleProp<ViewStyle>, noEdit?:boolean, type?:'guest'|'org'}) {
+export function EventItem(props:{tag?:number, size?:number, check?:boolean, data?:{}, style?: StyleProp<ViewStyle>, noEdit?:boolean, type?:'guest'|'org'}) {
     const del = useRef<RBSheet>()
     const review = useRef<RBSheet>(null)
+    const {data} = props
+    console.log(data);
+    
     return ( 
-        <TouchableOpacity activeOpacity={0.7} style={[{width:width-32},props.style]} onPress={()=>navigate('Event',{type:props.type})}>
+        <TouchableOpacity activeOpacity={0.7} style={[{width:width-32},props.style]} onPress={()=>navigate('Event',{type:props.type, id:data?.id})}>
             <BlurView intensity={75} tint='systemChromeMaterialDark' style={{borderRadius:16, overflow:"hidden", borderWidth:1, borderColor:'#FFFFFF99', padding:8, flexDirection:"row",gap:10, width:'100%'}}>
                 <View>
-                    <Image source={require('../../../assets/image/event.jpg')} style={{height:props.size??72,aspectRatio:1, borderRadius:16}}/>
+                    <Image source={{uri:data?.img[0]?.small}} style={{height:props.size??72,aspectRatio:1, borderRadius:16}}/>
                     {!props.noEdit &&<View style={{flexDirection:"row", justifyContent:"space-between", alignItems:"center", marginTop:8}}>
                         <TouchableOpacity activeOpacity={0.7} onPress={()=>del.current?.open()} style={{width:33, height:33, borderRadius:180, backgroundColor:'#4D000190', alignItems:"center", justifyContent:"center"}}>
                             <TrashIcon/>
@@ -32,11 +36,11 @@ export function EventItem(props:{tag?:number, size?:number, check?:boolean, styl
                 </View>
                 <View style={{flex:1, justifyContent:"space-between",gap:6}}>
                     <View style={{flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}>
-                        <Text style={[styles.smallText,{color:'white'}]}>18:00</Text>
-                        <Text style={[styles.smallText,{color:'white'}]}>10 <Text style={{fontSize:10, color:"#FFFFFF99"}}>авг. -</Text> 10 <Text style={{fontSize:10, color:"#FFFFFF99"}}>авг.</Text></Text>
+                        <Text style={[styles.smallText,{color:'white'}]}>{moment(data?.date_event).format("HH:mm")}</Text>
+                        <Text style={[styles.smallText,{color:'white'}]}>{moment(data?.date_event).format("DD ")}<Text style={{fontSize:10, color:"#FFFFFF99"}}>{moment(data?.date_event).format("MMM YY")} -</Text> {moment(data?.end_date_event).format("DD ")}<Text style={{fontSize:10, color:"#FFFFFF99"}}>{moment(data?.end_date_event).format("MMM YY")}</Text></Text>
                     </View>
                     
-                    <Text style={[styles.h4,{color:'white', flex:1}]}>Название вечеринки Paty Dens Nou</Text>
+                    <Text style={[styles.h4,{color:'white', flex:1}]}>{data?.title}</Text>
                     {props.noEdit ? <View style={{flexDirection:"row", alignItems:"center", gap:4, justifyContent:"space-between"}}>
                         <View style={{flexDirection:"row", alignItems:'flex-end', gap:2}}>
                             <Text style={[styles.smallText,{color:'#5AA19D', fontSize:10}]}>Для вас:</Text>
@@ -53,9 +57,9 @@ export function EventItem(props:{tag?:number, size?:number, check?:boolean, styl
                             <InstaIcon/>
                         </View>
                     </View>:<>
-                        {props.tag == 0 && <ButtonMy text='25 заявок' disabled={false} onPress={()=>navigate('EventPeople')} backgroundColor='#88FFF900' colorText='#FFF' borderColor='#88FFF9' onPressColor='#393939'/>}
+                        {props.tag == 2 && <ButtonMy text={data?.count+' заявки'} disabled={false} onPress={()=>navigate('EventPeople')} backgroundColor='#88FFF900' colorText='#FFF' borderColor='#88FFF9' onPressColor='#393939'/>}
                         {props.tag == 1 && <ButtonMy text='Оценить' disabled={false} onPress={()=>review.current?.open()} backgroundColor='#88FFF900' colorText='#FFF' borderColor='#88FFF9' onPressColor='#393939'/>}
-                        {props.tag == 2 && <ButtonMy text='Опубликовать' onPressColor='#393939' disabled={false} onPress={()=>{}} backgroundColor='#88FFF900' colorText='#FFF' borderColor='#88FFF9'/>}
+                        {props.tag == 0 && <ButtonMy text='Опубликовать' onPressColor='#393939' disabled={false} onPress={()=>{}} backgroundColor='#88FFF900' colorText='#FFF' borderColor='#88FFF9'/>}
                     </>}
                 </View>
                 <ModalDelEvent ref={del}/>

@@ -10,6 +10,7 @@ import { AddEventIcon, HeartMenuIcon, MapMenuIcon, ProfileMenuIcon, SearchIcon }
 import { styles } from "../styles";
 import avatar from "../model/avatar";
 import token from "../model/token";
+import { NoPayModal } from "../component/popup/noPay";
 
 const AppStack = observer(() =>{
     return (
@@ -46,12 +47,13 @@ const AppStack = observer(() =>{
 })
 
 const MainScreenBottom = observer(() => {
+  
   return (
     <View style={{flex:1}}>
       <View style={{height:0.88, width:'100%',position:"absolute", bottom:58,right:0, left:0,}}>
         <Image source={require('../../assets/image/line.png')} style={{resizeMode:'contain', height:0.88, zIndex:999, width:'94%', opacity:0.55,alignSelf:"center",  marginHorizontal:16}}/>
       </View>
-     
+      {token.data?.may_publish == 0 && <NoPayModal visible={true}/>}
       <MainBottom.Navigator
         backBehavior="history"
         screenOptions={{
@@ -110,12 +112,12 @@ const MainScreenBottom = observer(() => {
 })
 
 const MainGuestScreenBottom = observer(() => {
+  
   return (
     <View style={{flex:1}}>
       <View style={{height:0.88, width:'100%',position:"absolute", bottom:58,right:0, left:0,}}>
         <Image source={require('../../assets/image/line.png')} style={{resizeMode:'contain', height:0.88, zIndex:999, width:'94%', opacity:0.55,alignSelf:"center",  marginHorizontal:16}}/>
       </View>
-     
       <MainBottom.Navigator
         backBehavior="history"
         screenOptions={{
