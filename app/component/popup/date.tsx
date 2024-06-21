@@ -37,7 +37,7 @@ export const ModalDate = forwardRef((props:{onPeroid?:(start?:string, end?:strin
         <>
             <RBSheet
                 ref={ref}
-                height={519}
+                height={Platform.OS=='ios'? 549:519}
                 closeOnDragDown={true}
                 // dragFromTopOnly
                 closeOnPressMask={true} 
@@ -134,15 +134,16 @@ export const ModalDate = forwardRef((props:{onPeroid?:(start?:string, end?:strin
  * Модалка для вызова дат
  * @param ref для взаимодействия с модальным окном
  */
-export const ModalDatePoint = forwardRef((props:{onPeroid?:(date?:string)=>void},ref)=>{
+export const ModalDatePoint = forwardRef((props:{onPress?:(date?:string)=>void},ref)=>{
     const [selected, setSelected] = useState('')
     return (
         <>
             <RBSheet
                 ref={ref}
-                height={400}
+                height={Platform.OS=='ios'? 430:400}
                 closeOnDragDown={true}
                 // dragFromTopOnly
+                onClose={()=>setSelected('')}
                 closeOnPressMask={true} 
                 customStyles={{
                     draggableIcon:{
@@ -174,7 +175,7 @@ export const ModalDatePoint = forwardRef((props:{onPeroid?:(date?:string)=>void}
                                     enableSwipeMonths
                                     onDayPress={day => {
                                         setSelected(day.dateString)
-                                        !!props.onPeroid&&props.onPeroid(day.dateString)
+                                        !!props.onPress&&props.onPress(day.dateString)
                                     }}
                                     style={{ borderRadius:16, paddingVertical:10}}
                                     markedDates={{[selected]:{selected: true, disableTouchEvent: true, marked:false, color:'#355855'}}}

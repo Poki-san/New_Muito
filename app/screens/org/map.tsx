@@ -41,7 +41,7 @@ export const MapOrgScreen = observer(() => {
                 style={{ flex: 1, marginTop:statusBarHeight }}
             >
                 <View style={{top:8, left:16, right:16,  position:'absolute', alignItems:"center", zIndex:3}}>
-                    <BlurView intensity={75} experimentalBlurMethod='dimezisBlurView' style={{flexDirection:"row", paddingHorizontal:10, paddingVertical:8,
+                    <BlurView intensity={75}  style={{flexDirection:"row", paddingHorizontal:10, paddingVertical:8,
                     overflow:"hidden", borderRadius:16, alignItems:'center', gap:4}} tint='systemChromeMaterialDark'>
                         <Text style={[styles.h4,{color:Белый, textAlign:"center"}]}>Участницы рядом</Text>
                     </BlurView>

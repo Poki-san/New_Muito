@@ -76,7 +76,10 @@ export function RegisterOrgScreen() {
                                 const bodyFormData = new FormData()
                                 if (value?.login?.length > 0) {
                                     bodyFormData.append('login', value?.login)
+                                    value?.name?.length > 0 && bodyFormData.append('name', value?.name)
+                                    value?.last_name?.length > 0 && bodyFormData.append('last_name', value?.last_name)
                                 } else {
+                                    value?.login?.length > 0 && bodyFormData.append('login', value?.login)
                                     bodyFormData.append('name', value?.name)
                                     bodyFormData.append('last_name', value?.last_name)
                                 }
@@ -149,7 +152,7 @@ export function RegisterOrgScreen() {
                                 </View>}
                             </View>
                             {step == 0 && <View style={{gap:24}}>
-                                <BlurView experimentalBlurMethod='dimezisBlurView' intensity={30} tint='systemChromeMaterialDark' style={styles.blurContainer}>
+                                <BlurView  intensity={30} tint='systemChromeMaterialDark' style={styles.blurContainer}>
                                     <View style={{marginHorizontal:8}}>
                                         <Text style={{color:'white', fontWeight:'700', fontSize:18, textAlign:'center', fontFamily:'PoppinsBold'}}>Регистрация для организатора</Text>
                                     </View>
@@ -246,7 +249,7 @@ function StepOne(props:{onPress?:()=>void, setImg?:(path?:string)=>void, path?:s
         <View style={{marginTop:11, flex:1}}>
             <Text style={[styles.bodyText,{fontFamily:'Poppins', color:'#ffffff90'}]}>Вы можете добавить личную фотографию, логотип или картинку.</Text>
             <View style={{flex:1, marginTop:25, alignItems:'center', justifyContent:"space-between"}}>
-                <BlurView experimentalBlurMethod='dimezisBlurView' intensity={30} tint='systemChromeMaterialDark' style={{width:290, height:290, borderRadius:16, borderWidth:2, borderColor:'#B5B5B54D', overflow:"hidden"}}>
+                <BlurView  intensity={30} tint='systemChromeMaterialDark' style={{width:290, height:290, borderRadius:16, borderWidth:2, borderColor:'#B5B5B54D', overflow:"hidden"}}>
                     <TouchableOpacity activeOpacity={0.7} onPress={()=>img.current?.open()} style={{width:290, height:290, alignItems:"center", justifyContent:"center"}}>
                         {props.path?
                             <View style={{width:290, height:290}}>

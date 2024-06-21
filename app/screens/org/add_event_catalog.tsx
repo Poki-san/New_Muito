@@ -17,6 +17,8 @@ export function AddEventCatalogScreen() {
     useEffect(()=>{
         (async()=>{
             const value = await apiFetch('/event/my?page=1','GET',true)
+            console.log(value);
+            
             if (value.status === 200){
                 setMeta(value.meta)
                 setData(value.data)
@@ -37,6 +39,7 @@ export function AddEventCatalogScreen() {
             setRefresh(false)
         }, 1000);
     }
+    console.log(data);
     
     return ( 
         <ImageBackground style={{width:width, height:height}} source={require('../../../assets/image/back.png')}>
@@ -58,7 +61,7 @@ export function AddEventCatalogScreen() {
                         </View>
                         {data.length == 0 ?
                         <>
-                            {/* <BlurView experimentalBlurMethod='dimezisBlurView' intensity={75} tint='systemChromeMaterialDark'  style={{borderRadius:16, overflow:"hidden", borderWidth:1, borderColor:'#374A4E99', flexDirection:"row", justifyContent:'space-between', alignItems:"center", marginHorizontal:16, marginBottom:16}}>
+                            {/* <BlurView  intensity={75} tint='systemChromeMaterialDark'  style={{borderRadius:16, overflow:"hidden", borderWidth:1, borderColor:'#374A4E99', flexDirection:"row", justifyContent:'space-between', alignItems:"center", marginHorizontal:16, marginBottom:16}}>
                                 <TouchableOpacity activeOpacity={0.7} onPress={()=>{
                                     setTag(2)
                                     // onStatus(2)
@@ -99,7 +102,7 @@ export function AddEventCatalogScreen() {
                                     <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Черновики <Text style={{color:'#FFFFFF80'}}>2</Text></Text>
                                 </TouchableOpacity>
                             </BlurView>  */}
-                            <BlurView experimentalBlurMethod='dimezisBlurView' intensity={75} tint='systemChromeMaterialDark'  style={{borderRadius:16, overflow:"hidden", borderWidth:1, borderColor:'#374A4E99', marginHorizontal:16, flex:1, marginBottom:80, justifyContent:"center", alignItems:"center", gap:15}}>
+                            <BlurView  intensity={75} tint='systemChromeMaterialDark'  style={{borderRadius:16, overflow:"hidden", borderWidth:1, borderColor:'#374A4E99', marginHorizontal:16, flex:1, marginBottom:80, justifyContent:"center", alignItems:"center", gap:15}}>
                                 <Text style={[styles.h3,{fontSize:20, color:"white"}]}>У вас нет мероприятий</Text>
                                 <TouchableOpacity activeOpacity={0.7} onPress={()=>navigate('AddEvent')} style={{width:60, height:60, borderRadius:90, backgroundColor:Бирюзовый, justifyContent:"center", alignItems:"center"}}>
                                     <PlusIcon/>
@@ -130,7 +133,7 @@ export function AddEventCatalogScreen() {
                         ListFooterComponent={<View style={{height:70}}/>}
                         ListHeaderComponent={
                             <>
-                                {/* <BlurView experimentalBlurMethod='dimezisBlurView' intensity={75} tint='systemChromeMaterialDark'  style={{borderRadius:16, overflow:"hidden", borderWidth:1, borderColor:'#374A4E99', flexDirection:"row", justifyContent:'space-between', alignItems:"center", marginHorizontal:16, marginBottom:16}}>
+                                {/* <BlurView  intensity={75} tint='systemChromeMaterialDark'  style={{borderRadius:16, overflow:"hidden", borderWidth:1, borderColor:'#374A4E99', flexDirection:"row", justifyContent:'space-between', alignItems:"center", marginHorizontal:16, marginBottom:16}}>
                                     <TouchableOpacity activeOpacity={0.7} onPress={()=>{
                                         setTag(2)
                                         // onStatus(2)
@@ -173,7 +176,7 @@ export function AddEventCatalogScreen() {
                                 </BlurView> */}
                             </>
                         }
-                        renderItem={({item})=><EventItem data={item} style={{marginHorizontal:16}} type='org' tag={tag}/>}
+                        renderItem={({item})=><EventItem onDelete={()=>onRefresh()} data={item} style={{marginHorizontal:16}} type='org' tag={tag}/>}
                     /></>}
                     </KeyboardAvoidingView>
                 </View>

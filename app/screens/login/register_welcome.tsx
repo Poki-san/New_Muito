@@ -23,7 +23,7 @@ export function RegisterWScreen(props?:any) {
                     </View>
                     <View>
                         {type == 'org'&&
-                            <BlurView experimentalBlurMethod='dimezisBlurView' intensity={30} tint='systemChromeMaterialDark' style={styles.blurContainer}>
+                            <BlurView  intensity={30} tint='systemChromeMaterialDark' style={styles.blurContainer}>
                                 <View style={{gap:16}}>
                                     <View style={{flexDirection:"row", flex:1,gap:8}}>
                                         <RegHeartIcon/>
@@ -56,7 +56,7 @@ export function RegisterWScreen(props?:any) {
                             </BlurView>
                         }
                         {type == 'guest'&&
-                            <BlurView experimentalBlurMethod='dimezisBlurView' intensity={30} tint='systemChromeMaterialDark' style={styles.blurContainer}>
+                            <BlurView  intensity={30} tint='systemChromeMaterialDark' style={styles.blurContainer}>
                                 <View style={{gap:16}}>
                                     <View style={{flexDirection:"row", flex:1,gap:8}}>
                                         <RegMapIcon/>

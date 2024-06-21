@@ -4,16 +4,18 @@ import { BlurView } from 'expo-blur';
 import { CloseIcon, HeartMenuIcon, ModalCloseIcon, RegInstaIcon, TGIcon } from '../svg/svg';
 import { styles } from '../../styles';
 import GestureRecognizer from 'react-native-swipe-gestures';
-import Carousel from 'react-native-reanimated-carousel';
-import { useState } from 'react';
+import Carousel, { ICarouselInstance } from 'react-native-reanimated-carousel';
+import { useRef, useState } from 'react';
 import { TagBlock } from '../ui/tag_block';
 import { MainLayout } from '../layouts/MainLayout';
+import { LikeItem } from '../ui/likeItem';
  
-export function PeopleModal(props:{visible?: boolean, onRequestClose?: () => void, onBarcodeScanned?: (code?:string) => void}) {
+export function PeopleModal(props:{visible?: boolean, data?:{}, onRequestClose?: () => void, onBarcodeScanned?: (code?:string) => void}) {
     const [index, setIndex] = useState(0) 
     const [more, setMore] =useState(false)
     const animHeight = new Animated.Value(0)
     const animRotate = new Animated.Value(0)
+    const refSlider = useRef<ICarouselInstance>(null)
     const Rotate = animRotate.interpolate({
         inputRange:[0,1],
         outputRange:["0deg","180deg"]
@@ -31,6 +33,9 @@ export function PeopleModal(props:{visible?: boolean, onRequestClose?: () => voi
         inputRange:[0,1],
         outputRange:[500,117]
     })
+
+    // console.log(props.data?.user);
+    
 
     const AnimatedStepOne= async () => {
        
@@ -60,106 +65,101 @@ export function PeopleModal(props:{visible?: boolean, onRequestClose?: () => voi
                             keyboardVerticalOffset={Platform.OS === "ios" && statusBarHeight}
                             style={{ flex: 1 }}
                         >
-                            <Animated.View style={{height:'100%', backgroundColor:'#17171A'}}>
+                            <View style={{zIndex:3, height:'100%', flex:1}}>
+                                <Animated.View style={{transform:[{translateX:0}], height:'100%',  backgroundColor:'#17171A'}}>
+                                    
                                 <View style={styles.containerWomanBlock}>
-                                    <View>
-                                        <View style={{marginTop:statusBarHeight+10, flexDirection:"row"}}>
-                                            <View style={{flexDirection:'row', width:"100%", justifyContent:"space-between", alignItems:'center'}}>
-                                                <View style={{flexDirection:"row", alignItems:"center", gap:8, marginLeft:16}}>
-                                                    <BlurView intensity={75} style={{flexDirection:"row", padding:10, overflow:"hidden", borderRadius:16, alignItems:'center', gap:4}} tint='systemChromeMaterialDark'>
+                                        <View>
+                                            <View style={{marginTop:statusBarHeight+10, flexDirection:"row"}}>
+                                                <View style={{flexDirection:'row', width:"100%", justifyContent:"space-between", alignItems:'center'}}>
+                                                    <BlurView intensity={75}  style={{flexDirection:"row", padding:10,
+                                                    overflow:"hidden", borderRadius:16, alignItems:'center', gap:4, marginLeft:16}} tint='systemChromeMaterialDark'>
                                                         <HeartMenuIcon color={Бирюзовый}/>
-                                                        <Text style={[styles.h4,{color:Белый}]}>5.0</Text>
+                                                        <Text style={[styles.h4,{color:Белый}]}>{props.data?.user?.rating}</Text>
                                                     </BlurView>
+                                                    <TouchableOpacity activeOpacity={0.7} onPress={props.onRequestClose}>
+                                                        <BlurView intensity={75} style={{padding:8, overflow:"hidden", borderRadius:16, alignItems:'center', gap:4, marginRight:16}} tint='systemChromeMaterialDark'>
+                                                            <CloseIcon color={Бирюзовый}/>
+                                                        </BlurView>
+                                                    </TouchableOpacity>
                                                 </View>
-                                                <TouchableOpacity activeOpacity={0.7} onPress={props.onRequestClose}>
-                                                    <BlurView intensity={75} style={{padding:8, overflow:"hidden", borderRadius:16, alignItems:'center', gap:4, marginRight:16}} tint='systemChromeMaterialDark'>
-                                                        <CloseIcon color={Бирюзовый}/>
-                                                    </BlurView>
-                                                </TouchableOpacity>
+                                            </View>
+                                            <View style={{margin:16}}>
+                                                <View style={{width:'100%', flexDirection:"row", gap:4,height:2}}>
+                                                    {props.data?.user?.img.map((el,i)=><View key={i} style={{backgroundColor:index == i ? '#FFFFFF' : '#FFFFFF66', flex:1, height:2}}/>)}
+                                                </View>
                                             </View>
                                         </View>
-                                        <View style={{margin:16}}>
-                                            <View style={{width:'100%', flexDirection:"row", gap:4,height:2}}>
-                                                {[0,1,2].map((el,i)=><View key={i} style={{backgroundColor:index == i ? '#FFFFFF' : '#FFFFFF66', flex:1, height:2}}/>)}
-                                            </View>
-                                        </View>
-                                    </View>
-                                    <View>
-                                        <View style={{
-                                            backgroundColor: Бирюзовый50,
-                                            paddingVertical: 10,
-                                            paddingHorizontal: 12,
-                                            zIndex: 999,
-                                            borderRadius: 16,
-                                            alignSelf: 'center',
-                                            marginBottom:8
-                                            }}>
-                                            <Text style={[styles.bodyText, {color: 'black', textAlign:"center"}]}>Участница приглашена на мероприятие</Text>
-                                        </View>
-                                        <Animated.View style={{maxHeight:more ? HeightAnimTwo : HeightAnim, width:'100%', borderBottomRightRadius:16, borderBottomLeftRadius:16}}>
+                                        <Animated.View style={{maxHeight:more ? HeightAnimTwo : HeightAnim, borderBottomRightRadius:16, borderBottomLeftRadius:16, overflow:'hidden'}}>
                                             <GestureRecognizer onSwipeDown={()=>{
                                                 if (more) {
                                                     AnimatedStepOne()
                                                 }
-                                            }} onSwipeUp={()=>{                                            
+                                            }} onSwipeUp={()=>{
                                                 if (!more) {
                                                     AnimatedStepOne()
                                                 }
                                             }}>
-                                                <BlurView style={styles.blurLikeContainer} tint='systemChromeMaterialDark' intensity={50}>
+                                                <BlurView style={styles.blurLikeContainer} tint='systemChromeMaterialDark' intensity={Platform.OS=='android'? 100:40} >
                                                     <TouchableOpacity activeOpacity={0.7} onPress={()=>AnimatedStepOne()} style={{width:"100%",alignItems:"center"}}>
                                                         <Animated.View style={{transform:[{rotate:more ? Rotate : RotateTwo}], alignItems:"flex-start"}}><ModalCloseIcon/></Animated.View>
                                                     </TouchableOpacity>
-                                                    <Text style={[styles.h1,{fontSize:34, color:'white', paddingTop:6}]}>Виктория <Text style={{color:'#FFFFFF80'}}>25</Text></Text>
+                                                    <Text style={[styles.h1,{fontSize:34, color:'white', paddingTop:6}]}>{props.data?.user?.name} <Text style={{color:'#FFFFFF80'}}>{props.data?.user?.age}</Text></Text>
                                                     <View style={styles.womanInfoContainer}>
                                                         <View style={{flexDirection:'row', alignItems:'flex-end', gap:14}}>
                                                             <View style={{flexDirection:'row', alignItems:'flex-end', gap:4}}>
-                                                                <Text style={[styles.bodyText,{fontSize:18, color:'white', paddingTop:4}]}>172</Text>
+                                                                <Text style={[styles.bodyText,{fontSize:18, color:'white', paddingTop:4}]}>{props.data?.user?.growth}</Text>
                                                                 <Text style={[styles.smallText,{color:'#FFFFFF99'}]}>Рост</Text>
                                                             </View>
                                                             <View style={{flexDirection:'row', alignItems:'flex-end', gap:4}}>
-                                                                <Text style={[styles.bodyText,{fontSize:18, color:'white', paddingTop:4}]}>55</Text>
+                                                                <Text style={[styles.bodyText,{fontSize:18, color:'white', paddingTop:4}]}>{props.data?.user?.weight}</Text>
                                                                 <Text style={[styles.smallText,{color:'#FFFFFF99'}]}>Вес</Text>
                                                             </View>
                                                         </View>
-                                                        <View style={{flexDirection:'row', alignItems:'flex-end', gap:11}}>
-                                                            <TouchableOpacity activeOpacity={0.7} style={{alignItems:'center'}}>
-                                                                <Text style={[styles.smallText,{fontFamily:'PoppinsSemiBold', color:Бирюзовый50}]}>100К</Text>
+                                                        <View style={{flexDirection:'row', height:39, alignItems:'flex-end', gap:11}}>
+                                                            {props.data?.user?.instagram && <TouchableOpacity activeOpacity={0.7} style={{alignItems:'center'}}>
+                                                                {props.data?.user?.count_instagram && <Text style={[styles.smallText,{fontFamily:'PoppinsSemiBold', color:Бирюзовый50}]}>{props.data?.user?.count_instagram}</Text>}
                                                                 <RegInstaIcon/>
-                                                            </TouchableOpacity>
-                                                            <TouchableOpacity activeOpacity={0.7} style={{alignItems:'center', pointerEvents:"box-only"}}>
+                                                            </TouchableOpacity>}
+                                                            {props.data?.user?.telegram && <TouchableOpacity activeOpacity={0.7} style={{alignItems:'center', pointerEvents:"box-only"}}>
                                                                 <TGIcon/>
-                                                            </TouchableOpacity>
+                                                            </TouchableOpacity>}
                                                         </View>
                                                     </View>
-                                                    <View style={styles.tagContainerBlock}>
-                                                        <TagBlock text='Клубы'/>
-                                                        <TagBlock text='Фильмы'/>
-                                                        <TagBlock text='Фигурное катание'/>
-                                                        <TagBlock text='Фигурное катание'/>
-                                                        <TagBlock text='Экстрим'/>
-                                                    </View>
-                                                    <Text style={[styles.bodyText,{color:"white"}]}>Я обожаю моду, и всегда следую последним тенденциям. Моя внешность отличается смелостью и индивидуальностью, и я стремлюсь делать карьеру в мире моды. Я готова к новым вызовам и возможностям, и ищу возможность реализовать себя. Люблю шумные тусовки, громкую музыку и грандиозные шоу.</Text>
+                                                    <ScrollView style={{maxHeight:341}} showsVerticalScrollIndicator={false}>
+                                                        <View style={styles.tagContainerBlock}>
+                                                            {props.data?.user?.hashtags && props.data?.user?.hashtags?.map((el,i)=><TagBlock text={el?.label} key={i}/>)}
+                                                        </View>
+                                                        <Text style={[styles.bodyText,{color:"white"}]}>{props.data?.user?.description}</Text>
+                                                    </ScrollView>
                                                 </BlurView>
                                             </GestureRecognizer>
                                         </Animated.View>
                                     </View>
-                                </View>
-                                <Carousel
-                                    data={[0,1,2]}
-                                    width={width}
-                                    loop={[0,1,2]?.length > 1 ? true : false }
-                                    height={height-statusBarHeight}
-                                    defaultIndex={index}
-                                    onSnapToItem={setIndex}
-                                    style={{zIndex:9999, borderBottomLeftRadius:20, pointerEvents:'box-only', borderBottomRightRadius:20, position:"relative"}}
-                                    renderItem={({item})=>(
-                                        <Image style={{width:width, borderBottomLeftRadius:20, borderBottomRightRadius:20, height:'100%'}} resizeMode='cover' source={require('../../../assets/image/people.jpg')}/>
-                                    )}
-                                />
-                            </Animated.View>
+
+                                    <Carousel
+                                        data={props.data?.user?.img}
+                                        width={width}
+                                        loop={props.data?.user?.img?.length > 1 ? true : false }
+                                        height={height-30}
+                                        ref={refSlider}
+                                        defaultIndex={index}
+                                        onSnapToItem={setIndex}
+                                        enabled={false}
+                                        style={styles.imageContainer}
+                                        renderItem={({item})=>(
+                                            <View>
+                                                <View onTouchEnd={()=> refSlider?.current?.prev()} style={{width:65, pointerEvents:"box-only", height:'100%', zIndex:999, top:0, left:0, position:"absolute"}}/>
+                                                <Image style={{width:width, height:'100%'}} resizeMode='cover' source={{uri:item?.uri}}/>
+                                                <View onTouchEnd={()=> refSlider?.current?.next()} style={{width:65, pointerEvents:"box-only", height:'100%', zIndex:999, top:0, right:0, position:"absolute"}}/>
+                                            </View>
+                                        )}
+                                    />
+                                </Animated.View>
+                            </View>
                         </KeyboardAvoidingView>
                     </ScrollView>
+                    {Platform.OS=='ios'&&<View style={{height:30, backgroundColor:"#181818"}}/>}
                 </Modal>
             </MainLayout>
         </ImageBackground>

@@ -12,7 +12,7 @@ import QRCode from "react-native-qrcode-svg";
  * Модалка для отправки сообщения
  * @param ref для взаимодействия с модальным окном
  */
-export const ModalQrCode = forwardRef((props:{},ref)=>{
+export const ModalQrCode = forwardRef((props:{value?:string},ref)=>{
     const code = useRef<RBSheet>()
     const [text, setText] = useState('')
     return (
@@ -49,7 +49,7 @@ export const ModalQrCode = forwardRef((props:{},ref)=>{
                         <View style={{gap:15}}>
                             <Text style={[styles.h4,{color:'white', textAlign:'center'}]}>Покажите QR код организатору мероприятия</Text>
                             <View style={{alignItems:"center"}}>
-                                <QRCode size={230} value="ya.ru"/>
+                                <View style={{borderWidth:5,borderColor:'white'}}><QRCode size={220} ecl="M" value={props.value}/></View>
                             </View>
                             <Text style={[styles.smallText,{color:'#FFFFFF99', textAlign:'center'}]}>Действует для прохода одного человека</Text>
                         </View>

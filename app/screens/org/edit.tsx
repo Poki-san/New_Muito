@@ -41,16 +41,18 @@ export function EditOrgScreen() {
                 <Formik
                     onSubmit={async(value)=>{
                         const bodyFormData = new FormData()
-                        value?.login && bodyFormData.append('login', value?.login)
+                        
+                        value?.login != token?.data?.login && bodyFormData.append('login', value?.login)
                         value?.name && bodyFormData.append('name', value?.name)
                         value?.last_name && bodyFormData.append('last_name', value?.last_name)
                         // bodyFormData.append('email', value.email)
                         value?.telegram?.length > 0 && bodyFormData.append('telegram', value?.telegram)
                         value?.instagram?.length > 0 && bodyFormData.append('instagram', value?.instagram)
                         value?.birthday?.length > 0 && bodyFormData.append('birthday', value?.birthday)
+                        console.log(bodyFormData);
                         
                         const result = await apiFetchFile('/profile/update',"POST",true,bodyFormData)
-                        console.log(result);
+                        // console.log(result);
                         switch (result?.status) {
                             case 200:
                             case 201:
@@ -61,7 +63,7 @@ export function EditOrgScreen() {
                                 break;
                         
                             default:
-                                error.Input(true,'Что-то пошло не так!','Упс...', Platform.OS=='ios'?158 :150)
+                                error.Input(true,'Что-то пошло не так!','Упс...', Platform.OS=='ios'?158:150)
                                 break;
                         }
                     }}

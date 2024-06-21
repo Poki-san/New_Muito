@@ -14,6 +14,7 @@ import { logOut } from '../../functions/auth';
 import token from '../../model/token';
 import { fileExpansion, fileName } from '../../functions/addImage';
 import apiFetch, { apiFetchFile } from '../../functions/api';
+import { showToastable } from 'react-native-toastable';
  
 export const ProfileGuestScreen = observer(() => {
     const img = useRef<RBSheet>(null)
@@ -35,11 +36,15 @@ export const ProfileGuestScreen = observer(() => {
                                     {(token?.data?.img?.length >= 1) ? <>
                                         <Image source={{uri:token?.data?.img[0]?.uri}} style={{width:'100%', height:'100%', borderRadius:16}}/>
                                         <TouchableOpacity activeOpacity={0.7} onPress={async()=>{
+                                            if (token?.data?.img?.length <= 1) {
+                                                showToastable({message:'Должна быть хотя бы одна фотография'})
+                                            } else {
                                                 const value = await apiFetch(`/profile/attachment/${token?.data?.img[0]?.id}`,'DELETE',true)
                                                 if (value?.status == 200) {
                                                     token?.userUpdate(value?.user, token?.token)
                                                 }
-                                            }} style={{position:'absolute', alignItems:"center", justifyContent:"center", bottom:6, right:6, backgroundColor:'#221E1E80', pointerEvents:"box-only", padding:5, width:32, height:32, borderRadius:90}}>
+                                            }  
+                                        }} style={{position:'absolute', alignItems:"center", justifyContent:"center", bottom:6, right:6, backgroundColor:'#221E1E80', pointerEvents:"box-only", padding:5, width:32, height:32, borderRadius:90}}>
                                             <CloseIcon/>
                                         </TouchableOpacity></>
                                         :
@@ -55,10 +60,15 @@ export const ProfileGuestScreen = observer(() => {
                                     <>
                                         <Image source={{uri:token?.data?.img[1]?.uri}} style={{width:'100%', height:'100%', borderRadius:16}}/>
                                         <TouchableOpacity activeOpacity={0.7} onPress={async()=>{
-                                            const value = await apiFetch(`/profile/attachment/${token?.data?.img[1]?.id}`,'DELETE',true)
-                                            if (value?.status == 200) {
-                                                token?.userUpdate(value?.user, token?.token)
+                                            if (token?.data?.img?.length <= 1) {
+                                                showToastable({message:'Должна быть хотя бы одна фотография'})
+                                            } else {
+                                                const value = await apiFetch(`/profile/attachment/${token?.data?.img[1]?.id}`,'DELETE',true)
+                                                if (value?.status == 200) {
+                                                    token?.userUpdate(value?.user, token?.token)
+                                                }
                                             }
+                                            
                                         }} style={{position:'absolute', alignItems:"center", justifyContent:"center", bottom:6, right:6, backgroundColor:'#221E1E80', pointerEvents:"box-only", padding:5, width:32, height:32, borderRadius:90}}>
                                             <CloseIcon/>
                                         </TouchableOpacity>
@@ -74,9 +84,13 @@ export const ProfileGuestScreen = observer(() => {
                                     <>
                                         <Image source={{uri:token?.data?.img[2]?.uri}} style={{width:'100%', height:'100%', borderRadius:16}}/>
                                         <TouchableOpacity activeOpacity={0.7} onPress={async()=>{
-                                            const value = await apiFetch(`/profile/attachment/${token?.data?.img[2]?.id}`,'DELETE',true)
-                                            if (value?.status == 200) {
-                                                token?.userUpdate(value?.user, token?.token)
+                                            if (token?.data?.img?.length <= 1) {
+                                                showToastable({message:'Должна быть хотя бы одна фотография'})
+                                            } else {
+                                                const value = await apiFetch(`/profile/attachment/${token?.data?.img[2]?.id}`,'DELETE',true)
+                                                if (value?.status == 200) {
+                                                    token?.userUpdate(value?.user, token?.token)
+                                                }
                                             }
                                         }} style={{position:'absolute', alignItems:"center", justifyContent:"center", bottom:6, right:6, backgroundColor:'#221E1E80', pointerEvents:"box-only", padding:5, width:32, height:32, borderRadius:90}}>
                                             <CloseIcon/>

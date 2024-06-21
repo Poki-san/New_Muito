@@ -118,7 +118,7 @@ export const styles = StyleSheet.create({
         width:"100%", 
         paddingHorizontal:16, 
         paddingBottom:16, 
-        borderRadius:16, 
+        borderRadius:16,
         overflow:'hidden'
     },
     noLikeContainer:{

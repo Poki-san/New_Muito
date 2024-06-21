@@ -31,20 +31,14 @@ LocaleConfig.locales["ru"] = {
 LocaleConfig.defaultLocale = "ru";
 
 const App = observer(() => {
-  if (__DEV__) {
-    console.log('Development');
-  } else {
-    YaMap.init('9686e034-f846-4d6c-a556-fc6f621bd36a');
-  }
+  // if (__DEV__) {
+  //   console.log('Development');
+  // } else {
+  //   YaMap.init('9686e034-f846-4d6c-a556-fc6f621bd36a');
+  // }
+  YaMap.init('9686e034-f846-4d6c-a556-fc6f621bd36a');
   const [appIsReady, setAppIsReady] = useState(false);
   const errRef = useRef<RBSheet>(null);
-  // const [fontsLoaded] = useFonts({
-  //   'OswaldMedium': require('./assets/fonts/Oswald-Medium.ttf'),
-  //   'Poppins': require('./assets/fonts/Poppins-Regular.ttf'),
-  //   'PoppinsMedium': require('./assets/fonts/Poppins-Medium.ttf'),
-  //   'PoppinsSemiBold': require('./assets/fonts/Poppins-SemiBold.ttf'),
-  //   'PoppinsBold': require('./assets/fonts/Poppins-Bold.ttf'),
-  // })
   async function preload() {
     try {
       
@@ -58,7 +52,7 @@ const App = observer(() => {
       
       const tmp = await load('@userData')
       token?.userInput(tmp?.user, tmp?.token)
-      console.log(tmp);
+      // console.log(tmp);
       
 
       const { status } = await Location.requestForegroundPermissionsAsync();

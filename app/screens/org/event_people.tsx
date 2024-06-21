@@ -28,7 +28,7 @@ export function EventPeopleScreen() {
                             </View>
                             <Image source={require('../../../assets/image/line.png')} style={{height:1}}/>
                         </View>
-                        <BlurView experimentalBlurMethod='dimezisBlurView' intensity={75} tint='systemChromeMaterialDark' style={styles.blurTagEventContainer}>
+                        <BlurView  intensity={75} tint='systemChromeMaterialDark' style={styles.blurTagEventContainer}>
                             <TouchableOpacity activeOpacity={0.7} onPress={()=>setTag(0)} style={[styles.tagEventContainer, {
                                 backgroundColor:tag==0 ? '#374A4E' : '#374A4E00'
                             }]}>

@@ -11,7 +11,7 @@ import { navigate } from "../../functions/navigate";
  * Модалка ошибка скана
  * @param ref для взаимодействия с модальным окном
  */
-export const ModalErrScan = forwardRef((props:{},ref)=>{
+export const ModalErrScan = forwardRef((props:{onPress?:()=>void},ref)=>{
     return (
         <>
             <RBSheet
@@ -50,10 +50,9 @@ export const ModalErrScan = forwardRef((props:{},ref)=>{
                                 <Text style={[styles.bodyText,{color:'white', textAlign:'center',marginHorizontal:40}]}>Попробуйте другой QR-код или повторите попытку</Text>
                             </View>
                             <View style={{flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}>
-                                <ButtonMy text='Повторить' onPress={()=>ref?.current?.close()} backgroundColor='#88FFF9' width={'48%'} colorText='#171717'/>
+                                <ButtonMy text='Повторить' onPress={props.onPress} backgroundColor='#88FFF9' width={'48%'} colorText='#171717'/>
                                 <ButtonMy text='Отмена' onPress={()=>{
                                     ref?.current?.close()
-                                    setTimeout(() => navigate('Auth'), 300);
                                 }} borderColor='#88FFF9' onPressColor='#393939' backgroundColor='#171717' width={'48%'} colorText='#FFF'/>
                             </View>
                         </View>

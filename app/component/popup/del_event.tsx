@@ -7,13 +7,13 @@ import { CameraMiniIcon, ImgIcon, ModalCloseIcon } from "../svg/svg";
 import { addImage } from "../../functions/addImage";
 import { ButtonMy } from "../ui/ButtonMy";
 import { navigate } from "../../functions/navigate";
+import apiFetch from "../../functions/api";
 
 /**
  * Модалка для удаления профиля
  * @param ref для взаимодействия с модальным окном
  */
-export const ModalDelEvent = forwardRef((props:{},ref)=>{
-    const code = useRef<RBSheet>()
+export const ModalDelEvent = forwardRef((props:{id?:number, onDelete?:()=>void},ref)=>{
     return (
         <>
             <RBSheet
@@ -49,7 +49,13 @@ export const ModalDelEvent = forwardRef((props:{},ref)=>{
                             <Text style={[styles.h4,{color:'white', textAlign:'center',marginHorizontal:40}]}>Удалить мероприятие?</Text>
                             <View style={{flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}>
                                 <ButtonMy text='Отмена' onPress={()=>ref?.current?.close()} backgroundColor='#88FFF9' width={'48%'} colorText='#171717'/>
-                                <ButtonMy text='Удалить' onPress={()=>ref?.current?.close()} borderColor='#88FFF9' onPressColor='#393939' backgroundColor='#171717' width={'48%'} colorText='#FFF'/>
+                                <ButtonMy text='Удалить' onPress={async()=>{
+                                    const value = await apiFetch(`/event/${props.id}`,'DELETE',true)
+                                    if (value?.status == 200) {
+                                        props.onDelete()
+                                        ref?.current?.close()
+                                    }
+                                }} borderColor='#88FFF9' onPressColor='#393939' backgroundColor='#171717' width={'48%'} colorText='#FFF'/>
                             </View>
                         </View>
                     </KeyboardAvoidingView>

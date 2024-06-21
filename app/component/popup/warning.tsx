@@ -6,14 +6,16 @@ import { styles } from "../../styles";
 import { ModalCloseIcon } from "../svg/svg";
 import { Input } from "../ui/input";
 import { ButtonMy } from "../ui/ButtonMy";
+import apiFetch, { apiFetchFile } from "../../functions/api";
+import error from "../../model/error";
 
 /**
  * Модалка для отправки сообщения
  * @param ref для взаимодействия с модальным окном
  */
-export const ModalWarning = forwardRef((props:{},ref)=>{
-    const code = useRef<RBSheet>()
+export const ModalWarning = forwardRef((props:{id?:number, onClose?: () => void, type?:string, uri?:string},ref)=>{
     const [text, setText] = useState('')
+    
     return (
         <>
             <RBSheet
@@ -21,6 +23,7 @@ export const ModalWarning = forwardRef((props:{},ref)=>{
                 height={Platform.OS=='ios'? 325:300}
                 closeOnDragDown={true}
                 // dragFromTopOnly
+                onClose={props.onClose}
                 closeOnPressMask={true} 
                 customStyles={{
                     draggableIcon:{
@@ -52,7 +55,20 @@ export const ModalWarning = forwardRef((props:{},ref)=>{
                                 <Text style={[styles.smallText,{color:'#FFFFFF90', marginRight:10, textAlign:'right'}]}>{text.length}/300</Text>
                                 <Input mode='outlined' value={text} onChangeText={setText} backgroundColor='#FFFFFF00' maxLength={300} placeholderTextColor={'#FFFFFF99'} title='Опишите причину' style={{borderWidth:1, borderColor:'#FFFFFF99', height:140}} multiline/>
                             </View>
-                            <ButtonMy text='Отправить' onPress={()=>{}} backgroundColor='#88FFF9' colorText='#171717'/>
+                            <ButtonMy text='Отправить' onPress={async()=>{
+                                const bodyFormData = new FormData()
+                                !!props.type && bodyFormData.append('type', props.type)
+                                bodyFormData.append('event_id', props.id.toString())
+                                bodyFormData.append('description', `Жалоба на: ${text} \n id: ${props.id.toString()}`)
+                                const value = await apiFetchFile(props.uri,'POST',true,bodyFormData)
+                                ref?.current?.close()
+                                if (value?.status == 201) {
+                                    console.log(value);
+                                } else{
+                                    setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 300);
+                                }
+                                
+                            }} backgroundColor='#88FFF9' colorText='#171717'/>
                         </View>
                     </KeyboardAvoidingView>
                 </ScrollView>

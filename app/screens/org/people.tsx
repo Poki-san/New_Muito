@@ -70,17 +70,17 @@ export function PeopleScreen() {
                                         <View style={{flexDirection:'row', width:"100%", justifyContent:"space-between", alignItems:'center'}}>
                                             <View style={{flexDirection:"row", alignItems:"center", gap:8, marginLeft:16}}>
                                                 <TouchableOpacity activeOpacity={0.7} onPress={goBack}>
-                                                    <BlurView intensity={50} tint='systemChromeMaterialDark' experimentalBlurMethod='dimezisBlurView' style={styles.backArrowContainer}>
+                                                    <BlurView intensity={50} tint='systemChromeMaterialDark'  style={styles.backArrowContainer}>
                                                         <BackArrowIcon/>
                                                     </BlurView>
                                                 </TouchableOpacity>
-                                                <BlurView intensity={75} experimentalBlurMethod='dimezisBlurView' style={{flexDirection:"row", padding:10, overflow:"hidden", borderRadius:16, alignItems:'center', gap:4}} tint='systemChromeMaterialDark'>
+                                                <BlurView intensity={75}  style={{flexDirection:"row", padding:10, overflow:"hidden", borderRadius:16, alignItems:'center', gap:4}} tint='systemChromeMaterialDark'>
                                                     <HeartMenuIcon color={Бирюзовый}/>
                                                     <Text style={[styles.h4,{color:Белый}]}>5.0</Text>
                                                 </BlurView>
                                             </View>
                                             <TouchableOpacity activeOpacity={0.7} onPress={()=>setAlert(!alert)}>
-                                                <BlurView intensity={75} experimentalBlurMethod='dimezisBlurView' style={{padding:3, overflow:"hidden", borderRadius:16, alignItems:'center', gap:4, marginRight:16}} tint='systemChromeMaterialDark'>
+                                                <BlurView intensity={75}  style={{padding:3, overflow:"hidden", borderRadius:16, alignItems:'center', gap:4, marginRight:16}} tint='systemChromeMaterialDark'>
                                                     <SettingIcon color={Бирюзовый}/>
                                                 </BlurView>
                                             </TouchableOpacity>
@@ -112,7 +112,7 @@ export function PeopleScreen() {
                                             AnimatedStepOne()
                                         }
                                     }}>
-                                        <BlurView style={styles.blurLikeContainer} tint='systemChromeMaterialDark' intensity={40} experimentalBlurMethod='dimezisBlurView'>
+                                        <BlurView style={styles.blurLikeContainer} tint='systemChromeMaterialDark' intensity={40} >
                                             <TouchableOpacity activeOpacity={0.7} onPress={()=>AnimatedStepOne()} style={{width:"100%",alignItems:"center"}}>
                                                 <Animated.View style={{transform:[{rotate:more ? Rotate : RotateTwo}], alignItems:"flex-start"}}><ModalCloseIcon/></Animated.View>
                                             </TouchableOpacity>

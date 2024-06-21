@@ -4,8 +4,11 @@ import { height, statusBarHeight, width, Бирюзовый } from '../../GLOBAL
 import { MainLayout } from '../layouts/MainLayout';
 import { CloseIcon } from '../svg/svg';
 import { BlurView } from 'expo-blur';
+import { useState } from 'react';
+import token from '../../model/token';
+import apiFetch from '../../functions/api';
  
-export function ScanModal(props:{visible?: boolean, onRequestClose?: () => void, onBarcodeScanned?: (code?:string) => void}) {
+export function ScanModal(props:{visible?: boolean, onRequestClose?: () => void, onBarcodeScanned?: (uri?:string) => void}) {
     const [permission, requestPermission] = useCameraPermissions();
     
     return ( 
@@ -28,24 +31,10 @@ export function ScanModal(props:{visible?: boolean, onRequestClose?: () => void,
                     {/* <View style={{bottom:0, top:0, right:0, left:0, justifyContent:"center", alignItems:'center', position:"absolute", zIndex:3}}>
                         <View style={{position:"absolute",backgroundColor:'#35383FF2', width:width*0.8, height:height*0.42}}/>
                     </View> */}
-                    <CameraView onLayout={async()=> await requestPermission()} 
+                    <CameraView barcodeScannerSettings={{barcodeTypes: ["qr"]}} onLayout={async()=> await requestPermission()}
                         onBarcodeScanned={(result)=>{
-                            if (Platform.OS == 'ios') {
-                                if (result?.cornerPoints[0]?.y>0.3 && result?.cornerPoints[0]?.y<0.7) {
-                                    
-                                    if (result?.cornerPoints[0]?.x>0.1 && result?.cornerPoints[0]?.x<0.9) {
-                                        props.onBarcodeScanned()
-                                    }
-                                }
-                            } else {
-                                if (result?.boundingBox?.size.width>30) {
-                                    if (result?.cornerPoints[0]?.y>height*0.3 && result?.cornerPoints[0]?.y<height*0.7) {
-                                        if (result?.cornerPoints[0]?.x>width*0.1 && result?.cornerPoints[0]?.x<width*0.9) {
-                                            props.onBarcodeScanned()
-                                        }
-                                    }
-                                }
-                            }
+                            props.onBarcodeScanned(result?.data)
+                            props.onRequestClose()
                         }} style={{width:width, height:height}}
                     />
                 </Modal>

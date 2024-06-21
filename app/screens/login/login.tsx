@@ -98,7 +98,7 @@ export function LoginScreen() {
                                     validationSchema={validationsSchemaLogin}
                                 >
                                     {({handleSubmit, values, handleBlur, handleChange, errors, touched})=>(
-                                    <BlurView experimentalBlurMethod='dimezisBlurView' intensity={30} tint='systemChromeMaterialDark' style={styles.blurContainer}>
+                                    <BlurView  intensity={30} tint='systemChromeMaterialDark' style={styles.blurContainer}>
                                         <Text style={{color:'white', fontWeight:'700', fontSize:18, textAlign:'center', fontFamily:'PoppinsBold'}}>Вход</Text>
                                         <View style={{gap:8}}>
                                             <Input 
@@ -133,7 +133,7 @@ export function LoginScreen() {
                                     </BlurView>)}
                                 </Formik>
                                 :
-                                <BlurView experimentalBlurMethod='dimezisBlurView' intensity={30} tint='systemChromeMaterialDark' style={styles.blurContainer}>
+                                <BlurView  intensity={30} tint='systemChromeMaterialDark' style={styles.blurContainer}>
                                     <Text style={{color:'white', fontWeight:'700', fontSize:18, textAlign:'center', fontFamily:'PoppinsBold'}}>Регистрация</Text>
                                     <Text style={{color:'white', opacity:0.6, fontWeight:'500', fontSize:14, textAlign:'center', fontFamily:'PoppinsMedium'}}>Выберите как хотите пользоваться приложением</Text>
                                     <ButtonMy text='Участница' onPress={()=>navigate('RegisterWelcome',{type:'guest'})} backgroundColor='#88FFF900' colorText='#FFFFFF' borderWidth={1} borderColor='#FFFFFF80'/>

@@ -187,7 +187,7 @@ export function RegisterGuestScreen() {
                                 </View>}
                             </View>
                             {step == 0 && <View style={{gap:24}}>
-                                <BlurView experimentalBlurMethod='dimezisBlurView' intensity={30} tint='systemChromeMaterialDark' style={styles.blurContainer}>
+                                <BlurView  intensity={30} tint='systemChromeMaterialDark' style={styles.blurContainer}>
                                     <View style={{marginHorizontal:8}}>
                                         <Text style={{color:'white', fontWeight:'700', fontSize:18, textAlign:'center', fontFamily:'PoppinsBold'}}>Регистрация для участницы</Text>
                                     </View>
@@ -339,7 +339,7 @@ function StepOne(props:{onPress?:(paths?:string[])=>void}) {
             <Text style={[styles.bodyText,{fontFamily:'Poppins', color:'#ffffff90'}]}>Добавление фотографий</Text>
             <View style={{flex:1, marginTop:25, alignItems:'center', justifyContent:"space-between"}}>
                 <View style={{marginBottom:10}}>
-                    <BlurView experimentalBlurMethod='dimezisBlurView' intensity={30} tint='systemChromeMaterialDark' style={{width:290, height:290, borderRadius:16, borderWidth:2, borderColor:'#B5B5B54D', overflow:"hidden"}}>
+                    <BlurView  intensity={30} tint='systemChromeMaterialDark' style={{width:290, height:290, borderRadius:16, borderWidth:2, borderColor:'#B5B5B54D', overflow:"hidden"}}>
                         <TouchableOpacity onPress={()=>{
                             setActive(0)
                             img.current?.open()
@@ -360,7 +360,7 @@ function StepOne(props:{onPress?:(paths?:string[])=>void}) {
                         </TouchableOpacity>
                     </BlurView>
                     <View style={{flexDirection:'row', alignItems:'center', justifyContent:"space-between", marginTop:10}}>
-                        <BlurView experimentalBlurMethod='dimezisBlurView' intensity={30} tint='systemChromeMaterialDark' style={{width:(280/2), height:(280/2), borderRadius:16, borderWidth:2, borderColor:'#B5B5B54D', overflow:"hidden"}}>
+                        <BlurView  intensity={30} tint='systemChromeMaterialDark' style={{width:(280/2), height:(280/2), borderRadius:16, borderWidth:2, borderColor:'#B5B5B54D', overflow:"hidden"}}>
                             <TouchableOpacity onPress={()=>{
                                 img.current?.open()
                                 setActive(1)
@@ -381,7 +381,7 @@ function StepOne(props:{onPress?:(paths?:string[])=>void}) {
                                 }
                             </TouchableOpacity>
                         </BlurView>
-                        <BlurView experimentalBlurMethod='dimezisBlurView' intensity={30} tint='systemChromeMaterialDark' style={{width:(280/2), height:(280/2), borderRadius:16, borderWidth:2, borderColor:'#B5B5B54D', overflow:"hidden"}}>
+                        <BlurView  intensity={30} tint='systemChromeMaterialDark' style={{width:(280/2), height:(280/2), borderRadius:16, borderWidth:2, borderColor:'#B5B5B54D', overflow:"hidden"}}>
                             <TouchableOpacity onPress={()=>{
                                 img.current?.open()
                                 setActive(2)

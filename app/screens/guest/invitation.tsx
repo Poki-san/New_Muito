@@ -18,6 +18,7 @@ export function InvitationScreen() {
 
     const onStatus = async(status?:number) => {
         const value = await apiFetch(`/event/invites?page=1${(status === 0 || status === 1) ? `&status=${status}` : ''}`,'GET', true)
+            // console.log(value);
             
         if (value?.status == 200) {
             setPage(1)
@@ -61,8 +62,13 @@ export function InvitationScreen() {
                             <Image source={require('../../../assets/image/line.png')} style={{height:1}}/>
                         </View>
                         {data.length == 0 ?
-                        <>
-                             <BlurView experimentalBlurMethod='dimezisBlurView' intensity={75} tint='systemChromeMaterialDark'  style={{borderRadius:16, overflow:"hidden", borderWidth:1, borderColor:'#374A4E99', flexDirection:"row", justifyContent:'space-between', alignItems:"center", marginHorizontal:16, marginBottom:16}}>
+                        <ScrollView showsVerticalScrollIndicator={false} refreshControl={<RefreshControl
+                            refreshing={refresh}
+                            colors={[Бирюзовый]}
+                            progressBackgroundColor={'#181818'}
+                            onRefresh={onRefresh}
+                        />} style={{flexGrow:1}} contentContainerStyle={{flexGrow:1}}>
+                             <BlurView  intensity={75} tint='systemChromeMaterialDark'  style={{borderRadius:16, overflow:"hidden", borderWidth:1, borderColor:'#374A4E99', flexDirection:"row", justifyContent:'space-between', alignItems:"center", marginHorizontal:16, marginBottom:16}}>
                                     <TouchableOpacity activeOpacity={0.7} onPress={()=>{
                                         setTag(2)
                                         onStatus(2)
@@ -74,7 +80,7 @@ export function InvitationScreen() {
                                         backgroundColor:tag==2 ? '#374A4E' : '#374A4E00',
                                         borderRadius:16
                                     }}>
-                                        <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Все <Text style={{color:'#FFFFFF80'}}>5</Text></Text>
+                                        <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Все <Text style={{color:'#FFFFFF80'}}></Text></Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity activeOpacity={0.7} onPress={()=>{
                                         setTag(1)
@@ -87,7 +93,7 @@ export function InvitationScreen() {
                                         backgroundColor:tag==1 ? '#374A4E' : '#374A4E00',
                                         borderRadius:16
                                     }}>
-                                        <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Принятые <Text style={{color:'#FFFFFF80'}}>3</Text></Text>
+                                        <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Принятые <Text style={{color:'#FFFFFF80'}}></Text></Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity activeOpacity={0.7} onPress={()=>{
                                         setTag(0)
@@ -100,16 +106,16 @@ export function InvitationScreen() {
                                         backgroundColor:tag==0 ? '#374A4E' : '#374A4E00',
                                         borderRadius:16
                                     }}>
-                                        <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Отправленные <Text style={{color:'#FFFFFF80'}}>2</Text></Text>
+                                        <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Отправленные <Text style={{color:'#FFFFFF80'}}></Text></Text>
                                     </TouchableOpacity>
                                 </BlurView>
-                            <BlurView experimentalBlurMethod='dimezisBlurView' intensity={75} tint='systemChromeMaterialDark'  style={{borderRadius:16, overflow:"hidden", borderWidth:1, borderColor:'#374A4E99', marginHorizontal:16, flex:1, marginBottom:80, justifyContent:"center", alignItems:"center", gap:15}}>
+                            <BlurView  intensity={75} tint='systemChromeMaterialDark'  style={{borderRadius:16, overflow:"hidden", borderWidth:1, borderColor:'#374A4E99', marginHorizontal:16, flex:1, marginBottom:106, justifyContent:"center", alignItems:"center", gap:15}}>
                                 <Text style={[styles.h3,{fontSize:20, color:"white"}]}>У вас нет мероприятий</Text>
                                 {/* <TouchableOpacity activeOpacity={0.7} onPress={()=>navigate('AddEvent')} style={{width:60, height:60, borderRadius:90, backgroundColor:Бирюзовый, justifyContent:"center", alignItems:"center"}}>
                                     <PlusIcon/>
                                 </TouchableOpacity> */}
                             </BlurView> 
-                        </> : <>
+                        </ScrollView> : <>
                         <FlatList
                             data={data}
                             refreshControl={<RefreshControl
@@ -132,7 +138,7 @@ export function InvitationScreen() {
                             contentContainerStyle={{flexGrow:1, gap:8}}
                             ListFooterComponent={<View style={{height:70}}/>}
                             ListHeaderComponent={
-                                <BlurView experimentalBlurMethod='dimezisBlurView' intensity={75} tint='systemChromeMaterialDark'  style={{borderRadius:16, overflow:"hidden", borderWidth:1, borderColor:'#374A4E99', flexDirection:"row", justifyContent:'space-between', alignItems:"center", marginHorizontal:16, marginBottom:16}}>
+                                <BlurView  intensity={75} tint='systemChromeMaterialDark'  style={{borderRadius:16, overflow:"hidden", borderWidth:1, borderColor:'#374A4E99', flexDirection:"row", justifyContent:'space-between', alignItems:"center", marginHorizontal:16, marginBottom:16}}>
                                     <TouchableOpacity activeOpacity={0.7} onPress={()=>{
                                         setTag(2)
                                         onStatus(2)
@@ -144,7 +150,7 @@ export function InvitationScreen() {
                                         backgroundColor:tag==2 ? '#374A4E' : '#374A4E00',
                                         borderRadius:16
                                     }}>
-                                        <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Все <Text style={{color:'#FFFFFF80'}}>5</Text></Text>
+                                        <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Все <Text style={{color:'#FFFFFF80'}}></Text></Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity activeOpacity={0.7} onPress={()=>{
                                         setTag(1)
@@ -157,7 +163,7 @@ export function InvitationScreen() {
                                         backgroundColor:tag==1 ? '#374A4E' : '#374A4E00',
                                         borderRadius:16
                                     }}>
-                                        <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Принятые <Text style={{color:'#FFFFFF80'}}>3</Text></Text>
+                                        <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Принятые <Text style={{color:'#FFFFFF80'}}></Text></Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity activeOpacity={0.7} onPress={()=>{
                                         setTag(0)
@@ -170,7 +176,7 @@ export function InvitationScreen() {
                                         backgroundColor:tag==0 ? '#374A4E' : '#374A4E00',
                                         borderRadius:16
                                     }}>
-                                        <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Отправленные <Text style={{color:'#FFFFFF80'}}>2</Text></Text>
+                                        <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Отправленные <Text style={{color:'#FFFFFF80'}}></Text></Text>
                                     </TouchableOpacity>
                                 </BlurView> 
                             }

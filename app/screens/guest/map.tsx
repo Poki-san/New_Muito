@@ -1,5 +1,5 @@
 import { Image, KeyboardAvoidingView, Platform, Text, TouchableOpacity, View } from 'react-native';
-import { EventItem, MainLayout, ModalDatePoint } from '../../component';
+import { EventItem, EventMapItem, MainLayout, ModalDatePoint } from '../../component';
 import { height, statusBarHeight, width, Белый, Бирюзовый } from '../../GLOBAL';
 import { ClusteredYamap, Marker } from 'react-native-yamap-plus';
 import { useEffect, useRef, useState } from 'react';
@@ -8,31 +8,39 @@ import { CalendarIcon } from '../../component/svg/svg';
 import { styles } from '../../styles';
 import RBSheet from '@nonam4/react-native-bottom-sheet';
 import { BlurView } from 'expo-blur';
+import apiFetch from '../../functions/api';
  
 export function MapGuestScreen() {
     const [countLoad, setCountLoader] = useState(0)
     const [event, setEvent] = useState(false)
     const date = useRef<RBSheet>(null)
-    const [markers, setMarkers] = useState([{
-        point: {
-            lat: 55.754215,
-            lon: 37.722504,
-        },
-        data: {id:1, uri:'../../../assets/image/event.jpg'},
-    }, {
-        point: {
-            lat: 55.834215,
-            lon: 37.752504
-        },
-        data: {id:2, uri:'../../../assets/image/event.jpg'},
-    }]);
+    const [markers, setMarkers] = useState([]);
+    const [markerItem, setMarkerItem] = useState(0);
     const [up, setUp] = useState(1)
     useEffect(() => {
+        (async()=>{
+            const value = await apiFetch('/event/map','GET',true)
+            // console.log(value);
+            
+            switch (value?.status) {
+                case 200:
+                case 201:
+                case 202:
+                    setMarkers(value?.data)
+                    break;
+                default:
+                    break;
+            }
+            
+        })();
+    }, [])
+
+    useEffect(() => {
         if (countLoad > 0 && markers.length > 0 && countLoad === markers.length) {
-            // console.log('Все изображения загрузились!')
             setUp(2)
         }
     }, [countLoad])
+
     return ( 
         <MainLayout isStatusBar backgroundColor='#181818'>
             <KeyboardAvoidingView
@@ -51,7 +59,7 @@ export function MapGuestScreen() {
                             <CalendarIcon color='#fff'/>
                         </TouchableOpacity>
                     </View>
-                    <ClusteredYamap
+                    {markers?.length > 0 && <ClusteredYamap
                         key={up}
                         clusterColor={Бирюзовый}
                         style={{width:width, height:height-statusBarHeight, borderTopLeftRadius:16, borderTopRightRadius:16, overflow:"hidden"}}
@@ -63,13 +71,13 @@ export function MapGuestScreen() {
                         onTouchMove={() => setEvent(false)}
                         clusteredMarkers={markers}
                         renderMarker={(info, index) => <Marker
-                            key={info.data?.id}
+                            key={info?.id}
                             point={info.point}
                             children={
                                 <View key={index} style={{width: 40, height: 40, borderRadius:16, overflow:"hidden"}}>
                                     <Image
                                         onLoad={() => countLoad < markers.length && setCountLoader(prevState => prevState + 1)}
-                                        source={require('../../../assets/image/event.jpg')}
+                                        source={{uri:info?.img}}
                                         style={{
                                             width: 40,
                                             height: 40,
@@ -78,11 +86,16 @@ export function MapGuestScreen() {
                                     />
                                 </View>
                             }
-                            onPress={() => setEvent(true)}
+                            onPress={() => {
+                                console.log(info);
+                                
+                                setMarkerItem(index)
+                                setEvent(true)
+                            }}
                         />}
-                    />
+                    />}
                     {event&&<View  style={{marginHorizontal:16, position:'absolute', bottom:0, marginBottom:76}}>
-                        <EventItem size={92} noEdit type={'guest'}/>
+                        <EventMapItem data={markers[markerItem]} size={92} noEdit type={'guest'}/>
                     </View>}
                 </View>
             </KeyboardAvoidingView>

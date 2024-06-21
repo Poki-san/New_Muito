@@ -2,19 +2,24 @@ import { FlatList, Image, ImageBackground, KeyboardAvoidingView, Platform, Refre
 import { EventItem, MainLayout } from '../../component';
 import { height, statusBarHeight, width, Бирюзовый } from '../../GLOBAL';
 import { styles } from '../../styles';
-import { CalendarIcon } from '../../component/svg/svg';
+import { CalendarIcon, CloseIcon } from '../../component/svg/svg';
 import { Tags } from '../../component/ui/tags';
 import { BlurView } from 'expo-blur';
 import { useEffect, useRef, useState } from 'react';
 import { ModalDatePoint } from '../../component/popup/date';
 import RBSheet from '@nonam4/react-native-bottom-sheet';
 import apiFetch from '../../functions/api';
+import moment from 'moment';
+import token from '../../model/token';
 
 export function SearchScreen() {
     const date = useRef<RBSheet>(null)
     const [page, setPage] = useState(1)
+    const [tag, setTag] = useState(-1)
     const [meta, setMeta] = useState({})
+    const [dateTxt, setDate] = useState('')
     const [data, setData] = useState([])
+    const [forParticipants, setForParticipants] = useState([])
     const [refresh, setRefresh] = useState(false)
     
     useEffect(()=>{
@@ -22,27 +27,41 @@ export function SearchScreen() {
             const value = await apiFetch(`/event?page=1`,'GET', true)
             
             if (value?.status == 200) {
+                setDate('')
                 setMeta(value.meta)
                 setData(value.data)
+                setForParticipants(value?.forParticipants)
+                setPage(1)
             }
             
         })();
     },[])
 
-    const onRefresh = async() => {
+    const onRefresh = async(date?:string) => {
         setRefresh(true)
+        console.log(date);
         setTimeout(async() => {
-            const val = await apiFetch('/event?page=1','GET', true)
-            // console.log(val);
+            let uri = '/event?page=1'
+            if (date?.length > 0 ) {
+                uri += `&date=${date}`
+            }else{
+                setDate('')
+            }
+            if (tag != -1) {
+                uri += `&for=${tag}`
+            }
+            console.log(uri);
+            const val = await apiFetch(uri,'GET', true)
             if (val?.status == 200) {
                 setMeta(val.meta)
                 setData(val.data)
+                setForParticipants(val?.forParticipants)
             }
             setPage(1)
             setRefresh(false)
         }, 1000);
     }
-
+    
     return ( 
         <ImageBackground style={{width:width, height:height}} source={require('../../../assets/image/back.png')}>
             <MainLayout isStatusBar>
@@ -58,10 +77,18 @@ export function SearchScreen() {
                         />}
                         onEndReached={async()=>{
                             if (meta?.last_page>page) {
-                                const value = await apiFetch(`/event?page=${page+1}`,'GET', true)
+                                let uri = `/event?page=${page+1}`
+                                if (dateTxt?.length > 0 ) {
+                                    uri += `&date=${date}`
+                                } 
+                                if (tag != -1) {
+                                    uri += `&for=${tag}`
+                                }
+                                console.log(uri);
+                                const val = await apiFetch(uri,'GET', true)
                                 setPage(page+1)
-                                setMeta(value.meta)
-                                setData(prevState => ([...prevState, ...value.data]))
+                                setMeta(val.meta)
+                                setData(prevState => ([...prevState, ...val.data]))
                             }
                         }}
                         onEndReachedThreshold={0.8}
@@ -70,9 +97,16 @@ export function SearchScreen() {
                                 <View style={{marginBottom:16}}>
                                     <View style={{marginHorizontal:16, marginBottom:8, flexDirection:'row', alignItems:'center', justifyContent:"space-between"}}>
                                         <Text style={[styles.h4, {color:'white'}]}>Мероприятия</Text>
-                                        <TouchableOpacity onPress={()=>date.current?.open()} style={{borderRadius:16, width:42, alignItems:'center', justifyContent:"center", height:42, backgroundColor:'#00000033'}}>
-                                            <CalendarIcon color='#fff'/>
-                                        </TouchableOpacity>
+                                        <View style={{flexDirection:"row", alignItems:"center", gap:8}}>
+                                            {dateTxt.length>0 && <TouchableOpacity onPress={()=>{
+                                                onRefresh('')
+                                            }} style={{borderRadius:16, width:42, alignItems:'center', justifyContent:"center", height:42, backgroundColor:'#00000033'}}>
+                                                <CloseIcon color='#fff'/>
+                                            </TouchableOpacity>}
+                                            <TouchableOpacity onPress={()=>date.current?.open()} style={{borderRadius:16, width:42, alignItems:'center', justifyContent:"center", height:42, backgroundColor:'#00000033'}}>
+                                                <CalendarIcon color='#fff'/>
+                                            </TouchableOpacity>
+                                        </View>
                                     </View>
                                     {/* <View style={{marginHorizontal:16, marginBottom:8, flexDirection:'row', alignItems:'center', gap:8}}>
                                         <TouchableOpacity style={{borderRadius:90, borderWidth:2, borderColor:Бирюзовый, overflow:'hidden', width:63, height:63}} activeOpacity={0.7}>
@@ -90,7 +124,10 @@ export function SearchScreen() {
                                     </View>*/}
                                     <Image source={require('../../../assets/image/line.png')} style={{height:1}}/> 
                                 </View>
-                                {/* <Tags paddingV={5} style={{paddingHorizontal:0}} onPress={(data)=>console.log(data)} noBorder data={[{value:'1', name:'Сегодня', colorInActive:'#00000033', color:'#374A4E', colorText:'#FFFFFF', colorTextInActive:'#FFFFFFAB'}, {value:'2', name:'Завтра', color:'#374A4E', colorInActive:'#00000033', colorTextInActive:'#FFFFFFAB', colorText:'#FFFFFF'}, {value:'3', colorInActive:'#00000033', colorTextInActive:'#FFFFFFAB', name:'Оплачиваемые', color:'#374A4E', colorText:'#FFFFFF'}, {value:'4', colorInActive:'#00000033', colorTextInActive:'#FFFFFFAB', name:'Еда', color:'#374A4E', colorText:'#FFFFFF'}, {value:'5', colorInActive:'#00000033', colorTextInActive:'#FFFFFFAB', name:'Алкоголь', color:'#374A4E', colorText:'#FFFFFF'}]}/> */}
+                                <Tags paddingV={5} style={{paddingHorizontal:16}} onPress={(tags)=>{
+                                    setTag(tags)
+                                    onRefresh()
+                                }} noBorder data={forParticipants}/>
                                 
                             </>
                         }
@@ -115,9 +152,16 @@ export function SearchScreen() {
                         <View style={{marginTop:statusBarHeight+15, marginBottom:16}}>
                             <View style={{marginHorizontal:16, marginBottom:8, flexDirection:'row', alignItems:'center', justifyContent:"space-between"}}>
                                 <Text style={[styles.h4, {color:'white'}]}>Мероприятия</Text>
-                                <TouchableOpacity onPress={()=>date.current?.open()} style={{borderRadius:16, width:42, alignItems:'center', justifyContent:"center", height:42, backgroundColor:'#00000033'}}>
-                                    <CalendarIcon color='#fff'/>
-                                </TouchableOpacity>
+                                <View style={{flexDirection:"row", alignItems:"center", gap:8}}>
+                                    {dateTxt.length>0 && <TouchableOpacity onPress={()=>{
+                                        onRefresh('')
+                                    }} style={{borderRadius:16, width:42, alignItems:'center', justifyContent:"center", height:42, backgroundColor:'#00000033'}}>
+                                        <CloseIcon color='#fff'/>
+                                    </TouchableOpacity>}
+                                    <TouchableOpacity onPress={()=>date.current?.open()} style={{borderRadius:16, width:42, alignItems:'center', justifyContent:"center", height:42, backgroundColor:'#00000033'}}>
+                                        <CalendarIcon color='#fff'/>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
                             {/* <View style={{marginHorizontal:16, marginBottom:8, flexDirection:'row', alignItems:'center', gap:8}}>
                                 <TouchableOpacity style={{borderRadius:90, borderWidth:2, borderColor:Бирюзовый, overflow:'hidden', width:63, height:63}} activeOpacity={0.7}>
@@ -135,18 +179,23 @@ export function SearchScreen() {
                             </View> */}
                             <Image source={require('../../../assets/image/line.png')} style={{height:1}}/>
                         </View>
-                        {/* <Tags paddingV={5} style={{paddingHorizontal:0}} onPress={(data)=>console.log(data)} noBorder data={[{value:'1', name:'Сегодня', colorInActive:'#00000033', color:'#374A4E', colorText:'#FFFFFF', colorTextInActive:'#FFFFFFAB'}, {value:'2', name:'Завтра', color:'#374A4E', colorInActive:'#00000033', colorTextInActive:'#FFFFFFAB', colorText:'#FFFFFF'}, {value:'3', colorInActive:'#00000033', colorTextInActive:'#FFFFFFAB', name:'Оплачиваемые', color:'#374A4E', colorText:'#FFFFFF'}, {value:'4', colorInActive:'#00000033', colorTextInActive:'#FFFFFFAB', name:'Еда', color:'#374A4E', colorText:'#FFFFFF'}, {value:'5', colorInActive:'#00000033', colorTextInActive:'#FFFFFFAB', name:'Алкоголь', color:'#374A4E', colorText:'#FFFFFF'}]}/> */}
                         
                         <View style={{flex:1}}>
-                            <BlurView intensity={75} experimentalBlurMethod='dimezisBlurView' style={styles.blurNoWoman} tint='systemChromeMaterialDark'>
+                            <BlurView intensity={75}  style={styles.blurNoWoman} tint='systemChromeMaterialDark'>
                                 <Text style={[styles.bodyText,{color:'white',textAlign:"center"}]}>{'По этому запросу ничего не найдено.\nПопробуйте изменить набор фильтров'}</Text>
-                                <TouchableOpacity activeOpacity={0.7}>
-                                    <Text style={[styles.button,{color:Бирюзовый, paddingTop:8}]}>Сбросить фильтр</Text>
+                                <TouchableOpacity activeOpacity={0.7} onPress={()=>{
+                                    onRefresh('')
+                                }}>
+                                    <Text style={[styles.button,{color:Бирюзовый, paddingTop:8}]}>Обновить</Text>
                                 </TouchableOpacity>
                             </BlurView>
                         </View>
                     </ScrollView>}
-                <ModalDatePoint ref={date}/>
+                <ModalDatePoint onPress={async(data)=>{
+                    setDate(moment(data).format("YYYY-MM-DD"));
+                    onRefresh(moment(data).format("YYYY-MM-DD"))
+                    date?.current?.close()
+                }} ref={date}/>
             </MainLayout>
         </ImageBackground>
     )
