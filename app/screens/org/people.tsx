@@ -1,7 +1,7 @@
-import { Animated, Image, ImageBackground, KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Animated, Image, ImageBackground, KeyboardAvoidingView, Linking, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { MainLayout,ModalWarning,TagBlock } from '../../component';
 import { height, statusBarHeight, width, Белый, Бирюзовый, Бирюзовый50 } from '../../GLOBAL';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { BlurView } from 'expo-blur';
 import { AlertIcon, BackArrowIcon, CloseEyeIcon, CloseIcon, HeartMenuIcon, LikeIcon, ModalCloseIcon, RegInstaIcon, SettingIcon, TGIcon } from '../../component/svg/svg';
 import { styles } from '../../styles';
@@ -10,8 +10,10 @@ import Carousel from 'react-native-reanimated-carousel';
 import { showToastable } from 'react-native-toastable';
 import { goBack } from '../../functions/navigate';
 import RBSheet from '@nonam4/react-native-bottom-sheet';
+import apiFetch from '../../functions/api';
+import error from '../../model/error';
  
-export function PeopleScreen() {
+export function PeopleScreen({ route }) {
     const [index, setIndex] = useState(0)  
     const [more, setMore] =useState(false)
     const [alert, setAlert] =useState(false)
@@ -53,6 +55,21 @@ export function PeopleScreen() {
        
         setTimeout(() => setMore(!more), 410)
     }
+
+    const [people, setPeople] = useState(null)
+
+    useEffect(()=>{
+        (async()=>{
+            const value = await apiFetch(`/users/${route?.params?.id}`,'GET',true)
+            
+            if (value?.status == 200) {
+                console.log(value.data);
+                
+                setPeople(value.data)
+            }
+        })();
+    },[])
+
     return ( 
         <ImageBackground style={{width:width, height:height}} source={require('../../../assets/image/back.png')}>
             <MainLayout isStatusBar backgroundColor='#17171A'>
@@ -62,7 +79,7 @@ export function PeopleScreen() {
                         keyboardVerticalOffset={Platform.OS === "ios" && statusBarHeight}
                         style={{ flex: 1 }}
                     >
-                        <Animated.View style={{height:'85%', backgroundColor:'#17171A', borderBottomLeftRadius:20, borderBottomRightRadius:20, overflow:"hidden"}}>
+                        <Animated.View style={{height:Platform.OS=='ios'? height-statusBarHeight:height, backgroundColor:'#17171A', borderBottomLeftRadius:20, borderBottomRightRadius:20, overflow:"hidden"}}>
                             <View style={styles.containerWomanBlock}>
                             {alert &&<View onTouchStart={()=>setAlert(false)} style={{position:"absolute", top:0, left:0, width:width*2, height:height*2, zIndex:Platform.OS=='ios'? 0:1}} />}
                                 <View>
@@ -76,7 +93,7 @@ export function PeopleScreen() {
                                                 </TouchableOpacity>
                                                 <BlurView intensity={75}  style={{flexDirection:"row", padding:10, overflow:"hidden", borderRadius:16, alignItems:'center', gap:4}} tint='systemChromeMaterialDark'>
                                                     <HeartMenuIcon color={Бирюзовый}/>
-                                                    <Text style={[styles.h4,{color:Белый}]}>5.0</Text>
+                                                    <Text style={[styles.h4,{color:Белый}]}>{people?.rating}</Text>
                                                 </BlurView>
                                             </View>
                                             <TouchableOpacity activeOpacity={0.7} onPress={()=>setAlert(!alert)}>
@@ -89,7 +106,23 @@ export function PeopleScreen() {
                                                     <AlertIcon/>
                                                     <Text style={[styles.bodyText,{color:'#BC1115'}]}>Пожаловаться</Text>
                                                 </TouchableOpacity>
-                                                <TouchableOpacity activeOpacity={0.7} style={{flexDirection:"row", gap:7, alignItems:"center"}}>
+                                                <TouchableOpacity activeOpacity={0.7} onPress={async()=>{
+                                                    const result = await apiFetch(`/users/hidden/${people.id}`,'POST',true)
+                                                    console.log(result);
+                                                    
+                                                    switch (result?.status) {
+                                                        case 200:
+                                                        case 201:
+                                                        case 202:
+                                                            showToastable({message:'Пользователь скрыт'})
+                                                            goBack()
+                                                            break;
+                                                    
+                                                        default:
+                                                            setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 300);
+                                                            break;
+                                                    }
+                                                }} style={{flexDirection:"row", gap:7, alignItems:"center"}}>
                                                     <CloseEyeIcon/>
                                                     <Text style={[styles.bodyText,{color:'white'}]}>Больше не показывать</Text>
                                                 </TouchableOpacity>
@@ -98,7 +131,7 @@ export function PeopleScreen() {
                                     </View>
                                     <View style={{margin:16}}>
                                         <View style={{width:'100%', flexDirection:"row", gap:4,height:2}}>
-                                            {[0,1,2].map((el,i)=><View key={i} style={{backgroundColor:index == i ? '#FFFFFF' : '#FFFFFF66', flex:1, height:2}}/>)}
+                                            {people?.img?.map((el,i)=><View key={i} style={{backgroundColor:index == i ? '#FFFFFF' : '#FFFFFF66', flex:1, height:2}}/>)}
                                         </View>
                                     </View>
                                 </View>
@@ -116,54 +149,65 @@ export function PeopleScreen() {
                                             <TouchableOpacity activeOpacity={0.7} onPress={()=>AnimatedStepOne()} style={{width:"100%",alignItems:"center"}}>
                                                 <Animated.View style={{transform:[{rotate:more ? Rotate : RotateTwo}], alignItems:"flex-start"}}><ModalCloseIcon/></Animated.View>
                                             </TouchableOpacity>
-                                            <Text style={[styles.h1,{fontSize:34, color:'white', paddingTop:6}]}>Виктория <Text style={{color:'#FFFFFF80'}}>25</Text></Text>
+                                            <Text style={[styles.h1,{fontSize:34, color:'white', paddingTop:6}]}>{people?.name} <Text style={{color:'#FFFFFF80'}}>{people?.age}</Text></Text>
                                             <View style={styles.womanInfoContainer}>
                                                 <View style={{flexDirection:'row', alignItems:'flex-end', gap:14}}>
-                                                    <View style={{flexDirection:'row', alignItems:'flex-end', gap:4}}>
-                                                        <Text style={[styles.bodyText,{fontSize:18, color:'white', paddingTop:4}]}>172</Text>
+                                                    {people?.growth && <View style={{flexDirection:'row', alignItems:'flex-end', gap:4}}>
+                                                        <Text style={[styles.bodyText,{fontSize:18, color:'white', paddingTop:4}]}>{people?.growth}</Text>
                                                         <Text style={[styles.smallText,{color:'#FFFFFF99'}]}>Рост</Text>
-                                                    </View>
-                                                    <View style={{flexDirection:'row', alignItems:'flex-end', gap:4}}>
-                                                        <Text style={[styles.bodyText,{fontSize:18, color:'white', paddingTop:4}]}>55</Text>
+                                                    </View>}
+                                                    {people?.weight &&<View style={{flexDirection:'row', alignItems:'flex-end', gap:4}}>
+                                                        <Text style={[styles.bodyText,{fontSize:18, color:'white', paddingTop:4}]}>{people?.weight}</Text>
                                                         <Text style={[styles.smallText,{color:'#FFFFFF99'}]}>Вес</Text>
-                                                    </View>
+                                                    </View>}
                                                 </View>
-                                                <View style={{flexDirection:'row', alignItems:'flex-end', gap:11}}>
-                                                    <TouchableOpacity activeOpacity={0.7} style={{alignItems:'center'}}>
-                                                        <Text style={[styles.smallText,{fontFamily:'PoppinsSemiBold', color:Бирюзовый50}]}>100К</Text>
+                                                <View style={{flexDirection:'row', height:39, alignItems:'flex-end', gap:11}}>
+                                                    {people?.instagram && <TouchableOpacity 
+                                                        activeOpacity={0.7} 
+                                                        style={{alignItems:'center'}}
+                                                        onPress={()=>{
+                                                            Linking.openURL('https://www.instagram.com/'+people?.instagram?.replace('@',''))
+                                                        }}
+                                                    >
+                                                        {people?.count_instagram && <Text style={[styles.smallText,{fontFamily:'PoppinsSemiBold', color:Бирюзовый50}]}>{people?.count_instagram}</Text>}
                                                         <RegInstaIcon/>
-                                                    </TouchableOpacity>
-                                                    <TouchableOpacity activeOpacity={0.7} style={{alignItems:'center', pointerEvents:"box-only"}}>
+                                                    </TouchableOpacity>}
+                                                    {people?.telegram && <TouchableOpacity 
+                                                        activeOpacity={0.7} 
+                                                        style={{alignItems:'center', pointerEvents:"box-only"}}
+                                                        onPress={()=>{
+                                                            Linking.openURL('https://t.me/'+people?.telegram?.replace('@',''))
+                                                        }}
+                                                    >
                                                         <TGIcon/>
-                                                    </TouchableOpacity>
+                                                    </TouchableOpacity>}
                                                 </View>
                                             </View>
-                                            <View style={styles.tagContainerBlock}>
-                                                <TagBlock text='Клубы'/>
-                                                <TagBlock text='Фильмы'/>
-                                                <TagBlock text='Фигурное катание'/>
-                                                <TagBlock text='Фигурное катание'/>
-                                                <TagBlock text='Экстрим'/>
-                                            </View>
-                                            <Text style={[styles.bodyText,{color:"white"}]}>Я обожаю моду, и всегда следую последним тенденциям. Моя внешность отличается смелостью и индивидуальностью, и я стремлюсь делать карьеру в мире моды. Я готова к новым вызовам и возможностям, и ищу возможность реализовать себя. Люблю шумные тусовки, громкую музыку и грандиозные шоу.</Text>
+                                            
+                                            <ScrollView style={{maxHeight:341}} showsVerticalScrollIndicator={false}>
+                                                <View style={styles.tagContainerBlock}>
+                                                    {people?.hashtags && people?.hashtags?.map((el,i)=><TagBlock text={el?.label} key={i}/>)}
+                                                </View>
+                                                <Text style={[styles.bodyText,{color:"white"}]}>{people?.description}</Text>
+                                            </ScrollView>
                                         </BlurView>
                                     </GestureRecognizer>
                                 </Animated.View>
                             </View>
                             <Carousel
-                                data={[0,1,2]}
+                                data={people?.img}
                                 width={width}
-                                loop={[0,1,2]?.length > 1 ? true : false }
-                                height={height*0.87}
+                                loop={people?.img?.length > 1 ? true : false }
+                                height={Platform.OS=='ios'? height-statusBarHeight:height}
                                 defaultIndex={index}
                                 onSnapToItem={setIndex}
                                 style={{zIndex:9999, borderBottomLeftRadius:20, borderBottomRightRadius:20, overflow:"hidden", position:"relative"}}
                                 renderItem={({item})=>(
-                                    <Image style={{width:width, height:'100%', borderBottomLeftRadius:20, borderBottomRightRadius:20, overflow:"hidden"}} resizeMode='cover' source={require('../../../assets/image/people.jpg')}/>
+                                    <Image style={{width:width, height:'100%', borderBottomLeftRadius:20, borderBottomRightRadius:20, overflow:"hidden"}} resizeMode='cover' source={{uri:item?.uri}}/>
                                 )}
                             />
                         </Animated.View>
-                        <View style={{height:'15%', backgroundColor:'#17171A'}}>
+                        {/* <View style={{height:'15%', backgroundColor:'#17171A'}}>
                             {alert &&<View onTouchStart={()=>setAlert(false)} style={{position:"absolute", top:0, left:0, width:width*2, height:height*2, zIndex:1}} />}
                             <View style={{marginHorizontal:16,  marginTop:13, flexDirection:"row", justifyContent:'space-evenly'}}>
                                 <TouchableOpacity activeOpacity={0.7} onPress={()=>{}} style={{flexDirection:'row', alignItems:"center", gap:10}}>
@@ -178,7 +222,7 @@ export function PeopleScreen() {
                                     <Text style={[styles.smallText,{color:Бирюзовый50}]}>Пригласить</Text>
                                 </TouchableOpacity>
                             </View>
-                        </View>
+                        </View> */}
                     </KeyboardAvoidingView>
                 </View>
                 <ModalWarning ref={warning}/>

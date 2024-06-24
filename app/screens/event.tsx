@@ -1,4 +1,4 @@
-import { ActivityIndicator, Image, ImageBackground, KeyboardAvoidingView, Platform, RefreshControl, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Image, ImageBackground, KeyboardAvoidingView, Linking, Platform, RefreshControl, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { MainLayout, ModalErrScan, PeopleModal, ScanModal, ModalQrCode, ModalWarning, ModalReview } from '../component';
 import { height, statusBarHeight, width, Бирюзовый } from '../GLOBAL';
 import { styles } from '../styles';
@@ -147,7 +147,7 @@ export function EventScreen(props?:{route?:{params:{type?:''}}}) {
                             <View style={[styles.blurLikeContainer,{position:"absolute", bottom:0, paddingBottom:11}]}>
                                 <BlurView tint='systemChromeMaterialDark' style={{gap:7, paddingHorizontal:15, paddingTop:12, paddingBottom:12, borderRadius:16, overflow:'hidden'}} intensity={55} >
                                     <View style={{flexDirection:'row', alignItems:"center", justifyContent:'space-between'}}>
-                                        <Text style={[styles.bodyText,{color:'white', fontFamily:'PoppinsMedium'}]}>{moment(data?.date_event).format("HH:mm")}</Text>
+                                        {data?.time_part && <Text style={[styles.bodyText,{color:'white', fontFamily:'PoppinsMedium'}]}>{data?.time_part}</Text>}
                                         <Text style={[styles.bodyText,{color:'white', fontFamily:'PoppinsMedium'}]}>{moment(data?.date_event).format("DD ")}<Text style={{fontSize:10, color:"#FFFFFF99"}}>{moment(data?.date_event).format("MMM YY")} -</Text> {moment(data?.end_date_event).format("DD ")}<Text style={{fontSize:10, color:"#FFFFFF99"}}>{moment(data?.end_date_event).format("MMM YY")}</Text></Text>
                                     </View>
                                     <Text style={[styles.h4,{fontSize:18, color:'white', paddingTop:6}]}>{data?.title}</Text>
@@ -220,8 +220,22 @@ export function EventScreen(props?:{route?:{params:{type?:''}}}) {
                                 </View>
                                 <View style={{alignItems:"flex-end", flex:1, gap:7}}>
                                     <View style={{flexDirection:"row",gap:6}}>
-                                        {data?.author_full?.instagram && <InstaEventIcon/>}
-                                        {data?.author_full?.telegram && <TGEventIcon/>}
+                                        {data?.author_full?.instagram && <TouchableOpacity 
+                                            activeOpacity={0.7}
+                                            onPress={()=>{
+                                                Linking.openURL('https://www.instagram.com/'+data?.author_full?.instagram?.replace('@',''))
+                                            }}
+                                        >
+                                            <InstaEventIcon/>
+                                        </TouchableOpacity>}
+                                        {data?.author_full?.telegram && <TouchableOpacity 
+                                            activeOpacity={0.7}
+                                            onPress={()=>{
+                                                Linking.openURL('https://t.me/'+data?.author_full?.telegram?.replace('@',''))
+                                            }}
+                                        >
+                                            <TGEventIcon/>
+                                        </TouchableOpacity>}
                                     </View>
                                     <Text style={[styles.smallText,{color:'#FFFFFF80', textAlign:'right', width:'80%'}]}>Контакты будут доступны после одобрения заявки</Text>
                                 </View>

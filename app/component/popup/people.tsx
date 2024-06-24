@@ -1,4 +1,4 @@
-import { Animated, Image, ImageBackground, KeyboardAvoidingView, Modal, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Animated, Image, ImageBackground, KeyboardAvoidingView, Linking, Modal, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { height, statusBarHeight, width, Белый, Бирюзовый, Бирюзовый50 } from '../../GLOBAL';
 import { BlurView } from 'expo-blur';
 import { CloseIcon, HeartMenuIcon, ModalCloseIcon, RegInstaIcon, TGIcon } from '../svg/svg';
@@ -107,21 +107,33 @@ export function PeopleModal(props:{visible?: boolean, data?:{}, onRequestClose?:
                                                     <Text style={[styles.h1,{fontSize:34, color:'white', paddingTop:6}]}>{props.data?.user?.name} <Text style={{color:'#FFFFFF80'}}>{props.data?.user?.age}</Text></Text>
                                                     <View style={styles.womanInfoContainer}>
                                                         <View style={{flexDirection:'row', alignItems:'flex-end', gap:14}}>
-                                                            <View style={{flexDirection:'row', alignItems:'flex-end', gap:4}}>
+                                                            {props.data?.user?.growth && <View style={{flexDirection:'row', alignItems:'flex-end', gap:4}}>
                                                                 <Text style={[styles.bodyText,{fontSize:18, color:'white', paddingTop:4}]}>{props.data?.user?.growth}</Text>
                                                                 <Text style={[styles.smallText,{color:'#FFFFFF99'}]}>Рост</Text>
-                                                            </View>
-                                                            <View style={{flexDirection:'row', alignItems:'flex-end', gap:4}}>
+                                                            </View>}
+                                                            {props.data?.user?.weight && <View style={{flexDirection:'row', alignItems:'flex-end', gap:4}}>
                                                                 <Text style={[styles.bodyText,{fontSize:18, color:'white', paddingTop:4}]}>{props.data?.user?.weight}</Text>
                                                                 <Text style={[styles.smallText,{color:'#FFFFFF99'}]}>Вес</Text>
-                                                            </View>
+                                                            </View>}
                                                         </View>
                                                         <View style={{flexDirection:'row', height:39, alignItems:'flex-end', gap:11}}>
-                                                            {props.data?.user?.instagram && <TouchableOpacity activeOpacity={0.7} style={{alignItems:'center'}}>
+                                                            {props.data?.user?.instagram && <TouchableOpacity 
+                                                                activeOpacity={0.7} 
+                                                                style={{alignItems:'center'}}
+                                                                onPress={()=>{
+                                                                    Linking.openURL('https://www.instagram.com/'+props.data?.user?.instagram?.replace('@',''))
+                                                                }}
+                                                            >
                                                                 {props.data?.user?.count_instagram && <Text style={[styles.smallText,{fontFamily:'PoppinsSemiBold', color:Бирюзовый50}]}>{props.data?.user?.count_instagram}</Text>}
                                                                 <RegInstaIcon/>
                                                             </TouchableOpacity>}
-                                                            {props.data?.user?.telegram && <TouchableOpacity activeOpacity={0.7} style={{alignItems:'center', pointerEvents:"box-only"}}>
+                                                            {props.data?.user?.telegram && <TouchableOpacity 
+                                                                activeOpacity={0.7} 
+                                                                style={{alignItems:'center', pointerEvents:"box-only"}}
+                                                                onPress={()=>{
+                                                                    Linking.openURL('https://t.me/'+props.data?.user?.telegram?.replace('@',''))
+                                                                }}
+                                                            >
                                                                 <TGIcon/>
                                                             </TouchableOpacity>}
                                                         </View>
@@ -141,7 +153,7 @@ export function PeopleModal(props:{visible?: boolean, data?:{}, onRequestClose?:
                                         data={props.data?.user?.img}
                                         width={width}
                                         loop={props.data?.user?.img?.length > 1 ? true : false }
-                                        height={height-30}
+                                        height={height-statusBarHeight}
                                         ref={refSlider}
                                         defaultIndex={index}
                                         onSnapToItem={setIndex}

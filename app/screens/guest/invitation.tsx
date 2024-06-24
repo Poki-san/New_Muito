@@ -109,7 +109,7 @@ export function InvitationScreen() {
                                         <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Отправленные <Text style={{color:'#FFFFFF80'}}></Text></Text>
                                     </TouchableOpacity>
                                 </BlurView>
-                            <BlurView  intensity={75} tint='systemChromeMaterialDark'  style={{borderRadius:16, overflow:"hidden", borderWidth:1, borderColor:'#374A4E99', marginHorizontal:16, flex:1, marginBottom:106, justifyContent:"center", alignItems:"center", gap:15}}>
+                            <BlurView  intensity={75} tint='systemChromeMaterialDark'  style={{borderRadius:16, overflow:"hidden", borderWidth:1, borderColor:'#374A4E99', marginHorizontal:16, flex:1, marginBottom:70, justifyContent:"center", alignItems:"center", gap:15}}>
                                 <Text style={[styles.h3,{fontSize:20, color:"white"}]}>У вас нет мероприятий</Text>
                                 {/* <TouchableOpacity activeOpacity={0.7} onPress={()=>navigate('AddEvent')} style={{width:60, height:60, borderRadius:90, backgroundColor:Бирюзовый, justifyContent:"center", alignItems:"center"}}>
                                     <PlusIcon/>

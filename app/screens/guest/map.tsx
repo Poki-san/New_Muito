@@ -1,14 +1,16 @@
-import { Image, KeyboardAvoidingView, Platform, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Image, KeyboardAvoidingView, Platform, Text, TouchableOpacity, View } from 'react-native';
 import { EventItem, EventMapItem, MainLayout, ModalDatePoint } from '../../component';
 import { height, statusBarHeight, width, Белый, Бирюзовый } from '../../GLOBAL';
 import { ClusteredYamap, Marker } from 'react-native-yamap-plus';
 import { useEffect, useRef, useState } from 'react';
 import coordinate from '../../model/coordinate';
-import { CalendarIcon } from '../../component/svg/svg';
+import { CalendarIcon, CloseIcon } from '../../component/svg/svg';
 import { styles } from '../../styles';
 import RBSheet from '@nonam4/react-native-bottom-sheet';
 import { BlurView } from 'expo-blur';
 import apiFetch from '../../functions/api';
+import { useIsFocused } from '@react-navigation/native';
+import moment from 'moment';
  
 export function MapGuestScreen() {
     const [countLoad, setCountLoader] = useState(0)
@@ -17,29 +19,59 @@ export function MapGuestScreen() {
     const [markers, setMarkers] = useState([]);
     const [markerItem, setMarkerItem] = useState(0);
     const [up, setUp] = useState(1)
-    useEffect(() => {
-        (async()=>{
-            const value = await apiFetch('/event/map','GET',true)
-            // console.log(value);
-            
-            switch (value?.status) {
-                case 200:
-                case 201:
-                case 202:
-                    setMarkers(value?.data)
-                    break;
-                default:
-                    break;
-            }
-            
-        })();
-    }, [])
+    const [loader, setLoader] = useState(false)
+    const [dateTxt, setDate] = useState('')
+
+    const focus = useIsFocused();
+    useEffect(()=>{
+        setLoader(true)
+        if (focus) {
+            (async()=>{
+                const value = await apiFetch('/event/map','GET',true)
+                console.log(value);
+                
+                switch (value?.status) {
+                    case 200:
+                    case 201:
+                    case 202:
+                        setMarkers(value?.data)
+                        break;
+                    default:
+                        break;
+                }
+                setLoader(false)
+                
+            })();
+        }
+    },[focus])
 
     useEffect(() => {
         if (countLoad > 0 && markers.length > 0 && countLoad === markers.length) {
+            // console.log('Все изображения загрузились!')
             setUp(2)
         }
     }, [countLoad])
+
+    const onDate = async(date?:string) => {
+        setLoader(true)
+        setMarkers([])
+        setUp(1)
+        setCountLoader(0)
+        if (date.length>0) {
+            const val = await apiFetch(`/event/map?date=${date}`,'GET', true)
+            if (val?.status == 200) {
+                setMarkers(val?.data)
+                setLoader(false)
+            }
+        } else{
+            const val = await apiFetch(`/event/map`,'GET', true)
+            if (val?.status == 200) {
+                setMarkers(val?.data)
+                setLoader(false)
+            }
+        }
+        
+    }
 
     return ( 
         <MainLayout isStatusBar backgroundColor='#181818'>
@@ -55,11 +87,20 @@ export function MapGuestScreen() {
                         overflow:"hidden", borderRadius:16, alignItems:'center', gap:4}} tint='systemChromeMaterialDark'>
                             <Text style={[styles.h4,{color:Белый, textAlign:"center"}]}>Мероприятия рядом</Text>
                         </BlurView>
-                        <TouchableOpacity onPress={()=>date.current?.open()} style={{borderRadius:16, width:42, alignItems:'center', justifyContent:"center", height:42, backgroundColor:'#00000088'}}>
-                            <CalendarIcon color='#fff'/>
-                        </TouchableOpacity>
+                        {/* <View style={{width:42, height:42}}/> */}
+                        <View style={{flexDirection:"row", alignItems:"center", gap:4}}>
+                            {dateTxt.length>0 && <TouchableOpacity onPress={()=>{
+                                    setDate('')
+                                    onDate('')
+                                }} style={{borderRadius:16, width:42, alignItems:'center', justifyContent:"center", height:42, backgroundColor:'#00000088'}}>
+                                    <CloseIcon color='#fff'/>
+                                </TouchableOpacity>}
+                            <TouchableOpacity onPress={()=>date.current?.open()} style={{borderRadius:16, width:42, alignItems:'center', justifyContent:"center", height:42, backgroundColor:'#00000088'}}>
+                                <CalendarIcon color='#fff'/>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                    {markers?.length > 0 && <ClusteredYamap
+                    {(!loader&& markers.length > 0) ? <ClusteredYamap
                         key={up}
                         clusterColor={Бирюзовый}
                         style={{width:width, height:height-statusBarHeight, borderTopLeftRadius:16, borderTopRightRadius:16, overflow:"hidden"}}
@@ -74,10 +115,10 @@ export function MapGuestScreen() {
                             key={info?.id}
                             point={info.point}
                             children={
-                                <View key={index} style={{width: 40, height: 40, borderRadius:16, overflow:"hidden"}}>
+                                <View key={index} style={{width: 40, height: 40, borderRadius:16, borderColor:Бирюзовый, overflow:"hidden"}}>
                                     <Image
                                         onLoad={() => countLoad < markers.length && setCountLoader(prevState => prevState + 1)}
-                                        source={{uri:info?.img}}
+                                        source={{uri:info?.marker}}
                                         style={{
                                             width: 40,
                                             height: 40,
@@ -87,19 +128,28 @@ export function MapGuestScreen() {
                                 </View>
                             }
                             onPress={() => {
-                                console.log(info);
-                                
                                 setMarkerItem(index)
                                 setEvent(true)
                             }}
                         />}
-                    />}
+                    /> : 
+                    <View style={{alignItems:"center", justifyContent:"center", width:width,height:height-statusBarHeight}}>
+                        <View style={{backgroundColor:'#181818CC', borderRadius:90, padding:10}}><ActivityIndicator size={40} color={Бирюзовый}/></View>
+                    </View>
+                    }
                     {event&&<View  style={{marginHorizontal:16, position:'absolute', bottom:0, marginBottom:76}}>
                         <EventMapItem data={markers[markerItem]} size={92} noEdit type={'guest'}/>
                     </View>}
+                    {up==1&&<View style={{alignItems:"center", justifyContent:"center", backgroundColor:'#181818', zIndex:9999, position:"absolute", width:width,height:height-statusBarHeight}}>
+                        <View style={{backgroundColor:'#181818CC', borderRadius:90, padding:10}}><ActivityIndicator size={40} color={Бирюзовый}/></View>
+                    </View>}
                 </View>
             </KeyboardAvoidingView>
-            <ModalDatePoint ref={date}/>
+            <ModalDatePoint ref={date} onPress={(value)=>{
+                setDate(moment(value).format("YYYY-MM-DD"))
+                onDate(moment(value).format("YYYY-MM-DD"))
+                date.current?.close()
+            }}/>
         </MainLayout>
     )
 }

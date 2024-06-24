@@ -1,4 +1,4 @@
-import { Animated, Image, ImageBackground, KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Animated, Image, ImageBackground, KeyboardAvoidingView, Linking, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { MainLayout, ModalWarning, TagBlock } from '../../component';
 import { URL, height, statusBarHeight, width, Белый, Бирюзовый, Бирюзовый50 } from '../../GLOBAL';
 import { BlurView } from 'expo-blur';
@@ -8,8 +8,10 @@ import Carousel, { ICarouselInstance } from 'react-native-reanimated-carousel';
 import { useEffect, useRef, useState } from 'react';
 import GestureRecognizer from 'react-native-swipe-gestures';
 import RBSheet from '@nonam4/react-native-bottom-sheet';
+import apiFetch from '../../functions/api';
+import error from '../../model/error';
  
-export function LikeItem(props?:{data?:{}}) {
+export function LikeItem(props?:{data?:{}, onHidden?:()=>void}) {
     const [index, setIndex] = useState(0)  
     const [more, setMore] =useState(false)
     const refSlider = useRef<ICarouselInstance>(null)
@@ -77,7 +79,20 @@ export function LikeItem(props?:{data?:{}}) {
                                         <AlertIcon/>
                                         <Text style={[styles.bodyText,{color:'#BC1115'}]}>Пожаловаться</Text>
                                     </TouchableOpacity>
-                                    <TouchableOpacity activeOpacity={0.7} style={{flexDirection:"row", gap:7, alignItems:"center"}}>
+                                    <TouchableOpacity activeOpacity={0.7} onPress={async()=>{
+                                        const result = await apiFetch(`/users/hidden/${props.data?.user?.id}`,'POST',true)
+                                        switch (result?.status) {
+                                            case 200:
+                                            case 201:
+                                            case 202:
+                                                props.onHidden()
+                                                break;
+                                        
+                                            default:
+                                                setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 300);
+                                                break;
+                                        }
+                                    }} style={{flexDirection:"row", gap:7, alignItems:"center"}}>
                                         <CloseEyeIcon/>
                                         <Text style={[styles.bodyText,{color:'white'}]}>Больше не показывать</Text>
                                     </TouchableOpacity>
@@ -117,11 +132,23 @@ export function LikeItem(props?:{data?:{}}) {
                                         </View>
                                     </View>
                                     <View style={{flexDirection:'row', height:39, alignItems:'flex-end', gap:11}}>
-                                        {props.data?.user?.instagram && <TouchableOpacity activeOpacity={0.7} style={{alignItems:'center'}}>
+                                        {props.data?.user?.instagram && <TouchableOpacity 
+                                            activeOpacity={0.7} 
+                                            style={{alignItems:'center'}}
+                                            onPress={()=>{
+                                                Linking.openURL('https://www.instagram.com/'+props.data?.user?.instagram?.replace('@',''))
+                                            }}
+                                        >
                                             {props.data?.user?.count_instagram && <Text style={[styles.smallText,{fontFamily:'PoppinsSemiBold', color:Бирюзовый50}]}>{props.data?.user?.count_instagram}</Text>}
                                             <RegInstaIcon/>
                                         </TouchableOpacity>}
-                                        {props.data?.user?.telegram && <TouchableOpacity activeOpacity={0.7} style={{alignItems:'center', pointerEvents:"box-only"}}>
+                                        {props.data?.user?.telegram && <TouchableOpacity 
+                                            activeOpacity={0.7} 
+                                            style={{alignItems:'center', pointerEvents:"box-only"}}
+                                            onPress={()=>{
+                                                Linking.openURL('https://t.me/'+props.data?.user?.telegram?.replace('@',''))
+                                            }}
+                                        >
                                             <TGIcon/>
                                         </TouchableOpacity>}
                                     </View>

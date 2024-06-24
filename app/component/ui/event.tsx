@@ -16,7 +16,7 @@ export function EventItem(props:{tag?:number, size?:number, onDelete?: () => voi
     const del = useRef<RBSheet>()
     const review = useRef<RBSheet>(null)
     const {data} = props
-    console.log(data?.status?.invite);
+    console.log(data);
     
     
     return ( 
@@ -38,7 +38,7 @@ export function EventItem(props:{tag?:number, size?:number, onDelete?: () => voi
                 </View>
                 <View style={{flex:1, justifyContent:"space-between",gap:6}}>
                     <View style={{flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}>
-                        <Text style={[styles.smallText,{color:'white'}]}>{moment(data?.date_event).format("HH:mm")}</Text>
+                        {data?.time_part && <Text style={[styles.smallText,{color:'white'}]}>{data?.time_part}</Text>}
                         <Text style={[styles.smallText,{color:'white'}]}>{moment(data?.date_event).format("DD ")}<Text style={{fontSize:10, color:"#FFFFFF99"}}>{moment(data?.date_event).format("MMM YY")} -</Text> {moment(data?.end_date_event).format("DD ")}<Text style={{fontSize:10, color:"#FFFFFF99"}}>{moment(data?.end_date_event).format("MMM YY")}</Text></Text>
                     </View>
                     
@@ -55,7 +55,7 @@ export function EventItem(props:{tag?:number, size?:number, onDelete?: () => voi
                             {data?.from_participants?.length > 3 && <Text style={[styles.smallText,{color:'#5AA19D', fontFamily:"PoppinsMedium"}]}>+{data?.from_participants?.length-3}</Text>}
                         </View>}
                     </View>:<>
-                        {props.tag == 2 && <ButtonMy text={data?.count+' заявки'} disabled={false} onPress={()=>navigate('EventPeople')} backgroundColor='#88FFF900' colorText='#FFF' borderColor='#88FFF9' onPressColor='#393939'/>}
+                        {props.tag == 2 && <ButtonMy text={data?.count+' заявки'} disabled={data?.count == 0 ? true:false} onPress={()=>navigate('EventPeople',{id:data?.id})} backgroundColor='#88FFF900' colorText='#FFF' borderColor='#88FFF9' onPressColor='#393939'/>}
                         {props.tag == 1 && <ButtonMy text='Оценить' disabled={false} onPress={()=>review.current?.open()} backgroundColor='#88FFF900' colorText='#FFF' borderColor='#88FFF9' onPressColor='#393939'/>}
                         {props.tag == 0 && <ButtonMy text='Опубликовать' onPressColor='#393939' disabled={false} onPress={()=>{}} backgroundColor='#88FFF900' colorText='#FFF' borderColor='#88FFF9'/>}
                     </>}
@@ -94,7 +94,7 @@ export function EventMapItem(props:{tag?:number, size?:number, onDelete?: () => 
                 </View>
                 <View style={{flex:1, justifyContent:"space-between",gap:6}}>
                     <View style={{flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}>
-                        <Text style={[styles.smallText,{color:'white'}]}>{moment(event?.date_event).format("HH:mm")}</Text>
+                        {data?.time_part && <Text style={[styles.smallText,{color:'white'}]}>{data?.time_part}</Text>}
                         <Text style={[styles.smallText,{color:'white'}]}>{moment(event?.date_event).format("DD ")}<Text style={{fontSize:10, color:"#FFFFFF99"}}>{moment(event?.date_event).format("MMM YY")} -</Text> {moment(event?.end_date_event).format("DD ")}<Text style={{fontSize:10, color:"#FFFFFF99"}}>{moment(event?.end_date_event).format("MMM YY")}</Text></Text>
                     </View>
                     

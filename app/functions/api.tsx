@@ -96,9 +96,8 @@ export async function apiFetchFile(url:string, method:string, token:boolean, val
     
     await NetInfo.fetch().then(state => connect = state.isConnected);
     if (connect) {
-        
         try {
-            const jsonOutput = await fetch(URL + url, method? {
+            const jsonOutput = await fetch(URL + url,{
                 method:method,
                 headers: token ? {
                     'Accept': 'application/json',
@@ -107,12 +106,12 @@ export async function apiFetchFile(url:string, method:string, token:boolean, val
                     'Accept': 'application/json',
                   },
                   body: values
-            } : undefined)   
+            })   
+            
             preloader.Input(false);
             
             if (jsonOutput.status != 401) {
                 const result = await jsonOutput.json();
-                // console.log(result);
                 if (!!result?.exception) {
                     setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 300);
                 }
@@ -127,6 +126,8 @@ export async function apiFetchFile(url:string, method:string, token:boolean, val
                 navigationRef.current?.dispatch(bottomReset)
             }
         } catch (err) {
+            console.log(err);
+            
             preloader.Input(false);
             setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 300);
         }

@@ -35,13 +35,14 @@ interface InputProps {
     placeholderTextColor?: ColorValue,
     render?: (props: RenderProps) => React.ReactNode,
     maxLength?: number,
-    mode?: "flat" | "outlined"
+    mode?: "flat" | "outlined",
+    contentStyle?: StyleProp<TextStyle>
 }
 
 export const Input = forwardRef((props:InputProps, ref)=>{
     const [secure, setSecure] = useState(true)
     return (
-        <View style={{width:"100%"}}>
+        <View style={{width:"100%", gap:4}}>
             {/* {(props.title) && <Text style={[{color:'#FFFFFF66', fontSize:10, fontFamily:'Poppins', paddingLeft:14, marginBottom:-5}]}>{props.title}</Text>} */}
             <View style={{position:'relative', width:'100%', justifyContent: 'center'}}>
                 {props.icon && 
@@ -65,7 +66,7 @@ export const Input = forwardRef((props:InputProps, ref)=>{
                     label={props.label && <Placeholder required={props.required} placeholderColor={(!!props.errorText && props.touched)?'black' : 'gray'} style={props.styleLabel} placeholderText={props.label}/>}
                     placeholder={props.title}
                     placeholderTextColor={props.placeholderTextColor}
-                    contentStyle={{fontFamily:'Poppins', fontSize:14}}
+                    contentStyle={[{fontFamily:'Poppins', fontSize:14}, props.contentStyle]}
                     secureTextEntry={props.securePass ? secure:false} 
                     underlineStyle={{display:"none"}}
                     textColor='white'

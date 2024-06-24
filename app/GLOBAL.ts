@@ -5,6 +5,9 @@ export const height = Dimensions.get('window').height
 export const width = Dimensions.get('window').width
 export const statusBarHeight = Constants.statusBarHeight
 
+export const URLDADATAGEO = 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/geolocate/address'
+export const DADATATOKEN = '712ae19197bcf925c678e9643c50d1976994a1b0'
+export const URLDADATA = 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address'
 export const URL = 'https://event-lux.site/api'
 export const WEBSOCKET = ''
 

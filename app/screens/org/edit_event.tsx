@@ -92,21 +92,21 @@ export function EditEventScreen() {
                             </View>
                             <View style={{gap:8, marginTop:8}}>
                                 <Text style={[styles.h4,{color:'#FFFFFF'}]}>Для участниц:</Text>
-                                <TagsNoScroll data={[{name:'Такси', value:'1'},{name:'Кальян', value:'2'},{name:'Алкоголь', value:'3'},{name:'Еда', value:'4'},{name:'Оплачиваемые', value:'5'},{name:'Подробнее в описании', value:'6'}]} />
+                                <TagsNoScroll data={[{title:'Такси', id:'1'},{title:'Кальян', id:'2'},{title:'Алкоголь', id:'3'},{title:'Еда', id:'4'},{title:'Оплачиваемые', id:'5'},{title:'Подробнее в описании', id:'6'}]} />
                             </View>
                             <View style={{gap:8, marginTop:8}}>
                                 <Text style={[styles.h4,{color:'#FFFFFF'}]}>От участниц:</Text>
-                                <TagsNoScroll data={[{name:'Отметка в соцсетях', value:'1'}]} />
+                                <TagsNoScroll data={[{title:'Отметка в соцсетях', id:'1'}]} />
                             </View>
                             <View style={{marginTop:8, gap:16}}>
-                                <ButtonMy text='Создать мероприятие' onPress={()=>{
-                                    showToastable({message:'Ваше мероприятие успешно создано'})
+                                <ButtonMy text='Сохранить' onPress={()=>{
+                                    // showToastable({message:'Ваше мероприятие успешно создано'})
                                     goBack()
                                 }} backgroundColor='#88FFF9' colorText='#171717'/>
-                                <ButtonMy text='Сохранить как черновик' onPress={()=>{
+                                {/* <ButtonMy text='Сохранить как черновик' onPress={()=>{
                                     showToastable({message:'Изменения сохранены'})
                                     goBack()
-                                }} borderColor='#88FFF9' onPressColor='#393939' backgroundColor='#171717' colorText='#FFF'/>
+                                }} borderColor='#88FFF9' onPressColor='#393939' backgroundColor='#171717' colorText='#FFF'/> */}
                             </View>
                         </View>
                     </View>

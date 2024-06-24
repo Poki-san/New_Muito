@@ -1,32 +1,32 @@
-import { Image, KeyboardAvoidingView, Platform, Text, TouchableOpacity, View } from 'react-native';
-import { MainLayout } from '../../component';
-import { height, statusBarHeight, width, Белый, Бирюзовый, Бирюзовый50 } from '../../GLOBAL';
+import { ActivityIndicator, Image, KeyboardAvoidingView, Platform, Text, View } from 'react-native';
+import { MainLayout, PeopleItemMap } from '../../component';
+import { height, statusBarHeight, width, Белый, Бирюзовый } from '../../GLOBAL';
 import { ClusteredYamap, Marker } from 'react-native-yamap-plus';
 import { useEffect, useState } from 'react';
 import { styles } from '../../styles';
-import { RegInstaIcon } from '../../component/svg/svg';
-import { navigate } from '../../functions/navigate';
 import { BlurView } from 'expo-blur';
 import coordinate from '../../model/coordinate';
 import { observer } from 'mobx-react-lite';
+import apiFetch from '../../functions/api';
  
 export const MapOrgScreen = observer(() => {
     const [countLoad, setCountLoader] = useState(0)
     const [people, setPeople] = useState(false)
-    const [markers, setMarkers] = useState([{
-        point: {
-            lat: 55.754215,
-            lon: 37.722504,
-        },
-        data: {id:1, uri:'../../../assets/image/people.jpg'},
-    }, {
-        point: {
-            lat: 55.834215,
-            lon: 37.752504
-        },
-        data: {id:2, uri:'../../../assets/image/people.jpg'},
-    }]);
+    const [markers, setMarkers] = useState([]);
     const [up, setUp] = useState(1)
+    const [markerItem, setMarkerItem] = useState(0);
+    const [loader, setLoader] = useState(false)
+
+    const handlerNear = async () => {
+        const response = await apiFetch('/event/near','GET',true)
+        setMarkers(response?.data)
+        setLoader(false)
+    }
+    useEffect(() => {
+        setLoader(true)
+        handlerNear().catch(e => console.log(e))
+    }, [])
+
     useEffect(() => {
         if (countLoad > 0 && markers.length > 0 && countLoad === markers.length) {
             // console.log('Все изображения загрузились!')
@@ -47,7 +47,7 @@ export const MapOrgScreen = observer(() => {
                     </BlurView>
                 </View>
                 <View style={{borderTopLeftRadius:16, borderTopRightRadius:16, overflow:"hidden"}}>
-                    <ClusteredYamap
+                    {(!loader && markers.length > 0) ? <ClusteredYamap
                         // ref={ref}
                         key={up}
                         clusterColor={Бирюзовый}
@@ -64,39 +64,38 @@ export const MapOrgScreen = observer(() => {
                             }
                         }}
                         renderMarker={(info, index) => <Marker
-                            key={info.data?.id}
+                            key={info.id}
                             point={info.point}
-                            
                             children={
-                                <View key={index} style={{borderWidth:1, width: 40, height: 40, borderColor:Бирюзовый, borderRadius:12}}>
+                                <View key={index} style={{borderWidth:1, width: 40, height: 40, overflow:"hidden", borderColor:Бирюзовый, borderRadius:16}}>
                                     <Image
                                         onLoad={() => countLoad < markers.length && setCountLoader(prevState => prevState + 1)}
-                                        source={require('../../../assets/image/people.jpg')}
+                                        source={{uri:info.marker}}
                                         style={{
                                             width: 40,
                                             height: 40,
-                                            borderRadius: 12
+                                            borderRadius: 16
                                         }}
                                     />
                                 </View>
                             }
-                            onPress={() => setPeople(true)}
+                            onPress={() => {
+                                console.log(info);
+                                
+                                setMarkerItem(index)
+                                setPeople(true)
+                            }}
                         />}
-                    />
+                    /> :
+                    <View style={{alignItems:"center", justifyContent:"center", width:width,height:height-statusBarHeight}}>
+                        <View style={{backgroundColor:'#181818CC', borderRadius:90, padding:10}}><ActivityIndicator size={40} color={Бирюзовый}/></View>
+                    </View>
+                    }
                     {people && <View style={{position:"absolute", bottom:74, alignItems:"center", left:0, right:0}}>
-                        <TouchableOpacity activeOpacity={0.9} onPress={()=>{
-                            navigate('People')
-                            setPeople(false)
-                        }}>
-                            <Image source={require('../../../assets/image/people.jpg')} style={{width:width-32, height:width-32, borderRadius:16 }}/>
-                            <View style={{position:"absolute", borderRadius:16, left:8, right:8, bottom:12, backgroundColor:'#00000066', paddingVertical:8, paddingHorizontal:13, flexDirection:"row", justifyContent:"space-between", alignItems:'center'}}>
-                                <Text style={[styles.h4,{fontSize:18, color:'white', lineHeight:21.6}]}>Виктория <Text style={{color:'#FFFFFF99'}}>25</Text></Text>
-                                <View style={{alignItems:'center', flexDirection:'row', gap:4}}>
-                                    <Text style={[styles.smallText,{fontFamily:'PoppinsSemiBold', color:Бирюзовый50}]}>100К</Text>
-                                    <RegInstaIcon/>
-                                </View>
-                            </View>
-                        </TouchableOpacity>
+                        <PeopleItemMap data={markers[markerItem]} />
+                    </View>}
+                    {up==1&&<View style={{alignItems:"center", justifyContent:"center", backgroundColor:'#181818', zIndex:9999, position:"absolute", width:width,height:height-statusBarHeight}}>
+                        <View style={{backgroundColor:'#181818CC', borderRadius:90, padding:10}}><ActivityIndicator size={40} color={Бирюзовый}/></View>
                     </View>}
                 </View>
             </KeyboardAvoidingView>

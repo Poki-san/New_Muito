@@ -37,15 +37,12 @@ export function SearchScreen() {
         })();
     },[])
 
-    const onRefresh = async(date?:string) => {
+    const onRefresh = async() => {
         setRefresh(true)
-        console.log(date);
         setTimeout(async() => {
             let uri = '/event?page=1'
-            if (date?.length > 0 ) {
-                uri += `&date=${date}`
-            }else{
-                setDate('')
+            if (dateTxt?.length > 0 ) {
+                uri += `&date=${dateTxt}`
             }
             if (tag != -1) {
                 uri += `&for=${tag}`
@@ -79,7 +76,7 @@ export function SearchScreen() {
                             if (meta?.last_page>page) {
                                 let uri = `/event?page=${page+1}`
                                 if (dateTxt?.length > 0 ) {
-                                    uri += `&date=${date}`
+                                    uri += `&date=${dateTxt}`
                                 } 
                                 if (tag != -1) {
                                     uri += `&for=${tag}`
@@ -99,7 +96,8 @@ export function SearchScreen() {
                                         <Text style={[styles.h4, {color:'white'}]}>Мероприятия</Text>
                                         <View style={{flexDirection:"row", alignItems:"center", gap:8}}>
                                             {dateTxt.length>0 && <TouchableOpacity onPress={()=>{
-                                                onRefresh('')
+                                                setDate("")
+                                                onRefresh()
                                             }} style={{borderRadius:16, width:42, alignItems:'center', justifyContent:"center", height:42, backgroundColor:'#00000033'}}>
                                                 <CloseIcon color='#fff'/>
                                             </TouchableOpacity>}
@@ -124,7 +122,7 @@ export function SearchScreen() {
                                     </View>*/}
                                     <Image source={require('../../../assets/image/line.png')} style={{height:1}}/> 
                                 </View>
-                                <Tags paddingV={5} style={{paddingHorizontal:16}} onPress={(tags)=>{
+                                <Tags default={tag} paddingV={5} style={{paddingHorizontal:16}} onPress={(tags)=>{
                                     setTag(tags)
                                     onRefresh()
                                 }} noBorder data={forParticipants}/>
@@ -154,7 +152,8 @@ export function SearchScreen() {
                                 <Text style={[styles.h4, {color:'white'}]}>Мероприятия</Text>
                                 <View style={{flexDirection:"row", alignItems:"center", gap:8}}>
                                     {dateTxt.length>0 && <TouchableOpacity onPress={()=>{
-                                        onRefresh('')
+                                        setDate('')
+                                        onRefresh()
                                     }} style={{borderRadius:16, width:42, alignItems:'center', justifyContent:"center", height:42, backgroundColor:'#00000033'}}>
                                         <CloseIcon color='#fff'/>
                                     </TouchableOpacity>}
@@ -184,7 +183,8 @@ export function SearchScreen() {
                             <BlurView intensity={75}  style={styles.blurNoWoman} tint='systemChromeMaterialDark'>
                                 <Text style={[styles.bodyText,{color:'white',textAlign:"center"}]}>{'По этому запросу ничего не найдено.\nПопробуйте изменить набор фильтров'}</Text>
                                 <TouchableOpacity activeOpacity={0.7} onPress={()=>{
-                                    onRefresh('')
+                                    setDate('')
+                                    onRefresh()
                                 }}>
                                     <Text style={[styles.button,{color:Бирюзовый, paddingTop:8}]}>Обновить</Text>
                                 </TouchableOpacity>
@@ -193,7 +193,7 @@ export function SearchScreen() {
                     </ScrollView>}
                 <ModalDatePoint onPress={async(data)=>{
                     setDate(moment(data).format("YYYY-MM-DD"));
-                    onRefresh(moment(data).format("YYYY-MM-DD"))
+                    onRefresh()
                     date?.current?.close()
                 }} ref={date}/>
             </MainLayout>

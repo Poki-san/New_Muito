@@ -3,7 +3,7 @@ import { Белый, Бирюзовый, Бирюзовый50, Фон } from '..
 import { useEffect, useState } from 'react';
 import { styles } from '../../styles';
  
-export function Tags(props:{default?:string, data:{title:string, id:number, colorText?:string, color?:string, colorTextInActive?:string, colorInActive?:string}[], styleContainer?: StyleProp<ViewStyle>, style?: StyleProp<ViewStyle>, paddingV?:number, noBorder?:boolean, onPress?:(value:number)=>void}) {
+export function Tags(props:{default?:number, data:{title:string, id:number, colorText?:string, color?:string, colorTextInActive?:string, colorInActive?:string}[], styleContainer?: StyleProp<ViewStyle>, style?: StyleProp<ViewStyle>, paddingV?:number, noBorder?:boolean, onPress?:(value:number)=>void}) {
     const [active, setActive] = useState(-1)
     useEffect(()=>setActive(props.default),[props.default])
     return (
@@ -34,9 +34,13 @@ export function Tags(props:{default?:string, data:{title:string, id:number, colo
     )
 }
 
-export function TagsNoScroll(props:{default?:string, data:{name:string, value:string, incolorText?:string, incolor?:string, colorText?:string, color?:string}[], style?: StyleProp<ViewStyle>, oneTag?:boolean, onPress?:(value:any[])=>void, paddingV?:number, noBorder?:boolean}) {
+export function TagsNoScroll(props:{default?:[], data:{title:string, id:number, incolorText?:string, incolor?:string, colorText?:string, color?:string}[], style?: StyleProp<ViewStyle>, oneTag?:boolean, onPress?:(value:any[])=>void, paddingV?:number, noBorder?:boolean}) {
     const [active, setActive] = useState([])
-    // useEffect(()=>setActive(props.default),[props.default])
+    useEffect(()=>{
+        if (props.default) {
+            setActive(props.default)
+        }
+    },[props.default])
     return (
         <View style={[{gap:10, alignItems:'center', flexGrow:1, flexDirection:'row', flexWrap:"wrap"},props.style]}>
             {props.data&& 
@@ -46,25 +50,25 @@ export function TagsNoScroll(props:{default?:string, data:{name:string, value:st
                         activeOpacity={0.7}
                         onPress={()=>{
                             let tmp = active
-                            const index = tmp?.findIndex(value => value == el?.value)
+                            const index = tmp?.findIndex(value => value == el?.id)
                             if (props.oneTag == true) {
                                 tmp = []
-                                tmp[0]=el.value
+                                tmp[0]=el.id
                             } else {
                                 if (index==-1) {
                                     if (tmp.length != 10) {
-                                        tmp.push(el.value)
+                                        tmp.push(el.id)
                                     }
                                 } else {
                                     tmp.splice(index,1)
                                 }
                             }
-                            !!props.onPress && props.onPress(tmp)
+                            !!props.onPress && props.onPress([...tmp])
                             setActive([...tmp])
                         }}
-                        style={{borderColor:Бирюзовый50, paddingVertical:(props.paddingV ?? 6), backgroundColor:active?.findIndex(value => value == el?.value)!=-1 ? (el.color ?? Бирюзовый) : (el.incolor ?? '#17171A'), paddingHorizontal:13, borderWidth:props.noBorder ?0 : 1, borderRadius:20}}
+                        style={{borderColor:Бирюзовый50, paddingVertical:(props.paddingV ?? 6), backgroundColor:active?.findIndex(value => value == el?.id)!=-1 ? (el.color ?? Бирюзовый) : (el.incolor ?? '#17171A'), paddingHorizontal:13, borderWidth:props.noBorder ?0 : 1, borderRadius:20}}
                     >
-                        <Text style={[styles.smallText,{color:active?.findIndex(value => value == el?.value)!=-1 ? (el.colorText ?? '#17171A') : (el.incolorText ??'white')}]}>{el.name}</Text>
+                        <Text style={[styles.smallText,{color:active?.findIndex(value => value == el?.id)!=-1 ? (el.colorText ?? '#17171A') : (el.incolorText ??'white')}]}>{el.title}</Text>
                     </TouchableOpacity>
                 )) 
             }

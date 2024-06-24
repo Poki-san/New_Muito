@@ -124,7 +124,7 @@ export function LikeScreen() {
                             >
                                 
                                 {bid.map((el, i)=>
-                                    <LikeItem key={i} data={el}/>
+                                    <LikeItem key={i} data={el} onHidden={onRefresh}/>
                                 )}
                             </CardStack>
                             <View style={{height:'21%', backgroundColor:'#181818'}}>
