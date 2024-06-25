@@ -63,8 +63,6 @@ export function PeopleScreen({ route }) {
             const value = await apiFetch(`/users/${route?.params?.id}`,'GET',true)
             
             if (value?.status == 200) {
-                console.log(value.data);
-                
                 setPeople(value.data)
             }
         })();
@@ -107,24 +105,38 @@ export function PeopleScreen({ route }) {
                                                     <Text style={[styles.bodyText,{color:'#BC1115'}]}>Пожаловаться</Text>
                                                 </TouchableOpacity>
                                                 <TouchableOpacity activeOpacity={0.7} onPress={async()=>{
-                                                    const result = await apiFetch(`/users/hidden/${people.id}`,'POST',true)
-                                                    console.log(result);
-                                                    
-                                                    switch (result?.status) {
-                                                        case 200:
-                                                        case 201:
-                                                        case 202:
-                                                            showToastable({message:'Пользователь скрыт'})
-                                                            goBack()
-                                                            break;
-                                                    
-                                                        default:
-                                                            setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 300);
-                                                            break;
+                                                    if (people?.hidden) {
+                                                        const result = await apiFetch(`/users/unhidden/${people.id}`,'POST',true)
+                                                        console.log(result);
+                                                        
+                                                        switch (result?.status) {
+                                                            case 200:
+                                                            case 201:
+                                                            case 202:
+                                                                showToastable({message:'Пользователь показан'})
+                                                                goBack()
+                                                                break;
+                                                            default:
+                                                                setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 300);
+                                                                break;
+                                                        }
+                                                    } else {
+                                                        const result = await apiFetch(`/users/hidden/${people.id}`,'POST',true)
+                                                        switch (result?.status) {
+                                                            case 200:
+                                                            case 201:
+                                                            case 202:
+                                                                showToastable({message:'Пользователь скрыт'})
+                                                                goBack()
+                                                                break;
+                                                            default:
+                                                                setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 300);
+                                                                break;
+                                                        }
                                                     }
                                                 }} style={{flexDirection:"row", gap:7, alignItems:"center"}}>
                                                     <CloseEyeIcon/>
-                                                    <Text style={[styles.bodyText,{color:'white'}]}>Больше не показывать</Text>
+                                                    <Text style={[styles.bodyText,{color:'white'}]}>{people?.hidden ? "Показать": "Больше не показывать"}</Text>
                                                 </TouchableOpacity>
                                             </View>}
                                         </View>

@@ -104,6 +104,7 @@ export function EventPeopleScreen({ route }) {
                             refreshControl={<RefreshControl
                                 refreshing={refresh}
                                 colors={[Бирюзовый]}
+                                tintColor={Бирюзовый}
                                 progressBackgroundColor={'#181818'}
                                 onRefresh={onRefresh}
                             />}

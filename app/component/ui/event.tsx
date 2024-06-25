@@ -28,7 +28,7 @@ export function EventItem(props:{tag?:number, size?:number, onDelete?: () => voi
                         <TouchableOpacity activeOpacity={0.7} onPress={()=>del.current?.open()} style={{width:33, height:33, borderRadius:180, backgroundColor:'#4D000190', alignItems:"center", justifyContent:"center"}}>
                             <TrashIcon/>
                         </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={0.7} onPress={()=>navigate('EditEvent')} style={{width:33, height:33, borderRadius:180, backgroundColor:'#374A4E90', alignItems:"center", justifyContent:"center"}}>
+                        <TouchableOpacity activeOpacity={0.7} onPress={()=>navigate('EditEvent',{id:data?.id})} style={{width:33, height:33, borderRadius:180, backgroundColor:'#374A4E90', alignItems:"center", justifyContent:"center"}}>
                             <EditIcon/>
                         </TouchableOpacity>
                     </View>}

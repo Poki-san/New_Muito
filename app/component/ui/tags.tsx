@@ -34,7 +34,7 @@ export function Tags(props:{default?:number, data:{title:string, id:number, colo
     )
 }
 
-export function TagsNoScroll(props:{default?:[], data:{title:string, id:number, incolorText?:string, incolor?:string, colorText?:string, color?:string}[], style?: StyleProp<ViewStyle>, oneTag?:boolean, onPress?:(value:any[])=>void, paddingV?:number, noBorder?:boolean}) {
+export function TagsNoScroll(props:{default?:any[], data:{title:string, id:number, incolorText?:string, incolor?:string, colorText?:string, color?:string}[], style?: StyleProp<ViewStyle>, oneTag?:boolean, onPress?:(value:any[])=>void, paddingV?:number, noBorder?:boolean}) {
     const [active, setActive] = useState([])
     useEffect(()=>{
         if (props.default) {

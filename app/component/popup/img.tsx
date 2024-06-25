@@ -52,7 +52,10 @@ export const ModalImg = forwardRef((props:{allowsMultipleSelection?: boolean, se
                                 <ImgIcon/>
                                 <Text style={[styles.bodyText,{color:'white'}]}>Галерея</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity activeOpacity={0.7} style={{flexDirection:'row', alignItems:'center', gap:8}}>
+                            <TouchableOpacity activeOpacity={0.7} onPress={async()=>{
+                                const path = await addImage('Camera',false,props.allowsMultipleSelection??false,props.selectionLimit??3)
+                                props.onPath(path)
+                            }} style={{flexDirection:'row', alignItems:'center', gap:8}}>
                                 <CameraMiniIcon/>
                                 <Text style={[styles.bodyText,{color:'white'}]}>Камера</Text>
                             </TouchableOpacity>

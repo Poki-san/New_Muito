@@ -32,7 +32,6 @@ export function AddEventScreen() {
     
     const [paths, setPaths] = useState([])
     const [errPath, setErrPath] = useState(false)
-    const [dateTxt, setDateTxt] = useState('')
     const [data, setData] = useState(null)
     const img = useRef<RBSheet>(null)
     const date = useRef<RBSheet>(null)
@@ -84,7 +83,7 @@ export function AddEventScreen() {
 
     return ( 
         <MainLayout isStatusBar backgroundColor='#181818'>
-            {data && <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='always' contentContainerStyle={{flexGrow:1}}>
+            {<ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='always' contentContainerStyle={{flexGrow:1}}>
                 <Formik
                     onSubmit={async(value)=>{
                         setTextAddress('')
@@ -176,7 +175,7 @@ export function AddEventScreen() {
                                     {errPath && <Text style={[styles.smallText,{color:'#FF000086'}]}>Нужно добавить фотографию</Text>}
                                 </View>
                                 <View style={{gap:4}}>
-                                    <Text style={[styles.smallText,{color:'#FFFFFF90', marginRight:10, textAlign:'right'}]}>0/50</Text>
+                                    <Text style={[styles.smallText,{color:'#FFFFFF90', marginRight:10, textAlign:'right'}]}>{values.title?.length}/50</Text>
                                     <TextInput
                                         placeholder='Название эвента'
                                         multiline
@@ -225,7 +224,7 @@ export function AddEventScreen() {
                                         <Input 
                                             contentStyle={{fontSize:13}} 
                                             editable={false} 
-                                            value={dateTxt} 
+                                            value={values.date_event.length > 0 && (values.date_event + " "+ values.end_date_event)} 
                                             backgroundColor='#FFFFFF00' 
                                             placeholderTextColor={'#FFFFFF99'} 
                                             title='Дата проведения' 
@@ -291,7 +290,6 @@ export function AddEventScreen() {
                         <ModalDate ref={date} onPeroid={(start,end)=>{
                             setFieldValue('date_event',start)
                             setFieldValue('end_date_event',end)
-                            setDateTxt(start+' '+end)
                         }}/>
                         {isDate && 
                             <DateTimePickerModal

@@ -1,9 +1,9 @@
 import { ActivityIndicator, Image, ImageBackground, KeyboardAvoidingView, Linking, Platform, RefreshControl, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import { MainLayout, ModalErrScan, PeopleModal, ScanModal, ModalQrCode, ModalWarning, ModalReview } from '../component';
+import { MainLayout, ModalErrScan, PeopleModal, ScanModal, ModalQrCode, ModalWarning, ModalReview, ModalDelEvent } from '../component';
 import { height, statusBarHeight, width, Бирюзовый } from '../GLOBAL';
 import { styles } from '../styles';
 import { BlurView } from 'expo-blur';
-import { goBack } from '../functions/navigate';
+import { goBack, navigate } from '../functions/navigate';
 import { BackArrowIcon, EditIcon, GOIcon, InstaEventIcon, MiniHeartIcon, QRIcon, ScanIcon, SettingIcon, TGEventIcon, TrashIcon, WarningIcon } from '../component/svg/svg';
 import { useEffect, useRef, useState } from 'react';
 import RBSheet from '@nonam4/react-native-bottom-sheet';
@@ -28,6 +28,7 @@ export function EventScreen(props?:{route?:{params:{type?:''}}}) {
     const [refresh, setRefresh] = useState(false)
     const type = props.route.params.type=='' ? 'org' : props.route.params.type
     const id = props.route.params?.id
+    const del = useRef<RBSheet>()
 
     // review.current?.open()
     const handleBarCodeScanned = async (data?:string) => {
@@ -106,6 +107,7 @@ export function EventScreen(props?:{route?:{params:{type?:''}}}) {
                     refreshControl={<RefreshControl
                         refreshing={refresh}
                         colors={[Бирюзовый]}
+                        tintColor={Бирюзовый}
                         progressBackgroundColor={'#181818'}
                         onRefresh={onRefresh}
                     />} 
@@ -134,11 +136,11 @@ export function EventScreen(props?:{route?:{params:{type?:''}}}) {
                                         <Text style={[styles.bodyText,{color:'#BC1115'}]}>Пожаловаться</Text>
                                     </TouchableOpacity>
                                     :<>
-                                    <TouchableOpacity activeOpacity={0.7} style={{flexDirection:"row", gap:7, alignItems:"center"}}>
+                                    <TouchableOpacity activeOpacity={0.7} onPress={()=>navigate('EditEvent',{id:data?.id})} style={{flexDirection:"row", gap:7, alignItems:"center", pointerEvents:'box-only', padding:3, margin:-3}}>
                                         <EditIcon/>
                                         <Text style={[styles.bodyText,{color:'white'}]}>Редактировать</Text>
                                     </TouchableOpacity>
-                                    <TouchableOpacity activeOpacity={0.7} style={{flexDirection:"row", gap:7, alignItems:"center"}}>
+                                    <TouchableOpacity activeOpacity={0.7} onPress={()=>del.current?.open()} style={{flexDirection:"row", gap:7, alignItems:"center"}}>
                                         <TrashIcon color='#BC1115' fillOpacity={1}/>
                                         <Text style={[styles.bodyText,{color:'#BC1115'}]}>Удалить</Text>
                                     </TouchableOpacity></>}
@@ -253,6 +255,7 @@ export function EventScreen(props?:{route?:{params:{type?:''}}}) {
                     
                 }} onRequestClose={()=>setScan(false)}/>}
                 {people&&<PeopleModal data={peopleScan} visible={people} onRequestClose={()=>setPeople(false)}/>}
+                <ModalDelEvent ref={del} id={data?.id} onDelete={goBack}/>
                 <ModalErrScan ref={errScan} onPress={()=>{
                     errScan?.current?.close()
                     setTimeout(() => setScan(true), 300);
