@@ -15,6 +15,8 @@ import error from '../../model/error';
 import { save } from '../../functions/storage';
 import token from '../../model/token';
 import { handlerDevicesSubscribe, registerForPushNotificationsAsync } from '../../functions/auth';
+import { CommonActions } from '@react-navigation/native';
+import { navigationRef } from '../../navigate/navigateProps';
 
 const validationsSchemaLogin = yup.object().shape({
     email: yup.string().email('Не верный формат').required('Поле не может быть пустым'),
@@ -57,6 +59,8 @@ export function LoginScreen() {
                                             case 201:
                                             case 202:
                                                 //Проверка на тип пользователя
+                                                console.log(value?.user?.type);
+                                                
                                                 switch (value?.user?.type) {
                                                     case "organizer":
                                                         token.userInput(value?.user, value?.token)
@@ -64,7 +68,11 @@ export function LoginScreen() {
                                                         registerForPushNotificationsAsync().then(token => {
                                                             !!token && !!value?.token && handlerDevicesSubscribe(value?.token, token)
                                                         });
-                                                        navigate("Main")
+                                                        const bottomReset = CommonActions.reset({
+                                                            index: 0,
+                                                            routes: [{name: "Main"}],
+                                                          });
+                                                        navigationRef.current?.dispatch(bottomReset)
                                                         break;
                                                     case "guest":
                                                         token.userInput(value?.user, value?.token)
@@ -73,7 +81,12 @@ export function LoginScreen() {
                                                             registerForPushNotificationsAsync().then(token => {
                                                                 !!token && !!value?.token && handlerDevicesSubscribe(value?.token, token)
                                                             });
-                                                            navigate("MainGuest")
+                                                            const bottomReset = CommonActions.reset({
+                                                                index: 0,
+                                                                routes: [{name: "MainGuest"}],
+                                                              });
+                                                            navigationRef.current?.dispatch(bottomReset)
+                                                            // navigate("MainGuest")
                                                         } else {
                                                             navigate("Verf")
                                                         }

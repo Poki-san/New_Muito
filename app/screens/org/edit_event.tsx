@@ -104,79 +104,79 @@ export function EditEventScreen({route}) {
     
     return ( 
         <MainLayout isStatusBar backgroundColor='#181818'>
-            <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='always' contentContainerStyle={{flexGrow:1}}>
-                <KeyboardAvoidingView
-                    behavior={Platform.OS === "ios" ? "padding" : 'height'}
-                    keyboardVerticalOffset={Platform.OS === "ios" && statusBarHeight}
-                    style={{ flex: 1 }}
-                >
-                    {event ? <Formik
-                        onSubmit={async(value)=>{
-                            // console.log(location);
-                            // console.log(paths);
-                            // console.log(value);
+            {event ? 
+            <Formik
+                onSubmit={async(value)=>{
+                    // console.log(location);
+                    // console.log(paths);
+                    // console.log(value);
 
-                            const bodyFormData = new FormData()
+                    const bodyFormData = new FormData()
 
-                            value.title != event?.title && bodyFormData.append('title', value.title)
-                            value.date_event != event?.date_event && bodyFormData.append('date_event', value.date_event)
-                            value.end_date_event != event?.end_date_event && bodyFormData.append('end_date_event', value.end_date_event)
-                            bodyFormData.append('time', value.time)
-                            value.address != JSON.parse(event?.address)?.address && bodyFormData.append('address', JSON.stringify({ "address": value.address }))
-                            value.description != event?.description && bodyFormData.append('description', value.description)
-                            if (location.lat.length > 0 && location.lon.length>0) {
-                                if (event?.location != location) {
-                                    bodyFormData.append('location', JSON.stringify(location))
-                                }
-                            }
-                            if (forP?.length > 0) {
-                                forP.forEach(el=>{
-                                    bodyFormData.append('for_participants[]', el)
-                                })
-                            }
-                            if (fromP?.length > 0) {
-                                fromP.forEach(el=>{
-                                    bodyFormData.append('from_participants[]', el)
-                                })
-                            }
-                            paths?.length > 0 && paths.map(el => {
-                                bodyFormData.append('images[]', {
-                                    uri: el,
-                                    name: fileName(el),
-                                    type: fileExpansion(el, "image")
-                                })
-                            })
-                            const result = await apiFetchFile(`/event/${route?.params?.id}`,'POST',true, bodyFormData)
-                            switch (result?.status) {
-                                case 200:
-                                case 201:
-                                case 202:
-                                    showToastable({message:'Изменения сохранены'})
-                                    goBack()
-                                    break;
-                            
-                                default:
-                                    setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 300);
-                                    break;
-                            }
-                            console.log(result);
-                            
-                        }}
-                        validationSchema={validations}
-                        initialValues={{
-                            title:event?.title,
-                            address:JSON.parse(event?.address)?.address,
-                            description:event?.description,
-                            time:event?.time_part,
-                            date_event:moment(event?.date_event).format("YYYY-MM-DD"),
-                            end_date_event:moment(event?.end_date_event).format("YYYY-MM-DD"),
-                        }}
-                    >
-                        {({values, errors, touched, setFieldValue, handleChange, handleBlur, handleSubmit})=>(<KeyboardAvoidingView
-                        behavior={Platform.OS === "ios" ? "padding" : undefined}
-                        keyboardVerticalOffset={Platform.OS === "ios" && statusBarHeight}
-                        style={{ flex: 1 }}
-                    >
+                    value.title != event?.title && bodyFormData.append('title', value.title)
+                    value.date_event != event?.date_event && bodyFormData.append('date_event', value.date_event)
+                    value.end_date_event != event?.end_date_event && bodyFormData.append('end_date_event', value.end_date_event)
+                    bodyFormData.append('time', value.time)
+                    value.address != JSON.parse(event?.address)?.address && bodyFormData.append('address', JSON.stringify({ "address": value.address }))
+                    value.description != event?.description && bodyFormData.append('description', value.description)
+                    if (location.lat.length > 0 && location.lon.length>0) {
+                        if (event?.location != location) {
+                            bodyFormData.append('location', JSON.stringify(location))
+                        }
+                    }
+                    if (forP?.length > 0) {
+                        forP.forEach(el=>{
+                            bodyFormData.append('for_participants[]', el)
+                        })
+                    }
+                    if (fromP?.length > 0) {
+                        fromP.forEach(el=>{
+                            bodyFormData.append('from_participants[]', el)
+                        })
+                    }
+                    paths?.length > 0 && paths.map(el => {
+                        bodyFormData.append('images[]', {
+                            uri: el,
+                            name: fileName(el),
+                            type: fileExpansion(el, "image")
+                        })
+                    })
+                    const result = await apiFetchFile(`/event/${route?.params?.id}`,'POST',true, bodyFormData)
+                    switch (result?.status) {
+                        case 200:
+                        case 201:
+                        case 202:
+                            showToastable({message:'Изменения сохранены'})
+                            goBack()
+                            break;
+                    
+                        default:
+                            setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 300);
+                            break;
+                    }
+                    console.log(result);
+                    
+                }}
+                validationSchema={validations}
+                initialValues={{
+                    title:event?.title,
+                    address:JSON.parse(event?.address)?.address,
+                    description:event?.description,
+                    time:event?.time_part,
+                    date_event:moment(event?.date_event).format("YYYY-MM-DD"),
+                    end_date_event:moment(event?.end_date_event).format("YYYY-MM-DD"),
+                }}
+            >
+            {({values, errors, touched, setFieldValue, handleChange, handleBlur, handleSubmit})=>(
+            <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : 'height'}
+                keyboardVerticalOffset={Platform.OS === "ios" && statusBarHeight}
+                style={{ flex: 1 }}
+            >
+                <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled' contentContainerStyle={{flexGrow:1}}>
+                
+                    
+                    <>
                         <View style={{marginHorizontal:16, marginTop:statusBarHeight+19, marginBottom:20, flex:1}}>
                             <View style={{justifyContent:'space-between', marginBottom:19, flexDirection:"row", alignItems:"center"}}>
                                 <TouchableOpacity activeOpacity={0.7} onPress={goBack} style={{width:42, height:42, alignItems:"center", justifyContent:"center", backgroundColor:'#221E1E80', borderRadius:16}}>
@@ -200,7 +200,7 @@ export function EditEventScreen({route}) {
                                                 <CrossIcon/>
                                             </TouchableOpacity>
                                         </View>
-                                   )}
+                                    )}
                                     </View>}
                                     {errPath && <Text style={[styles.smallText,{color:'#FF000086'}]}>Нужно добавить фотографию</Text>}
                                 </View>
@@ -346,15 +346,16 @@ export function EditEventScreen({route}) {
                             onDismiss={()=>setChoice(false)}
                             onCoordinate={(lat,lon)=>setLocation({lat:lat, lon:lon})}
                         />
-
-                    </KeyboardAvoidingView>)}
-                    </Formik>:
-                    <View style={{alignItems:"center", justifyContent:"center", width:width,height:height-statusBarHeight}}>
-                        <View style={{backgroundColor:'#181818CC', borderRadius:90, padding:10}}><ActivityIndicator size={40} color={Бирюзовый}/></View>
-                    </View>
-                    }
-                </KeyboardAvoidingView>
-            </ScrollView>
+                    </>
+                    
+                </ScrollView>
+            </KeyboardAvoidingView>
+            )}
+            </Formik>:
+            <View style={{alignItems:"center", justifyContent:"center", width:width,height:height-statusBarHeight}}>
+                <View style={{backgroundColor:'#181818CC', borderRadius:90, padding:10}}><ActivityIndicator size={40} color={Бирюзовый}/></View>
+            </View>
+            }
         </MainLayout>
     )
 }

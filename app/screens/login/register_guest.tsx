@@ -21,6 +21,8 @@ import token from '../../model/token';
 import { save } from '../../functions/storage';
 import { handlerDevicesSubscribe, registerForPushNotificationsAsync } from '../../functions/auth';
 import error from '../../model/error';
+import { CommonActions } from '@react-navigation/native';
+import { navigationRef } from '../../navigate/navigateProps';
 
 const validationsStepOneRegister = yup.object().shape({
     email: yup.string().email('Введите корректный email').required('Обязательное поле'),
@@ -30,6 +32,7 @@ const validationsStepOneRegister = yup.object().shape({
 
 const validationsStepTwoRegister = yup.object().shape({
     name: yup.string().matches(/^[a-zа-яё\s]+$/iu, 'Имя может состоять только из букв').min(2, 'не менее 2 символов').required('Имя или Никнейм не могут быть пуcтыми'),
+    birthday: yup.string().required('Обязательное поле'),
     last_name: yup.string().matches(/^[a-zа-яё\s]+$/iu, 'Фамилия может состоять только из букв').min(2, 'не менее 2 символов').required('Обязательное поле'),
     growth: yup.number().test((value) => String(value).length > 2 && value > 139 && value < 230).required('Обязательное поле'),
     weight: yup.number().test((value) => String(value).length > 1 && value > 34 && value < 200).required('Обязательное поле')
@@ -135,6 +138,8 @@ export function RegisterGuestScreen() {
                                             !!token && !!result?.token && handlerDevicesSubscribe(result?.token, token)
                                         });
                                         setStep(val=>val+1)
+                                    }  else if (result?.status == 422) {
+                                        setTimeout(() => error.Input(true, 'Такой пользователь уже есть!', 'Упс!...', Platform.OS=='ios'?175:145), 300);
                                     } else {
                                         error.Input(true,'Такой пользователь уже есть','Упс...', Platform.OS=='ios'?158 :150)
                                     }
@@ -162,7 +167,7 @@ export function RegisterGuestScreen() {
                         }}
                     >
                         {({values, errors, touched, handleSubmit, handleChange, handleBlur, setFieldValue})=>
-                            (<ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='always' contentContainerStyle={{flexGrow:1, marginHorizontal:16, marginVertical:Platform.OS=='ios'?statusBarHeight:10, justifyContent:"space-between"}}>
+                            (<ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled' contentContainerStyle={{flexGrow:1, marginHorizontal:16, marginVertical:Platform.OS=='ios'?statusBarHeight:10, justifyContent:"space-between"}}>
                             <View style={{gap:10}}>
                                 {step != 5 && <TouchableOpacity activeOpacity={0.7} onPress={()=>{
                                     switch (step) {
@@ -290,7 +295,13 @@ export function RegisterGuestScreen() {
                                     setStepCamera(true)
                                 }
                             }}/>}
-                            {step == 6 && <StepPhoto photo={path} onPress={()=>navigate('MainGuest')}/>}
+                            {step == 6 && <StepPhoto photo={path} onPress={()=>{
+                                const bottomReset = CommonActions.reset({
+                                    index: 0,
+                                    routes: [{name: "MainGuest"}],
+                                  });
+                                navigationRef.current?.dispatch(bottomReset)
+                            }}/>}
                             </ScrollView>)
                         }
                     </Formik>
@@ -485,8 +496,17 @@ function StepTwo(props:{
                             onBlur={props.handleBlur('last_name')}
                         />
                         <TouchableOpacity activeOpacity={0.7} onPress={()=>setIsDate(true)}>
-                            <Input editable={false} value={props.values.birthday} backgroundColor='#FFFFFF00' placeholderTextColor={'#FFFFFF99'} title='Дата рождения' style={{borderWidth:1, borderColor:'#FFFFFF99', paddingRight:20}}/>
-                            <View style={{position:'absolute', right:10, top:0, bottom:0, justifyContent:'center'}}>
+                            <Input 
+                                editable={false} 
+                                value={props.values.birthday} 
+                                backgroundColor='#FFFFFF00' 
+                                placeholderTextColor={'#FFFFFF99'} 
+                                title='Дата рождения' 
+                                errorText={props.errors?.birthday}
+                                touched={props.touched?.birthday}
+                                style={{borderWidth:1, borderColor:'#FFFFFF99', pointerEvents:"none", paddingRight:20}}
+                            />
+                            <View style={{position:'absolute', right:10, height:40, top:0, bottom:0, justifyContent:'center'}}>
                                 <CalendarIcon/>
                             </View>
                         </TouchableOpacity>
@@ -629,7 +649,7 @@ function StepThree(props:{
                         </View>
                     ))}
                 </View>
-                <View style={{marginTop:10, width:'100%', marginBottom:15}}>
+                <View style={{marginTop:10, width:'100%', marginBottom:Platform.OS=="ios"? 40:15}}>
                     <ButtonMy text='Далее' onPress={()=>{
                         console.log(activeTagCount);
                         let count = 0

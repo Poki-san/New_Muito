@@ -12,12 +12,12 @@ export const logOut = async () => {
     const verf = await apiFetch('/profile/logout', 'POST', true)
     if(!verf.noInet)
     {
+        user.userClear()
         // chatAuth.reconnectInput(false)
         const bottomReset = CommonActions.reset({
             index: 0,
             routes: [{name: 'Auth'}],
           });
-        user.userClear()
         navigationRef.current?.dispatch(bottomReset)
     }
 }

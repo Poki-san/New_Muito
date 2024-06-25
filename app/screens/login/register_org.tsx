@@ -18,7 +18,13 @@ import { showToastable } from 'react-native-toastable';
 import token from '../../model/token';
 import { save } from '../../functions/storage';
 import { handlerDevicesSubscribe, registerForPushNotificationsAsync } from '../../functions/auth';
+import { CommonActions } from '@react-navigation/native';
+import { navigationRef } from '../../navigate/navigateProps';
+import error from '../../model/error';
 
+const validationsStepThreeRegister = yup.object().shape({
+    birthday: yup.string().required('Обязательное поле'),
+})
 const validationsStepOneRegister = yup.object().shape({
     email: yup.string().email('Введите корректный email').required('Обязательное поле'),
     password: yup.string().min(8, 'не менее 8 символов').typeError('Введите верный пароль').required('Обязательное поле'),
@@ -73,13 +79,14 @@ export function RegisterOrgScreen() {
                     <Formik
                         onSubmit={async(value)=>{
                             if (step==3) {
+                                console.log(value);
+                                
                                 const bodyFormData = new FormData()
                                 if (value?.login?.length > 0) {
                                     bodyFormData.append('login', value?.login)
                                     value?.name?.length > 0 && bodyFormData.append('name', value?.name)
                                     value?.last_name?.length > 0 && bodyFormData.append('last_name', value?.last_name)
                                 } else {
-                                    value?.login?.length > 0 && bodyFormData.append('login', value?.login)
                                     bodyFormData.append('name', value?.name)
                                     bodyFormData.append('last_name', value?.last_name)
                                 }
@@ -88,8 +95,8 @@ export function RegisterOrgScreen() {
                                 bodyFormData.append('password_confirmation', value.password_confirmation)
                                 value?.telegram?.length > 0 && bodyFormData.append('telegram', value?.telegram)
                                 value?.instagram?.length > 0 && bodyFormData.append('instagram', value?.instagram)
-                                value?.birthday?.length > 0 && bodyFormData.append('birthday', value?.birthday)
-                                bodyFormData.append('type', 'org')
+                                bodyFormData.append('birthday', value?.birthday)
+                                bodyFormData.append('type', 'organizer')
                                 value?.images?.length > 0 && bodyFormData.append('images[]', {
                                     uri: value?.images,
                                     name: fileName(value?.images),
@@ -103,7 +110,13 @@ export function RegisterOrgScreen() {
                                     registerForPushNotificationsAsync().then(token => {
                                         !!token && !!result?.token && handlerDevicesSubscribe(result?.token, token)
                                     });
-                                    navigate('Main')
+                                    const bottomReset = CommonActions.reset({
+                                        index: 0,
+                                        routes: [{name: "Main"}],
+                                      });
+                                    navigationRef.current?.dispatch(bottomReset)
+                                } else {
+                                    setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 300);
                                 }
                             } else {
                                 const index = step + 1
@@ -111,10 +124,11 @@ export function RegisterOrgScreen() {
                             }
                             // navigate('Main')
                         }}
-                        validationSchema={(step==0||step==1)?
-                            validationsStepOneRegister
-                            :
-                            ((step==2)&&validationsStepTwoRegister)
+                        validationSchema={
+                            ((step==0||step==1)&& validationsStepOneRegister)||
+                            ((step==2)&&validationsStepTwoRegister) ||
+                            ((step==3) && validationsStepThreeRegister)
+
                         }
                         initialValues={{
                             email:'',
@@ -130,7 +144,7 @@ export function RegisterOrgScreen() {
                         }}
                     >
                         {({handleSubmit, handleChange, handleBlur, errors, touched, values, setFieldValue})=>(
-                        <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='always' contentContainerStyle={{flexGrow:1, marginHorizontal:16, marginVertical:Platform.OS=='ios'? statusBarHeight:10, justifyContent:"space-between"}}>
+                        <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled' contentContainerStyle={{flexGrow:1, marginHorizontal:16, marginVertical:Platform.OS=='ios'? statusBarHeight:10, justifyContent:"space-between"}}>
                             <View style={{gap:10}}>
                                 <TouchableOpacity activeOpacity={0.7} onPress={()=>{
                                     switch (step) {
@@ -233,6 +247,8 @@ export function RegisterOrgScreen() {
                                     handleChange={handleChange} 
                                     handleBlur={handleBlur}
                                     values={values}
+                                    errors={errors}
+                                    touched={touched}
                                 />}
                             </View>}
                         </ScrollView>)}
@@ -348,7 +364,7 @@ function StepTwo(props:{
                         <Text style={[styles.smallText,{color:'#FFFFFF90', marginLeft:10}]}>Ваш контакт будет доступен только одобренным девушкам</Text>
                     </View>
                 </View>
-                <View style={{marginTop:10, width:'100%', marginBottom:15}}><ButtonMy text='Далее' onPress={props.onPress} backgroundColor='#88FFF9' colorText='#171717'/></View>
+                <View style={{marginTop:10, width:'100%', marginBottom:Platform.OS=="ios"? 55:15, flex:1, justifyContent:"flex-end"}}><ButtonMy text='Далее' onPress={props.onPress} backgroundColor='#88FFF9' colorText='#171717'/></View>
             </View>
         </View>
     )
@@ -373,6 +389,7 @@ function StepThree(props:{
     }
 }) {
     const [isDate, setIsDate] = useState(false)
+    
     return (
         <View style={{marginTop:11, flex:1}}>
             <Text style={[styles.bodyText,{fontFamily:'Poppins', color:'#ffffff90'}]}>Данные обязательные для заполнения</Text>
@@ -380,8 +397,17 @@ function StepThree(props:{
                 <View style={{gap:21, width:"100%"}}>
                     <View style={{gap:8}}>
                         <TouchableOpacity activeOpacity={0.7} onPress={()=>setIsDate(true)}>
-                            <Input editable={false} value={props.values?.birthday} backgroundColor='#FFFFFF00' placeholderTextColor={'#FFFFFF99'} title='Дата рождения' style={{borderWidth:1, borderColor:'#FFFFFF99', paddingRight:20}}/>
-                            <View style={{position:'absolute', right:10, top:0, bottom:0, justifyContent:'center'}}><CalendarIcon/></View>
+                            <Input 
+                                editable={false} 
+                                value={props.values?.birthday} 
+                                backgroundColor='#FFFFFF00' 
+                                placeholderTextColor={'#FFFFFF99'} 
+                                title='Дата рождения' 
+                                errorText={props.errors?.birthday}
+                                touched={props.touched?.birthday}
+                                style={{borderWidth:1, borderColor:'#FFFFFF99',pointerEvents:"none", paddingRight:20}}
+                            />
+                            <View style={{position:'absolute', right:10, top:0, bottom:0, height:40, justifyContent:'center'}}><CalendarIcon/></View>
                         </TouchableOpacity>
                         <Input 
                             backgroundColor='#FFFFFF00' 

@@ -18,6 +18,8 @@ import token from '../../model/token';
 import { fileExpansion, fileName } from '../../functions/addImage';
 import { apiFetchFile } from '../../functions/api';
 import { save } from '../../functions/storage';
+import { CommonActions } from '@react-navigation/native';
+import { navigationRef } from '../../navigate/navigateProps';
 
 export function VerfScreen() {
     const [step, setStep] = useState(0)
@@ -89,7 +91,11 @@ export function VerfScreen() {
                         }}/>}
                         {step == 1 && <StepPhoto photo={path} buttonBlock={check} onPress={()=>{
                             save('@userData',{token:token.token, user:token.data})
-                            navigate('MainGuest')
+                            const bottomReset = CommonActions.reset({
+                                index: 0,
+                                routes: [{name: "MainGuest"}],
+                              });
+                            navigationRef.current?.dispatch(bottomReset)
                         }}/>}
                     </ScrollView>
                 </KeyboardAvoidingView>

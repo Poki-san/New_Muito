@@ -8,22 +8,10 @@ import { MarkerMap } from './marker';
  
 export const MapOrg = memo(({onTouchMove, onLoad, onPress, markers, up}) => {
     // console.log(up);
-    const ref = useRef()
-    const handler = async () => {
-        ref?.current?.setCenter(
-            latlon,
-            10)
-    }
-    useEffect(() => {
-        if (up === 2) {
-            // console.log('move...')
-            handler().catch(e => console.log(e))
-        }
-    }, [up])
     return ( 
         <View style={{position:"relative"}}>
             <ClusteredYamap
-                ref={ref}
+                // ref={ref}
                 key={up}
                 clusterColor={Бирюзовый}
                 style={{width:width, height:height-statusBarHeight, borderTopLeftRadius:16, borderTopRightRadius:16, overflow:"hidden"}}

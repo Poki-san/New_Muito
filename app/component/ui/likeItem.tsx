@@ -106,30 +106,25 @@ export function LikeItem(props?:{data?:{}, onHidden?:()=>void}) {
                         </View>
                     </View>
                     <Animated.View style={{maxHeight:more ? HeightAnimTwo : HeightAnim, borderBottomRightRadius:16, borderBottomLeftRadius:16, overflow:'hidden'}}>
-                        <GestureRecognizer onSwipeDown={()=>{
-                            if (more) {
-                                AnimatedStepOne()
-                            }
-                        }} onSwipeUp={()=>{
-                            if (!more) {
-                                AnimatedStepOne()
-                            }
-                        }}>
-                            <BlurView style={styles.blurLikeContainer} tint='systemChromeMaterialDark' intensity={Platform.OS=='android'? 100:40} >
+                        
+                        <BlurView style={styles.blurLikeContainer} tint='systemChromeMaterialDark' intensity={Platform.OS=='android'? 100:40} >
+                            <GestureRecognizer onSwipeDown={()=>{
+                                if (more) {
+                                    AnimatedStepOne()
+                                }
+                            }} onSwipeUp={()=>{
+                                if (!more) {
+                                    AnimatedStepOne()
+                                }
+                            }}>
                                 <TouchableOpacity activeOpacity={0.7} onPress={()=>AnimatedStepOne()} style={{width:"100%",alignItems:"center"}}>
                                     <Animated.View style={{transform:[{rotate:more ? Rotate : RotateTwo}], alignItems:"flex-start"}}><ModalCloseIcon/></Animated.View>
                                 </TouchableOpacity>
                                 <Text style={[styles.h1,{fontSize:34, color:'white', paddingTop:6}]}>{props.data?.user?.name} <Text style={{color:'#FFFFFF80'}}>{props.data?.user?.age}</Text></Text>
                                 <View style={styles.womanInfoContainer}>
                                     <View style={{flexDirection:'row', alignItems:'flex-end', gap:14}}>
-                                        <View style={{flexDirection:'row', alignItems:'flex-end', gap:4}}>
-                                            <Text style={[styles.bodyText,{fontSize:18, color:'white', paddingTop:4}]}>{props.data?.user?.growth}</Text>
-                                            <Text style={[styles.smallText,{color:'#FFFFFF99'}]}>Рост</Text>
-                                        </View>
-                                        <View style={{flexDirection:'row', alignItems:'flex-end', gap:4}}>
-                                            <Text style={[styles.bodyText,{fontSize:18, color:'white', paddingTop:4}]}>{props.data?.user?.weight}</Text>
-                                            <Text style={[styles.smallText,{color:'#FFFFFF99'}]}>Вес</Text>
-                                        </View>
+                                        {props.data?.user?.growth&&<Text style={[styles.bodyText,{fontSize:18, color:'white', paddingTop:4}]}>{props.data?.user?.growth} <Text style={[styles.smallText,{color:'#FFFFFF99'}]}>Рост</Text></Text>}
+                                        {props.data?.user?.weight && <Text style={[styles.bodyText,{fontSize:18, color:'white', paddingTop:4}]}>{props.data?.user?.weight} <Text style={[styles.smallText,{color:'#FFFFFF99'}]}>Вес</Text></Text>}
                                     </View>
                                     <View style={{flexDirection:'row', height:39, alignItems:'flex-end', gap:11}}>
                                         {props.data?.user?.instagram && <TouchableOpacity 
@@ -153,14 +148,15 @@ export function LikeItem(props?:{data?:{}, onHidden?:()=>void}) {
                                         </TouchableOpacity>}
                                     </View>
                                 </View>
-                                <ScrollView style={{maxHeight:341}} showsVerticalScrollIndicator={false}>
-                                    <View style={styles.tagContainerBlock}>
-                                        {props.data?.user?.hashtags && props.data?.user?.hashtags?.map((el,i)=><TagBlock text={el?.label} key={i}/>)}
-                                    </View>
-                                    <Text style={[styles.bodyText,{color:"white"}]}>{props.data?.user?.description}</Text>
-                                </ScrollView>
-                            </BlurView>
-                        </GestureRecognizer>
+                            </GestureRecognizer>
+
+                            <ScrollView style={{maxHeight:341}} showsVerticalScrollIndicator={false}>
+                                <View style={styles.tagContainerBlock}>
+                                    {props.data?.user?.hashtags && props.data?.user?.hashtags?.map((el,i)=><TagBlock text={el?.label} key={i}/>)}
+                                </View>
+                                <Text style={[styles.bodyText,{color:"white"}]}>{props.data?.user?.description}</Text>
+                            </ScrollView>
+                        </BlurView>
                     </Animated.View>
                 </View>
 

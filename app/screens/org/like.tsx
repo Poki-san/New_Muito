@@ -16,13 +16,13 @@ export function LikeScreen() {
     const refSwiper = useRef()
 
     const warning = useRef<RBSheet>(null)
-    const [noWoman, setNoWoman] =useState(false)
+    const [noWoman, setNoWoman] =useState(true)
     const [refresh, setRefreshing] = useState(false)
 
     const onRefresh = () => {
         setRefreshing(true);
         setBid([])
-        setNoWoman(false)
+        setNoWoman(true)
         setTimeout(async() => {
             const value = await apiFetch('/event/bid','GET',true)
             if (value.status === 200){
@@ -30,6 +30,7 @@ export function LikeScreen() {
                     setNoWoman(true)
                 } else {
                     setBid(value.data)
+                    setNoWoman(false)
                 }
             }
             setRefreshing(false);
@@ -37,7 +38,7 @@ export function LikeScreen() {
     };
 
 
-    const handlerBid = async (index, type) => {
+    const handlerBid = async (index:any, type:any, refresh?:any) => {
         const bidSwipe = bid[index]
         console.log(bid[index]);
         
@@ -49,6 +50,18 @@ export function LikeScreen() {
                     'Authorization': `Bearer ${token?.token}`,
                 }
             })
+            if (refresh) {
+                setBid([])
+                const value = await apiFetch('/event/bid','GET',true)
+                if (value.status === 200){
+                    if (value.data?.length == 0) {
+                        setNoWoman(true)
+                    } else {
+                        setBid(value.data)
+                        setNoWoman(false)
+                    }
+                }
+            }
             console.log(value);
             
         } catch (e) {
@@ -64,6 +77,7 @@ export function LikeScreen() {
                     setNoWoman(true)
                 } else {
                     setBid(value.data)
+                    setNoWoman(false)
                 }
             }
         })();
@@ -72,10 +86,10 @@ export function LikeScreen() {
     
     return ( 
         <ImageBackground style={{width:width, height:height}} source={require('../../../assets/image/back.png')}>
-            <MainLayout isStatusBar backgroundColor={bid?.length > 0&&'#181818'}>
+            <MainLayout isStatusBar backgroundColor={!noWoman?'#181818':'#18181800'}>
                 <ScrollView 
                     showsVerticalScrollIndicator={false} 
-                    scrollEnabled={false} 
+                    scrollEnabled={true} 
                     refreshControl={<RefreshControl
                         refreshing={refresh}
                         colors={[Бирюзовый]}
@@ -112,15 +126,19 @@ export function LikeScreen() {
                                     if ((index+1)==bid.length) {
                                         console.log('End');
                                         setNoWoman(true)
+                                        handlerBid(index, 0, true)
+                                    } else {
+                                        handlerBid(index, 0)
                                     }
-                                    handlerBid(index, 0)
                                 }}
                                 onSwipedRight={(index) => {
                                     if ((index+1)==bid.length) {
                                         console.log('End');
                                         setNoWoman(true)
+                                        handlerBid(index, 1, true)
+                                    } else {
+                                        handlerBid(index, 1)
                                     }
-                                    handlerBid(index, 1)
                                 }}
                             >
                                 
@@ -146,9 +164,9 @@ export function LikeScreen() {
                                     </TouchableOpacity>
                                 </View>
                             </View>
-                        </>
-                        
-                        : <View style={{marginTop:statusBarHeight+16, flex:1}}>
+                        </> 
+                        : 
+                        <View style={{marginTop:statusBarHeight+16, flex:1}}>
                             <BlurView intensity={75}  style={styles.blurNoWoman} tint='systemChromeMaterialDark'>
                                 <Text style={[styles.h4,{fontSize:20, color:'white', paddingTop:2}]}>Пока нет заявок</Text>
                                 <Text style={[styles.bodyText,{color:'white', paddingTop:13}]}>Перейдите в раздел «Мои эвенты»</Text>

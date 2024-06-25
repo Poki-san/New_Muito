@@ -11,6 +11,7 @@ import RBSheet from '@nonam4/react-native-bottom-sheet';
 import apiFetch from '../../functions/api';
 import moment from 'moment';
 import token from '../../model/token';
+import { BackHandlerFirstScreen } from '../../navigate/navigateProps';
 
 export function SearchScreen() {
     const date = useRef<RBSheet>(null)

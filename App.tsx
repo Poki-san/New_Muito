@@ -31,12 +31,12 @@ LocaleConfig.locales["ru"] = {
 LocaleConfig.defaultLocale = "ru";
 
 const App = observer(() => {
-  // if (__DEV__) {
-  //   console.log('Development');
-  // } else {
-  //   YaMap.init('9686e034-f846-4d6c-a556-fc6f621bd36a');
-  // }
-  YaMap.init('9686e034-f846-4d6c-a556-fc6f621bd36a');
+  if (__DEV__) {
+    console.log('Development');
+  } else {
+    YaMap.init('9686e034-f846-4d6c-a556-fc6f621bd36a');
+  }
+  // YaMap.init('9686e034-f846-4d6c-a556-fc6f621bd36a');
   const [appIsReady, setAppIsReady] = useState(false);
   const errRef = useRef<RBSheet>(null);
   async function preload() {
