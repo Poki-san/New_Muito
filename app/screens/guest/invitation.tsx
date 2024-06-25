@@ -10,7 +10,7 @@ import apiFetch from '../../functions/api';
  
 export function InvitationScreen() {
     const [tag, setTag] = useState(2)
-    const [events, setEvents] = useState([1,2,3,4,5])
+    const [events, setEvents] = useState({})
     const [data, setData] = useState([])
     const [meta, setMeta] = useState({})
     const [page, setPage] = useState(1)
@@ -18,9 +18,10 @@ export function InvitationScreen() {
 
     const onStatus = async(status?:number) => {
         const value = await apiFetch(`/event/invites?page=1${(status === 0 || status === 1) ? `&status=${status}` : ''}`,'GET', true)
-            // console.log(value);
+            console.log(value);
             
         if (value?.status == 200) {
+            setEvents(value)
             setPage(1)
             setMeta(value.meta)
             setData(value.data)
@@ -36,6 +37,7 @@ export function InvitationScreen() {
             const val = await apiFetch(`/event/invites?page=1${(tag === 0 || tag === 1) ? `&status=${tag}` : ''}`,'GET', true)
             // console.log(val);
             if (val?.status == 200) {
+                setEvents(val)
                 setMeta(val.meta)
                 setData(val.data)
             }
@@ -65,6 +67,7 @@ export function InvitationScreen() {
                         <ScrollView showsVerticalScrollIndicator={false} refreshControl={<RefreshControl
                             refreshing={refresh}
                             colors={[Бирюзовый]}
+                            tintColor={Бирюзовый}
                             progressBackgroundColor={'#181818'}
                             onRefresh={onRefresh}
                         />} style={{flexGrow:1}} contentContainerStyle={{flexGrow:1}}>
@@ -80,7 +83,7 @@ export function InvitationScreen() {
                                         backgroundColor:tag==2 ? '#374A4E' : '#374A4E00',
                                         borderRadius:16
                                     }}>
-                                        <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Все <Text style={{color:'#FFFFFF80'}}></Text></Text>
+                                        <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Все <Text style={{color:'#FFFFFF80'}}>{events?.all}</Text></Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity activeOpacity={0.7} onPress={()=>{
                                         setTag(1)
@@ -93,7 +96,7 @@ export function InvitationScreen() {
                                         backgroundColor:tag==1 ? '#374A4E' : '#374A4E00',
                                         borderRadius:16
                                     }}>
-                                        <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Принятые <Text style={{color:'#FFFFFF80'}}></Text></Text>
+                                        <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Принятые <Text style={{color:'#FFFFFF80'}}>{events?.accept}</Text></Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity activeOpacity={0.7} onPress={()=>{
                                         setTag(0)
@@ -106,7 +109,7 @@ export function InvitationScreen() {
                                         backgroundColor:tag==0 ? '#374A4E' : '#374A4E00',
                                         borderRadius:16
                                     }}>
-                                        <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Отправленные <Text style={{color:'#FFFFFF80'}}></Text></Text>
+                                        <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Отправленные <Text style={{color:'#FFFFFF80'}}>{events?.send}</Text></Text>
                                     </TouchableOpacity>
                                 </BlurView>
                             <BlurView  intensity={75} tint='systemChromeMaterialDark'  style={{borderRadius:16, overflow:"hidden", borderWidth:1, borderColor:'#374A4E99', marginHorizontal:16, flex:1, marginBottom:Platform.OS=="ios"? 100:70, justifyContent:"center", alignItems:"center", gap:15}}>

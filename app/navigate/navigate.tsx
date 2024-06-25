@@ -100,7 +100,7 @@ const MainScreenBottom = observer(() => {
             options={{
               headerShown: false,
               tabBarShowLabel: false,
-              tabBarIcon: (icon) => (token?.data?.img.length > 0 ?
+              tabBarIcon: (icon) => (token?.data?.img?.length > 0 ?
                 <Image source={{uri:token?.data?.img[0]?.small}} resizeMode='cover' style={{borderWidth:icon.focused? 2 : 0, borderColor:'white', borderRadius:90, width:24, height:24}}/>
                 : <ProfileMenuIcon color={icon.color}/>
               )
@@ -164,7 +164,7 @@ const MainGuestScreenBottom = observer(() => {
             options={{
               headerShown: false,
               tabBarShowLabel: false,
-              tabBarIcon: (icon) => (token?.data?.img.length > 0 ?
+              tabBarIcon: (icon) => (token?.data?.img?.length > 0 ?
                 <Image source={{uri:token?.data?.img[0]?.small}} resizeMode='cover' style={{borderWidth:icon.focused? 1 : 0, borderColor:'white', borderRadius:90, width:24, height:24}}/> : 
                 <ProfileMenuIcon color={icon.color}/>
               )

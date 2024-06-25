@@ -14,11 +14,15 @@ export function EventPeopleScreen({ route }) {
     const [data, setData] = useState([])
     const [meta, setMeta] = useState({})
     const [refresh, setRefresh] = useState(false)
+    const [events, setEvents] = useState({})
     
     useEffect(()=>{
         (async()=>{
-            const value = await apiFetch(`/event/users/${route.params?.id}?page=${page}&status=1`,'GET',true)            
+            const value = await apiFetch(`/event/users/${route.params?.id}?page=${page}&status=1`,'GET',true)    
+            console.log(value);
+                    
             if (value?.status==200) {
+                setEvents(value)
                 setMeta(value?.meta)
                 setData(value?.data)
             }
@@ -29,13 +33,13 @@ export function EventPeopleScreen({ route }) {
         setData([])
         setPage(1)
         if (!loader) {
-            setTag(1)
             setRefresh(true)
             setTimeout(async() => {
                 const value = await apiFetch(`/event/users/${route.params?.id}?page=1&status=${status}`,'GET',true)            
                 if (value?.status==200) {
                     setMeta(value?.meta)
                     setData(value?.data)
+                    setEvents(value)
                 }
                 setRefresh(false)
             }, 1000);
@@ -75,7 +79,7 @@ export function EventPeopleScreen({ route }) {
                             }} style={[styles.tagEventContainer, {
                                 backgroundColor:tag==1 ? '#374A4E' : '#374A4E00'
                             }]}>
-                                <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Новые <Text style={{color:'#FFFFFF80'}}></Text></Text>
+                                <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Новые <Text style={{color:'#FFFFFF80'}}>{events?.new}</Text></Text>
                             </TouchableOpacity>
                             <TouchableOpacity activeOpacity={0.7} onPress={()=>{
                                 setTag(3)
@@ -83,7 +87,7 @@ export function EventPeopleScreen({ route }) {
                             }} style={[styles.tagEventContainer, {
                                 backgroundColor:tag==3 ? '#374A4E' : '#374A4E00'
                             }]}>
-                                <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Отклоненные <Text style={{color:'#FFFFFF80'}}></Text></Text>
+                                <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Отклоненные <Text style={{color:'#FFFFFF80'}}>{events?.reject}</Text></Text>
                             </TouchableOpacity>
                             <TouchableOpacity activeOpacity={0.7} onPress={()=>{
                                 setTag(2)
@@ -91,7 +95,7 @@ export function EventPeopleScreen({ route }) {
                             }} style={[styles.tagEventContainer, {
                                 backgroundColor:tag==2 ? '#374A4E' : '#374A4E00'
                             }]}>
-                                <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Принятые <Text style={{color:'#FFFFFF80'}}></Text></Text>
+                                <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Принятые <Text style={{color:'#FFFFFF80'}}>{events?.accept}</Text></Text>
                             </TouchableOpacity>
                         </BlurView>
                         {/* <View style={{alignItems:"center", marginBottom:Platform.OS == 'ios' ? 20:0}}>
