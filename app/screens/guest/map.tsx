@@ -11,6 +11,7 @@ import { BlurView } from 'expo-blur';
 import apiFetch from '../../functions/api';
 import { useIsFocused } from '@react-navigation/native';
 import moment from 'moment';
+import { MapGuest } from '../../component/myMap';
  
 export function MapGuestScreen() {
     const [countLoad, setCountLoader] = useState(0)
@@ -100,39 +101,53 @@ export function MapGuestScreen() {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    {(!loader&& markers.length > 0) ? <ClusteredYamap
-                        key={up}
-                        clusterColor={Бирюзовый}
-                        style={{width:width, height:height-statusBarHeight, borderTopLeftRadius:16, borderTopRightRadius:16, overflow:"hidden"}}
-                        initialRegion={{
-                            lat: coordinate.lat==0 ? 55.755864 : coordinate.lat,
-                            lon: coordinate.lon==0 ? 37.617698 : coordinate.lon,
-                            zoom: 8
-                        }}
-                        onTouchMove={() => setEvent(false)}
-                        clusteredMarkers={markers}
-                        renderMarker={(info, index) => <Marker
-                            key={info?.id}
-                            point={info.point}
-                            children={
-                                <View key={index} style={{width: 40, height: 40, borderRadius:16, borderColor:Бирюзовый, overflow:"hidden"}}>
-                                    <Image
-                                        onLoad={() => countLoad < markers.length && setCountLoader(prevState => prevState + 1)}
-                                        source={{uri:info?.marker}}
-                                        style={{
-                                            width: 40,
-                                            height: 40,
-                                            borderRadius: 16
-                                        }}
-                                    />
-                                </View>
-                            }
-                            onPress={() => {
+                    {(!loader&& markers.length > 0) ? 
+                    <>
+                        <MapGuest 
+                            up={up} 
+                            markers={markers}
+                            onTouchMove={() => setEvent(false)} 
+                            onLoad={() => countLoad < markers.length && setCountLoader(prevState => prevState + 1)}
+                            onPress={(index)=>{
                                 setMarkerItem(index)
                                 setEvent(true)
                             }}
-                        />}
-                    /> : 
+                        />
+                        {/* <ClusteredYamap
+                            key={up}
+                            clusterColor={Бирюзовый}
+                            style={{width:width, height:height-statusBarHeight, borderTopLeftRadius:16, borderTopRightRadius:16, overflow:"hidden"}}
+                            initialRegion={{
+                                lat: coordinate.lat==0 ? 55.755864 : coordinate.lat,
+                                lon: coordinate.lon==0 ? 37.617698 : coordinate.lon,
+                                zoom: 8
+                            }}
+                            onTouchMove={() => setEvent(false)}
+                            clusteredMarkers={markers}
+                            renderMarker={(info, index) => <Marker
+                                key={info?.id}
+                                point={info.point}
+                                children={
+                                    <View key={index} style={{width: 40, height: 40, borderRadius:16, borderColor:Бирюзовый, overflow:"hidden"}}>
+                                        <Image
+                                            onLoad={() => countLoad < markers.length && setCountLoader(prevState => prevState + 1)}
+                                            source={{uri:info?.marker}}
+                                            style={{
+                                                width: 40,
+                                                height: 40,
+                                                borderRadius: 16
+                                            }}
+                                        />
+                                    </View>
+                                }
+                                onPress={() => {
+                                    setMarkerItem(index)
+                                    setEvent(true)
+                                }}
+                            />}
+                        />  */}
+                    </>
+                    : 
                     <View style={{alignItems:"center", justifyContent:"center", width:width,height:height-statusBarHeight}}>
                         <View style={{backgroundColor:'#181818CC', borderRadius:90, padding:10}}><ActivityIndicator size={40} color={Бирюзовый}/></View>
                     </View>

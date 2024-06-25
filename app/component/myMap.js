@@ -3,17 +3,19 @@ import { height, statusBarHeight, width,  Бирюзовый } from '../GLOBAL';
 import { ClusteredYamap, Marker } from 'react-native-yamap-plus';
 import coordinate from '../model/coordinate';
 import { observer } from 'mobx-react-lite';
-import { memo, useEffect, useRef } from 'react';
+import { memo, useRef } from 'react';
 import { MarkerMap } from './marker';
  
 export const MapOrg = memo(({onTouchMove, onLoad, onPress, markers, up}) => {
     // console.log(up);
+    const ref = useRef();
     return ( 
         <View style={{position:"relative"}}>
             <ClusteredYamap
-                // ref={ref}
+                ref={ref}
                 key={up}
                 clusterColor={Бирюзовый}
+                showUserPosition={true}
                 style={{width:width, height:height-statusBarHeight, borderTopLeftRadius:16, borderTopRightRadius:16, overflow:"hidden"}}
                 initialRegion={{
                     lat: coordinate.lat==0 ? 55.755864 : coordinate.lat,
@@ -40,20 +42,10 @@ export const MapOrg = memo(({onTouchMove, onLoad, onPress, markers, up}) => {
  
 export const MapGuest = memo(({onTouchMove, onLoad, onPress, markers, up}) => {
     // console.log(up);
-    const ref = useRef()
-    const handler = async () => {
-        ref?.current?.setCenter(
-            latlon,
-            10)
-    }
-    useEffect(() => {
-        if (up === 2) {
-            // console.log('move...')
-            handler().catch(e => console.log(e))
-        }
-    }, [up])
+    const ref = useRef();
     return (<View style={{position:"relative"}}>
         <ClusteredYamap
+            ref={ref}
             key={up}
             clusterColor={Бирюзовый}
             style={{width:width, height:height-statusBarHeight, borderTopLeftRadius:16, borderTopRightRadius:16, overflow:"hidden"}}
@@ -64,6 +56,7 @@ export const MapGuest = memo(({onTouchMove, onLoad, onPress, markers, up}) => {
             }}
             onTouchMove={onTouchMove}
             clusteredMarkers={markers}
+            showUserPosition={true}
             renderMarker={(info, index) => <Marker
                 key={info?.id}
                 point={info.point}
