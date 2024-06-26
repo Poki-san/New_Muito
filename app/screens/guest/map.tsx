@@ -6,14 +6,15 @@ import { useEffect, useRef, useState } from 'react';
 import coordinate from '../../model/coordinate';
 import { CalendarIcon, CloseIcon } from '../../component/svg/svg';
 import { styles } from '../../styles';
-import RBSheet from '@nonam4/react-native-bottom-sheet';
+import RBSheet from '@poki_san/react-native-bottom-sheet';
 import { BlurView } from 'expo-blur';
 import apiFetch from '../../functions/api';
+import { useIsFocused } from '@react-navigation/native';
 import moment from 'moment';
 import { MapGuest } from '../../component/myMap';
  
 export function MapGuestScreen() {
-    const [countLoad, setCountLoader] = useState(1)
+    const [countLoad, setCountLoader] = useState(0)
     const [event, setEvent] = useState(false)
     const date = useRef<RBSheet>(null)
     const [markers, setMarkers] = useState([]);
@@ -22,25 +23,35 @@ export function MapGuestScreen() {
     const [loader, setLoader] = useState(false)
     const [dateTxt, setDate] = useState('')
 
-    const handlerEvent = async () => {
-        const response = await apiFetch('/event/map','GET',true)
-        
-        setMarkers(response?.data)
-        setLoader(false)
-    }
-
+    const focus = useIsFocused();
     useEffect(()=>{
         setLoader(true)
-        handlerEvent().catch(e => console.log(e))
-    },[])
+        if (focus) {
+            (async()=>{
+                const value = await apiFetch('/event/map','GET',true)
+                console.log(value);
+                
+                switch (value?.status) {
+                    case 200:
+                    case 201:
+                    case 202:
+                        setMarkers(value?.data)
+                        break;
+                    default:
+                        break;
+                }
+                setLoader(false)
+                
+            })();
+        }
+    },[focus])
 
     useEffect(() => {
-        
         if (countLoad > 0 && markers.length > 0 && countLoad === markers.length) {
             // console.log('Все изображения загрузились!')
             setUp(2)
         }
-    }, [countLoad, markers.length])
+    }, [countLoad])
 
     const onDate = async(date?:string) => {
         setLoader(true)
@@ -62,7 +73,6 @@ export function MapGuestScreen() {
         }
         
     }
-    // console.log(countLoad, markers.length);
 
     return ( 
         <MainLayout isStatusBar backgroundColor='#181818'>
@@ -91,7 +101,7 @@ export function MapGuestScreen() {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    {(!loader) ? 
+                    {(!loader&& markers.length > 0) ? 
                     <>
                         <MapGuest 
                             up={up} 
@@ -142,14 +152,12 @@ export function MapGuestScreen() {
                         <View style={{backgroundColor:'#181818CC', borderRadius:90, padding:10}}><ActivityIndicator size={40} color={Бирюзовый}/></View>
                     </View>
                     }
-                    {event&&
-                        <>
-                            <View  style={{marginHorizontal:16, position:'absolute', zIndex:999, bottom:0, marginBottom:76}}>
-                                <EventMapItem data={markers[markerItem]} size={92} noEdit type={'guest'}/>
-                            </View>
-                            <View onTouchStart={()=>setEvent(false)} style={{height:height, width:width,position:"absolute",bottom:74,top:0, zIndex:3}}/>
-                        </>
-                    }
+                    {event&&<View  style={{marginHorizontal:16, position:'absolute', bottom:0, marginBottom:76}}>
+                        <EventMapItem data={markers[markerItem]} size={92} noEdit type={'guest'}/>
+                    </View>}
+                    {up==1&&<View style={{alignItems:"center", justifyContent:"center", backgroundColor:'#181818', zIndex:9999, position:"absolute", width:width,height:height-statusBarHeight}}>
+                        <View style={{backgroundColor:'#181818CC', borderRadius:90, padding:10}}><ActivityIndicator size={40} color={Бирюзовый}/></View>
+                    </View>}
                 </View>
             </KeyboardAvoidingView>
             <ModalDatePoint ref={date} onPress={(value)=>{

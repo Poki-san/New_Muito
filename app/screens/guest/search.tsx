@@ -7,7 +7,7 @@ import { Tags } from '../../component/ui/tags';
 import { BlurView } from 'expo-blur';
 import { useEffect, useRef, useState } from 'react';
 import { ModalDatePoint } from '../../component/popup/date';
-import RBSheet from '@nonam4/react-native-bottom-sheet';
+import RBSheet from '@poki_san/react-native-bottom-sheet';
 import apiFetch from '../../functions/api';
 import moment from 'moment';
 import token from '../../model/token';

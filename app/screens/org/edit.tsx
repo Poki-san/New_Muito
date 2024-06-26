@@ -7,7 +7,7 @@ import { BackArrowIcon, CalendarIcon } from '../../component/svg/svg';
 import { useRef, useState } from 'react';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { ModalDel } from '../../component/popup/del';
-import RBSheet from '@nonam4/react-native-bottom-sheet';
+import RBSheet from '@poki_san/react-native-bottom-sheet';
 import { Formik } from 'formik';
 import * as yup from 'yup'
 import token from '../../model/token';

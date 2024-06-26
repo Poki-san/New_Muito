@@ -5,7 +5,7 @@ import { CameraIcon, CloseIcon, EditIcon, MiniHeartIcon } from '../../component/
 import { styles } from '../../styles';
 import { ModalImg } from '../../component/popup/img';
 import { useRef, useState } from 'react';
-import RBSheet from '@nonam4/react-native-bottom-sheet';
+import RBSheet from '@poki_san/react-native-bottom-sheet';
 import avatar from '../../model/avatar';
 import { observer } from 'mobx-react-lite';
 import { ModalEmailHelp } from '../../component/popup/help';

@@ -7,7 +7,7 @@ import { styles } from '../../styles';
 import Carousel, { ICarouselInstance } from 'react-native-reanimated-carousel';
 import { useEffect, useRef, useState } from 'react';
 import GestureRecognizer from 'react-native-swipe-gestures';
-import RBSheet from '@nonam4/react-native-bottom-sheet';
+import RBSheet from '@poki_san/react-native-bottom-sheet';
 import apiFetch from '../../functions/api';
 import error from '../../model/error';
  

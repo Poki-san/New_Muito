@@ -1,6 +1,6 @@
 import { Image, KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import React, { forwardRef, useRef, useState } from 'react'
-import RBSheet from '@nonam4/react-native-bottom-sheet';
+import RBSheet from '@poki_san/react-native-bottom-sheet';
 import { statusBarHeight, Белый50, Бирюзовый, Фон } from "../../GLOBAL";
 import { styles } from "../../styles";
 import { HeartMenuIcon, ModalCloseIcon } from "../svg/svg";

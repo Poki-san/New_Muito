@@ -6,7 +6,7 @@ import { BlurView } from 'expo-blur';
 import { goBack, navigate } from '../functions/navigate';
 import { BackArrowIcon, EditIcon, GOIcon, InstaEventIcon, MiniHeartIcon, QRIcon, ScanIcon, SettingIcon, TGEventIcon, TrashIcon, WarningIcon } from '../component/svg/svg';
 import { useEffect, useRef, useState } from 'react';
-import RBSheet from '@nonam4/react-native-bottom-sheet';
+import RBSheet from '@poki_san/react-native-bottom-sheet';
 import { showToastable } from 'react-native-toastable';
 import apiFetch from '../functions/api';
 import moment from 'moment';

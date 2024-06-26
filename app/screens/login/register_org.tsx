@@ -7,7 +7,7 @@ import { CalendarIcon, CameraIcon, CloseIcon, LogoIcon, ModalCloseIcon } from '.
 import { goBack, navigate } from '../../functions/navigate';
 import { useEffect, useRef, useState } from 'react';
 import { ModalImg } from '../../component/popup/img';
-import RBSheet from '@nonam4/react-native-bottom-sheet';
+import RBSheet from '@poki_san/react-native-bottom-sheet';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Formik, FormikErrors, FormikTouched } from 'formik';
 import * as yup from 'yup'

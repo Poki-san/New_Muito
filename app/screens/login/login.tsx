@@ -5,7 +5,7 @@ import { BlurView } from 'expo-blur';
 import { styles } from '../../styles';
 import { ModalRecovery } from '../../component/popup/recoveryPass';
 import { useRef, useState } from 'react';
-import RBSheet from '@nonam4/react-native-bottom-sheet';
+import RBSheet from '@poki_san/react-native-bottom-sheet';
 import { navigate } from '../../functions/navigate';
 import { LogoIcon } from '../../component/svg/svg';
 import { Formik } from 'formik';

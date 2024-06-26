@@ -1,6 +1,6 @@
 import { KeyboardAvoidingView, Platform, ScrollView, Text, View } from "react-native";
 import React, { forwardRef, useState } from 'react'
-import RBSheet from '@nonam4/react-native-bottom-sheet';
+import RBSheet from '@poki_san/react-native-bottom-sheet';
 import { statusBarHeight, Белый50, Фон } from "../../GLOBAL";
 import { styles } from "../../styles";
 import {  ArrowCalendarLeft, ArrowCalendarRight, ModalCloseIcon } from "../svg/svg";

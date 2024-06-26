@@ -5,7 +5,7 @@ import { CheckIcon, EditIcon, InstaIcon, MiniInfIcon, MoneyIcon, TaxiIcon, Trash
 import { navigate } from '../../functions/navigate';
 import { ButtonMy } from './ButtonMy';
 import { ModalDelEvent } from '../popup/del_event';
-import RBSheet from '@nonam4/react-native-bottom-sheet';
+import RBSheet from '@poki_san/react-native-bottom-sheet';
 import { useEffect, useRef, useState } from 'react';
 import { ModalReview } from '../popup/review';
 import { width, Бирюзовый } from '../../GLOBAL';

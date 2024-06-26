@@ -2,7 +2,8 @@ import { Image, View } from 'react-native';
 import {Бирюзовый } from '../GLOBAL';
 import { Marker } from 'react-native-yamap-plus';
 
-export const MarkerMap = ({info, index, onLoad, onPress}) => {
+export const MarkerMap = (props:{info?:any, index?:any, onLoad?:any, onPress?:any}) => {
+    const {index, onLoad, onPress, info} = props
     return (
         <Marker
             point={info.point}

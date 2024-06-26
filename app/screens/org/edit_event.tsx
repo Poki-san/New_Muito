@@ -7,7 +7,7 @@ import { styles } from '../../styles';
 import { useEffect, useRef, useState } from 'react';
 import { TagsNoScroll } from '../../component/ui/tags';
 import { ModalImg } from '../../component/popup/img';
-import RBSheet from '@nonam4/react-native-bottom-sheet';
+import RBSheet from '@poki_san/react-native-bottom-sheet';
 import apiFetch, { apiFetchFile } from '../../functions/api';
 import { Formik } from 'formik';
 import * as yup from 'yup'

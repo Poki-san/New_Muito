@@ -1,6 +1,6 @@
 import { KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import React, { forwardRef, useRef, useState } from 'react'
-import RBSheet from '@nonam4/react-native-bottom-sheet';
+import RBSheet from '@poki_san/react-native-bottom-sheet';
 import { ButtonMy } from "../ui/ButtonMy";
 import { Input } from "../ui/input";
 import { statusBarHeight, width, Белый50, Фон } from "../../GLOBAL";

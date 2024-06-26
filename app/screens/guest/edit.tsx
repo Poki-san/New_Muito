@@ -7,7 +7,7 @@ import { BackArrowIcon, CalendarIcon } from '../../component/svg/svg';
 import { useEffect, useRef, useState } from 'react';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { ModalDel } from '../../component/popup/del';
-import RBSheet from '@nonam4/react-native-bottom-sheet';
+import RBSheet from '@poki_san/react-native-bottom-sheet';
 import { showToastable } from 'react-native-toastable';
 import { delElement } from '../../functions/arrayFormater';
 import token from '../../model/token';

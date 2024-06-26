@@ -1,6 +1,6 @@
 import { KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import React, { forwardRef, useRef } from 'react'
-import RBSheet from '@nonam4/react-native-bottom-sheet';
+import RBSheet from '@poki_san/react-native-bottom-sheet';
 import { statusBarHeight, Белый50, Фон } from "../../GLOBAL";
 import { styles } from "../../styles";
 import { CameraMiniIcon, ImgIcon, ModalCloseIcon } from "../svg/svg";

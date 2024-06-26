@@ -5,7 +5,7 @@ import { BlurView } from 'expo-blur';
 import { CloseIcon, LikeIcon } from '../../component/svg/svg';
 import { styles } from '../../styles';
 import { useEffect, useRef, useState } from 'react';
-import RBSheet from '@nonam4/react-native-bottom-sheet';
+import RBSheet from '@poki_san/react-native-bottom-sheet';
 import apiFetch from '../../functions/api';
 import CardStack, { Card } from "react-native-card-stack-swiper";
 import token from '../../model/token';

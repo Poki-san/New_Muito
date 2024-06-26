@@ -6,7 +6,8 @@ import { observer } from 'mobx-react-lite';
 import { memo, useRef } from 'react';
 import { MarkerMap } from './marker';
  
-export const MapOrg = memo(({onTouchMove, onLoad, onPress, markers, up}) => {
+export const MapOrg = memo((props:{onTouchMove?:any, onLoad?:any, onPress?:any, markers?:any, up?:any}) => {
+    const {onTouchMove, onLoad, onPress, up, markers} = props
     // console.log(up);
     const ref = useRef();
     return ( 
@@ -40,7 +41,8 @@ export const MapOrg = memo(({onTouchMove, onLoad, onPress, markers, up}) => {
 
 
  
-export const MapGuest = memo(({onTouchMove, onLoad, onPress, markers, up}) => {
+export const MapGuest = memo((props:{onTouchMove?:any, onLoad?:any, onPress?:any, markers?:any, up?:any}) => {
+    const {onTouchMove, onLoad, onPress, up, markers} = props
     // console.log(up);
     const ref = useRef();
     return (<View style={{position:"relative"}}>

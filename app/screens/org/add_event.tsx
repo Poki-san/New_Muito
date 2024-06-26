@@ -7,7 +7,7 @@ import { styles } from '../../styles';
 import { useEffect, useRef, useState } from 'react';
 import { TagsNoScroll } from '../../component/ui/tags';
 import { ModalImg } from '../../component/popup/img';
-import RBSheet from '@nonam4/react-native-bottom-sheet';
+import RBSheet from '@poki_san/react-native-bottom-sheet';
 import { showToastable } from 'react-native-toastable';
 import { ModalDate } from '../../component/popup/date';
 import { Formik } from 'formik';

@@ -5,7 +5,7 @@ import { styles } from '../styles';
 import { goBack } from '../functions/navigate';
 import { BackArrowIcon } from '../component/svg/svg';
 import { useRef } from 'react';
-import RBSheet from '@nonam4/react-native-bottom-sheet';
+import RBSheet from '@poki_san/react-native-bottom-sheet';
 import { Formik } from 'formik';
 import * as yup from 'yup'
 import apiFetch from '../functions/api';
