@@ -39,7 +39,7 @@ export const MapOrgScreen = observer(() => {
             //     setLoader(false)
             // }, 15000);
         }
-    }, [countLoad])
+    }, [countLoad, markers.length])
     return ( 
         <MainLayout isStatusBar backgroundColor='#181818'>
             <KeyboardAvoidingView

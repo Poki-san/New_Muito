@@ -17,7 +17,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "buildNumber": "2.46",
+      "buildNumber": "2.47",
       "bundleIdentifier": "event-lux"
     },
     "android": {
