@@ -98,7 +98,6 @@ export function AddEventScreen() {
                         }else{
                             bodyFormData.append('end_date_event', value.end_date_event)
                         }
-                        bodyFormData.append('end_date_event', value.end_date_event)
                         bodyFormData.append('time', value.time)
                         bodyFormData.append('address', JSON.stringify({ "address": value.address }))
                         value.description.length > 0 && bodyFormData.append('description', value.description)
@@ -293,6 +292,7 @@ export function AddEventScreen() {
                     </View>
                     <ModalImg ref={img} onPath={(value)=>{
                         setPaths(value)
+                        setErrPath(false)
                         img.current?.close()
                     }}/>
                     <ModalDate ref={date} onPeroid={(start,end)=>{

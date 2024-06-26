@@ -151,7 +151,7 @@ export function EventScreen(props?:{route?:{params:{type?:''}}}) {
                                     <View style={{flexDirection:'row', alignItems:"center", justifyContent:'space-between'}}>
                                         {data?.time_part && <Text style={[styles.bodyText,{color:'white', fontFamily:'PoppinsMedium'}]}>{data?.time_part}</Text>}
 
-                                            {data?.date_event != data?.end_date_event ? 
+                                            {moment(data?.date_event).format("DD MMM YY") != moment(data?.end_date_event).format("DD MMM YY") ? 
                                                 <Text style={[styles.bodyText,{color:'white', fontFamily:'PoppinsMedium'}]}>{moment(data?.date_event).format("DD ")}<Text style={{fontSize:10, color:"#FFFFFF99"}}>{moment(data?.date_event).format("MMM YY")} -</Text> {moment(data?.end_date_event).format("DD ")}<Text style={{fontSize:10, color:"#FFFFFF99"}}>{moment(data?.end_date_event).format("MMM YY")}</Text></Text>
                                             :
                                                 <Text style={[styles.bodyText,{color:'white', fontFamily:'PoppinsMedium'}]}>{moment(data?.date_event).format("DD ")}<Text style={{fontSize:10, color:"#FFFFFF99"}}>{moment(data?.date_event).format("MMM YY")}</Text></Text>

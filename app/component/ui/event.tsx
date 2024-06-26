@@ -40,7 +40,7 @@ export function EventItem(props:{tag?:number, size?:number, onDelete?: () => voi
                     <View style={{flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}>
                         {data?.time_part && <Text style={[styles.smallText,{color:'white'}]}>{data?.time_part}</Text>}
 
-                        {data?.date_event != data?.end_date_event ? 
+                        {moment(data?.date_event).format("DD MMM YY") != moment(data?.end_date_event).format("DD MMM YY") ? 
                             <Text style={[styles.smallText,{color:'white'}]}>{moment(data?.date_event).format("DD ")}<Text style={{fontSize:10, color:"#FFFFFF99"}}>{moment(data?.date_event).format("MMM YY")} -</Text> {moment(data?.end_date_event).format("DD ")}<Text style={{fontSize:10, color:"#FFFFFF99"}}>{moment(data?.end_date_event).format("MMM YY")}</Text></Text>
                         :
                             <Text style={[styles.smallText,{color:'white'}]}>{moment(data?.date_event).format("DD ")}<Text style={{fontSize:10, color:"#FFFFFF99"}}>{moment(data?.date_event).format("MMM YY")}</Text></Text>
@@ -101,7 +101,7 @@ export function EventMapItem(props:{tag?:number, size?:number, onDelete?: () => 
                     <View style={{flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}>
                         {data?.time_part && <Text style={[styles.smallText,{color:'white'}]}>{data?.time_part}</Text>}
 
-                        {event?.date_event!= event?.end_date_event ? 
+                        {moment(event?.date_event).format("DD MMM YY") != moment(event?.end_date_event).format("DD MMM YY") ? 
                             <Text style={[styles.smallText,{color:'white'}]}>{moment(event?.date_event).format("DD ")}<Text style={{fontSize:10, color:"#FFFFFF99"}}>{moment(event?.date_event).format("MMM YY")} -</Text> {moment(event?.end_date_event).format("DD ")}<Text style={{fontSize:10, color:"#FFFFFF99"}}>{moment(event?.end_date_event).format("MMM YY")}</Text></Text>
                             :
                             <Text style={[styles.smallText,{color:'white'}]}>{moment(event?.date_event).format("DD ")}<Text style={{fontSize:10, color:"#FFFFFF99"}}>{moment(event?.date_event).format("MMM YY")}</Text></Text>

@@ -23,7 +23,6 @@ const validations = yup.object().shape({
     title:yup.string().required('Обязательное поле'),
     address:yup.string().required('Обязательное поле'),
     date_event:yup.string().required('Обязательное поле'),
-    end_date_event:yup.string().required('Обязательное поле'),
     time:yup.string().required('Обязательное поле')
 })
 
@@ -110,56 +109,65 @@ export function EditEventScreen({route}) {
                     // console.log(location);
                     // console.log(paths);
                     // console.log(value);
+                    if (paths.length > 0) {
+                        const bodyFormData = new FormData()
 
-                    const bodyFormData = new FormData()
+                        value.title != event?.title && bodyFormData.append('title', value.title)
+                        value.date_event != event?.date_event && bodyFormData.append('date_event', value.date_event)
 
-                    value.title != event?.title && bodyFormData.append('title', value.title)
-                    value.date_event != event?.date_event && bodyFormData.append('date_event', value.date_event)
-                    if (value.end_date_event.length == 0) {
-                        value.date_event != event?.date_event ? bodyFormData.append('end_date_event', value.date_event) : bodyFormData.append('end_date_event', event?.date_event)
-                    } else {
-                        value.end_date_event != event?.end_date_event && bodyFormData.append('end_date_event', value.end_date_event)
-                    }
-                    
-                    bodyFormData.append('time', value.time)
-                    value.address != JSON.parse(event?.address)?.address && bodyFormData.append('address', JSON.stringify({ "address": value.address }))
-                    value.description != event?.description && bodyFormData.append('description', value.description)
-                    if (location.lat.length > 0 && location.lon.length>0) {
-                        if (event?.location != location) {
-                            bodyFormData.append('location', JSON.stringify(location))
+                        if (value.end_date_event.length == 0) {
+                            if (value.date_event != event?.date_event) {
+                                bodyFormData.append('end_date_event', value.date_event)
+                            } else{
+                                bodyFormData.append('end_date_event', event?.date_event)
+                            }
+                        } else {
+                            value.end_date_event != event?.end_date_event && bodyFormData.append('end_date_event', value.end_date_event)
                         }
-                    }
-                    if (forP?.length > 0) {
-                        forP.forEach(el=>{
-                            bodyFormData.append('for_participants[]', el)
+                        
+                        bodyFormData.append('time', value.time)
+                        value.address != JSON.parse(event?.address)?.address && bodyFormData.append('address', JSON.stringify({ "address": value.address }))
+                        value.description != event?.description && bodyFormData.append('description', value.description)
+                        if (location.lat.length > 0 && location.lon.length>0) {
+                            if (event?.location != location) {
+                                bodyFormData.append('location', JSON.stringify(location))
+                            }
+                        }
+                        if (forP?.length > 0) {
+                            forP.forEach(el=>{
+                                bodyFormData.append('for_participants[]', el)
+                            })
+                        }
+                        if (fromP?.length > 0) {
+                            fromP.forEach(el=>{
+                                bodyFormData.append('from_participants[]', el)
+                            })
+                        }
+                        paths?.length > 0 && paths.map(el => {
+                            bodyFormData.append('images[]', {
+                                uri: el,
+                                name: fileName(el),
+                                type: fileExpansion(el, "image")
+                            })
                         })
+                        const result = await apiFetchFile(`/event/${route?.params?.id}`,'POST',true, bodyFormData)
+                        switch (result?.status) {
+                            case 200:
+                            case 201:
+                            case 202:
+                                showToastable({message:'Изменения сохранены'})
+                                goBack()
+                                break;
+                        
+                            default:
+                                setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 300);
+                                break;
+                        }
+                        console.log(result);
+                    } else{
+                        setErrPath(true)
                     }
-                    if (fromP?.length > 0) {
-                        fromP.forEach(el=>{
-                            bodyFormData.append('from_participants[]', el)
-                        })
-                    }
-                    paths?.length > 0 && paths.map(el => {
-                        bodyFormData.append('images[]', {
-                            uri: el,
-                            name: fileName(el),
-                            type: fileExpansion(el, "image")
-                        })
-                    })
-                    const result = await apiFetchFile(`/event/${route?.params?.id}`,'POST',true, bodyFormData)
-                    switch (result?.status) {
-                        case 200:
-                        case 201:
-                        case 202:
-                            showToastable({message:'Изменения сохранены'})
-                            goBack()
-                            break;
                     
-                        default:
-                            setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 300);
-                            break;
-                    }
-                    console.log(result);
                     
                 }}
                 validationSchema={validations}
@@ -169,7 +177,7 @@ export function EditEventScreen({route}) {
                     description:event?.description,
                     time:event?.time_part,
                     date_event:moment(event?.date_event).format("YYYY-MM-DD"),
-                    end_date_event:moment(event?.end_date_event).format("YYYY-MM-DD"),
+                    end_date_event:(moment(event?.date_event).format("YYYY-MM-DD") != moment(event?.end_date_event).format("YYYY-MM-DD")) ? moment(event?.end_date_event).format("YYYY-MM-DD") :'',
                 }}
             >
             {({values, errors, touched, setFieldValue, handleChange, handleBlur, handleSubmit})=>(
@@ -325,6 +333,7 @@ export function EditEventScreen({route}) {
                         </View>
                         <ModalImg ref={img} onPath={(value)=>{
                             setPaths(value)
+                            setErrPath(false)
                             img.current?.close()
                         }}/>
                         <ModalDate ref={date} onPeroid={(start,end)=>{
