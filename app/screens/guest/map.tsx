@@ -152,9 +152,14 @@ export function MapGuestScreen() {
                         <View style={{backgroundColor:'#181818CC', borderRadius:90, padding:10}}><ActivityIndicator size={40} color={Бирюзовый}/></View>
                     </View>
                     }
-                    {event&&<View  style={{marginHorizontal:16, position:'absolute', bottom:0, marginBottom:76}}>
-                        <EventMapItem data={markers[markerItem]} size={92} noEdit type={'guest'}/>
-                    </View>}
+                    {event&&
+                        <>
+                            <View  style={{marginHorizontal:16, position:'absolute', zIndex:999, bottom:0, marginBottom:76}}>
+                                <EventMapItem data={markers[markerItem]} size={92} noEdit type={'guest'}/>
+                            </View>
+                            <View onTouchStart={()=>setEvent(false)} style={{height:height, width:width,position:"absolute",bottom:74,top:0, zIndex:3}}/>
+                        </>
+                    }
                     {up==1&&<View style={{alignItems:"center", justifyContent:"center", backgroundColor:'#181818', zIndex:9999, position:"absolute", width:width,height:height-statusBarHeight}}>
                         <View style={{backgroundColor:'#181818CC', borderRadius:90, padding:10}}><ActivityIndicator size={40} color={Бирюзовый}/></View>
                     </View>}

@@ -65,6 +65,7 @@ export const MapOrgScreen = observer(() => {
                                 }
                             }}
                             onPress={(index) => {
+                                setPeople(false)
                                 setMarkerItem(index)
                                 setPeople(true)
                             }}
@@ -77,9 +78,14 @@ export const MapOrgScreen = observer(() => {
                     }
                     
                 </View>
-                {people && <View style={{position:"absolute", bottom:74, alignItems:"center", left:0, right:0}}>
-                    <PeopleItemMap data={markers[markerItem]} />
-                </View>}
+                {people && 
+                    <>
+                        <View style={{position:"absolute", bottom:74, alignItems:"center", zIndex:999, left:0, right:0}}>
+                            <PeopleItemMap data={markers[markerItem]} />
+                        </View>
+                        <View onTouchStart={()=>setPeople(false)} style={{height:height, width:width,position:"absolute",bottom:74,top:0, zIndex:3}}/>
+                    </>
+                }
             </KeyboardAvoidingView>
         </MainLayout>
     )
