@@ -1,4 +1,4 @@
-import { ActivityIndicator, Image, KeyboardAvoidingView, Platform, Text, View } from 'react-native';
+import { ActivityIndicator, Image, View } from 'react-native';
 import { height, statusBarHeight, width,  Бирюзовый } from '../GLOBAL';
 import { ClusteredYamap, Marker } from 'react-native-yamap-plus';
 import coordinate from '../model/coordinate';

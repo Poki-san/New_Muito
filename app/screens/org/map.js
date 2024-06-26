@@ -32,7 +32,7 @@ export const MapOrgScreen = observer(() => {
     useEffect(() => {
         if (countLoad > 0 && markers.length > 0 && countLoad === markers.length) {
             // console.log('Все изображения загрузились!')
-        // setLoader(true) 
+            // setLoader(true) 
             setUp(2)
             // setTimeout(() => {
             //     setLoader(false)
