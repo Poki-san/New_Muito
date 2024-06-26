@@ -14,7 +14,7 @@ import moment from 'moment';
 import { MapGuest } from '../../component/myMap';
  
 export function MapGuestScreen() {
-    const [countLoad, setCountLoader] = useState(0)
+    const [countLoad, setCountLoader] = useState(1)
     const [event, setEvent] = useState(false)
     const date = useRef<RBSheet>(null)
     const [markers, setMarkers] = useState([]);
