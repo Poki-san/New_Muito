@@ -1,4 +1,4 @@
-import { ActivityIndicator, Image, KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Image, Keyboard, KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { ButtonMy, Input, MainLayout, ModalDate } from '../../component';
 import { DADATATOKEN, URLDADATA, height, statusBarHeight, width, Бирюзовый } from '../../GLOBAL';
 import { BackArrowIcon, CalendarIcon, ClockIcon, CrossIcon, MapPinIcon } from '../../component/svg/svg';
@@ -115,7 +115,12 @@ export function EditEventScreen({route}) {
 
                     value.title != event?.title && bodyFormData.append('title', value.title)
                     value.date_event != event?.date_event && bodyFormData.append('date_event', value.date_event)
-                    value.end_date_event != event?.end_date_event && bodyFormData.append('end_date_event', value.end_date_event)
+                    if (value.end_date_event.length == 0) {
+                        value.date_event != event?.date_event ? bodyFormData.append('end_date_event', value.date_event) : bodyFormData.append('end_date_event', event?.date_event)
+                    } else {
+                        value.end_date_event != event?.end_date_event && bodyFormData.append('end_date_event', value.end_date_event)
+                    }
+                    
                     bodyFormData.append('time', value.time)
                     value.address != JSON.parse(event?.address)?.address && bodyFormData.append('address', JSON.stringify({ "address": value.address }))
                     value.description != event?.description && bodyFormData.append('description', value.description)
@@ -173,7 +178,7 @@ export function EditEventScreen({route}) {
                 keyboardVerticalOffset={Platform.OS === "ios" && statusBarHeight}
                 style={{ flex: 1 }}
             >
-                <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled' contentContainerStyle={{flexGrow:1}}>
+                <ScrollView showsVerticalScrollIndicator={false} scrollEnabled={!choiceMap} keyboardShouldPersistTaps='handled' contentContainerStyle={{flexGrow:1}}>
                 
                     
                     <>
@@ -235,7 +240,10 @@ export function EditEventScreen({route}) {
                                         />
                                         <TouchableOpacity 
                                             activeOpacity={0.7} 
-                                            onPress={()=>setChoice(true)} 
+                                            onPress={()=>{
+                                                setChoice(true)
+                                                Keyboard.dismiss()
+                                            }}  
                                             style={{position:'absolute', right:10, height:40, top:0, bottom:0, justifyContent:'center'}}>
                                             <MapPinIcon/>
                                         </TouchableOpacity>
@@ -258,7 +266,7 @@ export function EditEventScreen({route}) {
                                             backgroundColor='#FFFFFF00' 
                                             placeholderTextColor={'#FFFFFF99'} 
                                             title='Дата проведения' 
-                                            style={{borderWidth:1, borderColor:'#FFFFFF99', paddingRight:20}}
+                                            style={{borderWidth:1, pointerEvents:"none", borderColor:'#FFFFFF99', paddingRight:20}}
                                             errorText={errors.date_event ?? errors.end_date_event}
                                             touched={touched.date_event ?? touched.end_date_event}
                                         />
@@ -272,7 +280,7 @@ export function EditEventScreen({route}) {
                                             backgroundColor='#FFFFFF00' 
                                             placeholderTextColor={'#FFFFFF99'} 
                                             title='Начало' 
-                                            style={{borderWidth:1, borderColor:'#FFFFFF99', paddingRight:19}}
+                                            style={{borderWidth:1, pointerEvents:"none", borderColor:'#FFFFFF99', paddingRight:19}}
                                             errorText={errors.time}
                                             touched={touched.time}
                                         />

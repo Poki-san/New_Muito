@@ -150,7 +150,13 @@ export function EventScreen(props?:{route?:{params:{type?:''}}}) {
                                 <BlurView tint='systemChromeMaterialDark' style={{gap:7, paddingHorizontal:15, paddingTop:12, paddingBottom:12, borderRadius:16, overflow:'hidden'}} intensity={55} >
                                     <View style={{flexDirection:'row', alignItems:"center", justifyContent:'space-between'}}>
                                         {data?.time_part && <Text style={[styles.bodyText,{color:'white', fontFamily:'PoppinsMedium'}]}>{data?.time_part}</Text>}
-                                        <Text style={[styles.bodyText,{color:'white', fontFamily:'PoppinsMedium'}]}>{moment(data?.date_event).format("DD ")}<Text style={{fontSize:10, color:"#FFFFFF99"}}>{moment(data?.date_event).format("MMM YY")} -</Text> {moment(data?.end_date_event).format("DD ")}<Text style={{fontSize:10, color:"#FFFFFF99"}}>{moment(data?.end_date_event).format("MMM YY")}</Text></Text>
+
+                                            {data?.date_event != data?.end_date_event ? 
+                                                <Text style={[styles.bodyText,{color:'white', fontFamily:'PoppinsMedium'}]}>{moment(data?.date_event).format("DD ")}<Text style={{fontSize:10, color:"#FFFFFF99"}}>{moment(data?.date_event).format("MMM YY")} -</Text> {moment(data?.end_date_event).format("DD ")}<Text style={{fontSize:10, color:"#FFFFFF99"}}>{moment(data?.end_date_event).format("MMM YY")}</Text></Text>
+                                            :
+                                                <Text style={[styles.bodyText,{color:'white', fontFamily:'PoppinsMedium'}]}>{moment(data?.date_event).format("DD ")}<Text style={{fontSize:10, color:"#FFFFFF99"}}>{moment(data?.date_event).format("MMM YY")}</Text></Text>
+                                            }
+
                                     </View>
                                     <Text style={[styles.h4,{fontSize:18, color:'white', paddingTop:6}]}>{data?.title}</Text>
                                 </BlurView>

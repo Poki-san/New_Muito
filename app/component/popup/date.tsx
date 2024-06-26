@@ -19,15 +19,15 @@ export const ModalDate = forwardRef((props:{onPeroid?:(start?:string, end?:strin
         let start = new Date(start_date);
         let count=1
         let flag = true
-        let arr = {[start_date]:{selected: true, startingDay: true, endingDay: false, textColor:'black', color:'#355855'}}
+        let arr = {[start_date]:{selected: true, startingDay: true, disableTouchEvent:true, endingDay: false, textColor:'black', color:'#355855'}}
         while (flag==true) {
             const newDate = start.setDate(start.getDate() + count); 
             const date = CalendarUtils.getCalendarDateString(newDate)
             if (date == end_date) {
-                arr = {...arr, [end_date]:{selected: true, startingDay: false, endingDay: true, textColor:'white', color:'#528e8a'}}
+                arr = {...arr, [end_date]:{selected: true, disableTouchEvent:true, startingDay: false, endingDay: true, textColor:'white', color:'#528e8a'}}
                 flag = false
             } else {
-                arr = {...arr, [date]:{selected: true, startingDay: false, endingDay: false, textColor:'white', color:'#3d5f5d'}}
+                arr = {...arr, [date]:{selected: true, disableTouchEvent:true, startingDay: false, endingDay: false, textColor:'white', color:'#3d5f5d'}}
             }  
         }
         setSelected(arr)
@@ -40,6 +40,10 @@ export const ModalDate = forwardRef((props:{onPeroid?:(start?:string, end?:strin
                 height={Platform.OS=='ios'? 549:519}
                 closeOnDragDown={true}
                 // dragFromTopOnly
+                onClose={()=>{
+                    setSelectedSE({start:{text:'',obj:{}},end:{text:'',obj:{}}})
+                    setSelected({})
+                }}
                 closeOnPressMask={true} 
                 customStyles={{
                     draggableIcon:{
@@ -74,7 +78,7 @@ export const ModalDate = forwardRef((props:{onPeroid?:(start?:string, end?:strin
                                     onDayPress={day => {
                                         if (selectedSE.start.text == '') {
                                             setSelectedSE({start:{text:day.dateString, obj:day}, end:selectedSE.end})
-                                            setSelected({[day.dateString]:{selected: true, startingDay: true, endingDay: true, color:'#355855'}})
+                                            setSelected({[day.dateString]:{selected: true, startingDay: true, endingDay: true, disableTouchEvent:true, color:'#355855'}})
                                         } else {
                                             if (selectedSE.end.text == '') {
                                                 const d1: Date = new Date(day.dateString);
@@ -173,7 +177,7 @@ export const ModalDatePoint = forwardRef((props:{onPress?:(date?:string)=>void},
                                 <Calendar
                                     firstDay={1}
                                     enableSwipeMonths
-                                    onDayPress={day => {
+                                    onDayPress={day => {                                        
                                         setSelected(day.dateString)
                                         !!props.onPress&&props.onPress(day.dateString)
                                     }}

@@ -1,4 +1,4 @@
-import { Image, KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Image, Keyboard, KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { ButtonMy, Input, MainLayout } from '../../component';
 import { DADATATOKEN, URLDADATA, statusBarHeight, width, Бирюзовый } from '../../GLOBAL';
 import { BackArrowIcon, CalendarIcon, ClockIcon, CrossIcon, MapPinIcon } from '../../component/svg/svg';
@@ -24,7 +24,6 @@ const validations = yup.object().shape({
     title:yup.string().required('Обязательное поле'),
     address:yup.string().required('Обязательное поле'),
     date_event:yup.string().required('Обязательное поле'),
-    end_date_event:yup.string().required('Обязательное поле'),
     time:yup.string().required('Обязательное поле')
 })
 
@@ -94,6 +93,11 @@ export function AddEventScreen() {
 
                         bodyFormData.append('title', value.title)
                         bodyFormData.append('date_event', value.date_event)
+                        if (value?.end_date_event?.length==0) {
+                            bodyFormData.append('end_date_event', value.date_event)
+                        }else{
+                            bodyFormData.append('end_date_event', value.end_date_event)
+                        }
                         bodyFormData.append('end_date_event', value.end_date_event)
                         bodyFormData.append('time', value.time)
                         bodyFormData.append('address', JSON.stringify({ "address": value.address }))
@@ -147,7 +151,7 @@ export function AddEventScreen() {
                 keyboardVerticalOffset={Platform.OS === "ios" && statusBarHeight}
                 style={{ flex: 1 }}
             >
-                <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled' contentContainerStyle={{flexGrow:1}}>
+                <ScrollView showsVerticalScrollIndicator={false} scrollEnabled={!choiceMap} keyboardShouldPersistTaps='handled' contentContainerStyle={{flexGrow:1}}>
                     <View style={{marginHorizontal:16, marginTop:statusBarHeight+19, marginBottom:20, flex:1}}>
                         <View style={{justifyContent:'space-between', marginBottom:19, flexDirection:"row", alignItems:"center"}}>
                             <TouchableOpacity activeOpacity={0.7} onPress={goBack} style={{width:42, height:42, alignItems:"center", justifyContent:"center", backgroundColor:'#221E1E80', borderRadius:16}}>
@@ -196,7 +200,7 @@ export function AddEventScreen() {
                                         onChangeText={(value)=>{
                                             setText(value)
                                             setFieldValue('address',value)
-                                        }} 
+                                        }}
                                         errorText={errors.address}
                                         touched={touched.address}
                                         backgroundColor='#FFFFFF00' 
@@ -206,7 +210,10 @@ export function AddEventScreen() {
                                     />
                                     <TouchableOpacity 
                                         activeOpacity={0.7} 
-                                        onPress={()=>setChoice(true)} 
+                                        onPress={()=>{
+                                            setChoice(true)
+                                            Keyboard.dismiss()
+                                        }} 
                                         style={{position:'absolute', right:10, height:40, top:0, bottom:0, justifyContent:'center'}}>
                                         <MapPinIcon/>
                                     </TouchableOpacity>
@@ -229,7 +236,7 @@ export function AddEventScreen() {
                                         backgroundColor='#FFFFFF00' 
                                         placeholderTextColor={'#FFFFFF99'} 
                                         title='Дата проведения' 
-                                        style={{borderWidth:1, borderColor:'#FFFFFF99', paddingRight:20}}
+                                        style={{borderWidth:1, pointerEvents:"none", borderColor:'#FFFFFF99', paddingRight:20}}
                                         errorText={errors.date_event ?? errors.end_date_event}
                                         touched={touched.date_event ?? touched.end_date_event}
                                     />
@@ -243,7 +250,7 @@ export function AddEventScreen() {
                                         backgroundColor='#FFFFFF00' 
                                         placeholderTextColor={'#FFFFFF99'} 
                                         title='Начало' 
-                                        style={{borderWidth:1, borderColor:'#FFFFFF99', paddingRight:19}}
+                                        style={{borderWidth:1, pointerEvents:"none", borderColor:'#FFFFFF99', paddingRight:19}}
                                         errorText={errors.time}
                                         touched={touched.time}
                                     />

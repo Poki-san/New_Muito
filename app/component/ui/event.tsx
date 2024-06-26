@@ -39,7 +39,12 @@ export function EventItem(props:{tag?:number, size?:number, onDelete?: () => voi
                 <View style={{flex:1, justifyContent:"space-between",gap:6}}>
                     <View style={{flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}>
                         {data?.time_part && <Text style={[styles.smallText,{color:'white'}]}>{data?.time_part}</Text>}
-                        <Text style={[styles.smallText,{color:'white'}]}>{moment(data?.date_event).format("DD ")}<Text style={{fontSize:10, color:"#FFFFFF99"}}>{moment(data?.date_event).format("MMM YY")} -</Text> {moment(data?.end_date_event).format("DD ")}<Text style={{fontSize:10, color:"#FFFFFF99"}}>{moment(data?.end_date_event).format("MMM YY")}</Text></Text>
+
+                        {data?.date_event != data?.end_date_event ? 
+                            <Text style={[styles.smallText,{color:'white'}]}>{moment(data?.date_event).format("DD ")}<Text style={{fontSize:10, color:"#FFFFFF99"}}>{moment(data?.date_event).format("MMM YY")} -</Text> {moment(data?.end_date_event).format("DD ")}<Text style={{fontSize:10, color:"#FFFFFF99"}}>{moment(data?.end_date_event).format("MMM YY")}</Text></Text>
+                        :
+                            <Text style={[styles.smallText,{color:'white'}]}>{moment(data?.date_event).format("DD ")}<Text style={{fontSize:10, color:"#FFFFFF99"}}>{moment(data?.date_event).format("MMM YY")}</Text></Text>
+                        }
                     </View>
                     
                     <Text style={[styles.h4,{color:'white', flex:1}]}>{data?.title}</Text>
@@ -95,7 +100,12 @@ export function EventMapItem(props:{tag?:number, size?:number, onDelete?: () => 
                 <View style={{flex:1, justifyContent:"space-between",gap:6}}>
                     <View style={{flexDirection:"row", justifyContent:"space-between", alignItems:"center"}}>
                         {data?.time_part && <Text style={[styles.smallText,{color:'white'}]}>{data?.time_part}</Text>}
-                        <Text style={[styles.smallText,{color:'white'}]}>{moment(event?.date_event).format("DD ")}<Text style={{fontSize:10, color:"#FFFFFF99"}}>{moment(event?.date_event).format("MMM YY")} -</Text> {moment(event?.end_date_event).format("DD ")}<Text style={{fontSize:10, color:"#FFFFFF99"}}>{moment(event?.end_date_event).format("MMM YY")}</Text></Text>
+
+                        {event?.date_event!= event?.end_date_event ? 
+                            <Text style={[styles.smallText,{color:'white'}]}>{moment(event?.date_event).format("DD ")}<Text style={{fontSize:10, color:"#FFFFFF99"}}>{moment(event?.date_event).format("MMM YY")} -</Text> {moment(event?.end_date_event).format("DD ")}<Text style={{fontSize:10, color:"#FFFFFF99"}}>{moment(event?.end_date_event).format("MMM YY")}</Text></Text>
+                            :
+                            <Text style={[styles.smallText,{color:'white'}]}>{moment(event?.date_event).format("DD ")}<Text style={{fontSize:10, color:"#FFFFFF99"}}>{moment(event?.date_event).format("MMM YY")}</Text></Text>
+                        }
                     </View>
                     
                     <Text style={[styles.h4,{color:'white', flex:1}]}>{event?.title}</Text>
