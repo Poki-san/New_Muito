@@ -15,7 +15,7 @@ import coordinate from './app/model/coordinate';
 import { useFonts } from 'expo-font';
 import { ModalErr } from './app/component/popup/err';
 import error from './app/model/error';
-import RBSheet from '@poki-san/react-native-bottom-sheet';
+import RBSheet from '@poki_san/react-native-bottom-sheet';
 import { observer } from 'mobx-react-lite';
 import { load } from './app/functions/storage';
 import token from './app/model/token';
