@@ -32,11 +32,11 @@ export const MapOrgScreen = observer(() => {
     useEffect(() => {
         if (countLoad > 0 && markers.length > 0 && countLoad === markers.length) {
             // console.log('Все изображения загрузились!')
-        setLoader(true) 
+        // setLoader(true) 
             setUp(2)
-            setTimeout(() => {
-                setLoader(false)
-            }, 15000);
+            // setTimeout(() => {
+            //     setLoader(false)
+            // }, 15000);
         }
     }, [countLoad])
     return ( 
@@ -53,7 +53,7 @@ export const MapOrgScreen = observer(() => {
                     </BlurView>
                 </View>
                 <View style={{borderTopLeftRadius:16, borderTopRightRadius:16, overflow:"hidden"}}>
-                    {(!loader && markers.length > 0) ? <View>
+                    {(!loader && markers.length > 0) ? <>
                         <MapOrg
                             up={up} 
                             markers={markers} 
@@ -68,7 +68,7 @@ export const MapOrgScreen = observer(() => {
                                 setPeople(true)
                             }}
                         /> 
-                    </View>
+                    </>
                     :
                     <View style={{alignItems:"center", justifyContent:"center", width:width,height:height-statusBarHeight}}>
                         <View style={{backgroundColor:'#181818CC', borderRadius:90, padding:10}}><ActivityIndicator size={40} color={Бирюзовый}/></View>
