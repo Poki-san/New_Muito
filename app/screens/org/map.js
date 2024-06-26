@@ -11,7 +11,7 @@ import apiFetch from '../../functions/api';
 import {MapOrg} from '../../component/myMap';
  
 export const MapOrgScreen = observer(() => {
-    const [countLoad, setCountLoader] = useState(0)
+    const [countLoad, setCountLoader] = useState(1)
     const [people, setPeople] = useState(false)
     const [markers, setMarkers] = useState([]);
     const [up, setUp] = useState(1)
@@ -30,6 +30,7 @@ export const MapOrgScreen = observer(() => {
     }, [])
 
     useEffect(() => {
+        console.log(countLoad +' = '+markers.length);
         if (countLoad > 0 && markers.length > 0 && countLoad === markers.length) {
             // console.log('Все изображения загрузились!')
             // setLoader(true) 
