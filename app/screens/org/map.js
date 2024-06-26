@@ -74,11 +74,11 @@ export const MapOrgScreen = observer(() => {
                         <View style={{backgroundColor:'#181818CC', borderRadius:90, padding:10}}><ActivityIndicator size={40} color={Бирюзовый}/></View>
                     </View>
                     }
-                    {people && <View style={{position:"absolute", bottom:74, alignItems:"center", left:0, right:0}}>
-                        <PeopleItemMap data={markers[markerItem]} />
-                    </View>}
                     
                 </View>
+                {people && <View style={{position:"absolute", bottom:74, alignItems:"center", left:0, right:0}}>
+                    <PeopleItemMap data={markers[markerItem]} />
+                </View>}
             </KeyboardAvoidingView>
         </MainLayout>
     )
