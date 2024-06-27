@@ -11,7 +11,7 @@ import apiFetch from '../../functions/api';
 import {MapOrg} from '../../component/myMap';
  
 export const MapOrgScreen = observer(() => {
-    const [countLoad, setCountLoader] = useState(1)
+    // const [countLoad, setCountLoader] = useState(1)
     const [people, setPeople] = useState(false)
     const [markers, setMarkers] = useState([]);
     const [up, setUp] = useState(1)
@@ -20,7 +20,7 @@ export const MapOrgScreen = observer(() => {
 
     const handlerNear = async () => {
         const response = await apiFetch('/event/near','GET',true)
-        
+        coordinate.setLoad(0)
         setMarkers(response?.data)
         setLoader(false)
     }
@@ -30,8 +30,8 @@ export const MapOrgScreen = observer(() => {
     }, [])
 
     useEffect(() => {
-        console.log(countLoad +' = '+markers.length);
-        if (countLoad > 0 && markers.length > 0 && countLoad === markers.length) {
+        console.log(coordinate.imgLoad +' = '+markers.length);
+        if (coordinate.imgLoad === markers.length) {
             // console.log('Все изображения загрузились!')
             // setLoader(true) 
             setUp(2)
@@ -39,7 +39,7 @@ export const MapOrgScreen = observer(() => {
             //     setLoader(false)
             // }, 15000);
         }
-    }, [countLoad, markers.length])
+    }, [coordinate.imgLoad])
     return ( 
         <MainLayout isStatusBar backgroundColor='#181818'>
             <KeyboardAvoidingView
@@ -58,7 +58,11 @@ export const MapOrgScreen = observer(() => {
                         <MapOrg
                             up={up} 
                             markers={markers} 
-                            onLoad={() => countLoad < markers.length && setCountLoader(prevState => prevState + 1)}
+                            onLoad={() => {
+                                if (coordinate.imgLoad < markers.length) {
+                                    coordinate.setLoad(coordinate.imgLoad+1)
+                                }
+                            }}
                             onTouchMove={()=>{
                                 if (people) {
                                     setPeople(false)

@@ -12,9 +12,10 @@ import apiFetch from '../../functions/api';
 import { useIsFocused } from '@react-navigation/native';
 import moment from 'moment';
 import { MapGuest } from '../../component/myMap';
+import { observer } from 'mobx-react-lite';
  
-export function MapGuestScreen() {
-    const [countLoad, setCountLoader] = useState(0)
+export const MapGuestScreen=observer(()=> {
+    // const [countLoad, setCountLoader] = useState(0)
     const [event, setEvent] = useState(false)
     const date = useRef<RBSheet>(null)
     const [markers, setMarkers] = useState([]);
@@ -28,8 +29,8 @@ export function MapGuestScreen() {
         setLoader(true)
         if (focus) {
             (async()=>{
+                coordinate.setLoad(0)
                 const value = await apiFetch('/event/map','GET',true)
-                console.log(value);
                 
                 switch (value?.status) {
                     case 200:
@@ -47,17 +48,20 @@ export function MapGuestScreen() {
     },[focus])
 
     useEffect(() => {
-        if (countLoad > 0 && markers.length > 0 && countLoad === markers.length) {
+        console.log(coordinate.imgLoad, markers.length);
+        
+        if (coordinate.imgLoad === markers.length) {
             // console.log('Все изображения загрузились!')
+            // setTimeout(() => setUp(2), 1500);
             setUp(2)
         }
-    }, [countLoad])
+    }, [coordinate.imgLoad])
 
     const onDate = async(date?:string) => {
         setLoader(true)
         setMarkers([])
         setUp(1)
-        setCountLoader(0)
+        coordinate.setLoad(0)
         if (date.length>0) {
             const val = await apiFetch(`/event/map?date=${date}`,'GET', true)
             if (val?.status == 200) {
@@ -71,7 +75,6 @@ export function MapGuestScreen() {
                 setLoader(false)
             }
         }
-        
     }
 
     return ( 
@@ -102,51 +105,20 @@ export function MapGuestScreen() {
                         </View>
                     </View>
                     {(!loader&& markers.length > 0) ? 
-                    <>
-                        <MapGuest 
-                            up={up} 
-                            markers={markers}
-                            onTouchMove={() => setEvent(false)} 
-                            onLoad={() => countLoad < markers.length && setCountLoader(prevState => prevState + 1)}
-                            onPress={(index)=>{
-                                setMarkerItem(index)
-                                setEvent(true)
-                            }}
-                        />
-                        {/* <ClusteredYamap
-                            key={up}
-                            clusterColor={Бирюзовый}
-                            style={{width:width, height:height-statusBarHeight, borderTopLeftRadius:16, borderTopRightRadius:16, overflow:"hidden"}}
-                            initialRegion={{
-                                lat: coordinate.lat==0 ? 55.755864 : coordinate.lat,
-                                lon: coordinate.lon==0 ? 37.617698 : coordinate.lon,
-                                zoom: 8
-                            }}
-                            onTouchMove={() => setEvent(false)}
-                            clusteredMarkers={markers}
-                            renderMarker={(info, index) => <Marker
-                                key={info?.id}
-                                point={info.point}
-                                children={
-                                    <View key={index} style={{width: 40, height: 40, borderRadius:16, borderColor:Бирюзовый, overflow:"hidden"}}>
-                                        <Image
-                                            onLoad={() => countLoad < markers.length && setCountLoader(prevState => prevState + 1)}
-                                            source={{uri:info?.marker}}
-                                            style={{
-                                                width: 40,
-                                                height: 40,
-                                                borderRadius: 16
-                                            }}
-                                        />
-                                    </View>
-                                }
-                                onPress={() => {
-                                    setMarkerItem(index)
-                                    setEvent(true)
-                                }}
-                            />}
-                        />  */}
-                    </>
+                    <MapGuest 
+                        up={up} 
+                        markers={markers}
+                        onTouchMove={() => setEvent(false)} 
+                        onLoad={() => {
+                            if (coordinate.imgLoad < markers.length) {
+                                coordinate.setLoad(coordinate.imgLoad+1)
+                            }
+                        }}
+                        onPress={(index)=>{
+                            setMarkerItem(index)
+                            setEvent(true)
+                        }}
+                    />
                     : 
                     <View style={{alignItems:"center", justifyContent:"center", width:width,height:height-statusBarHeight}}>
                         <View style={{backgroundColor:'#181818CC', borderRadius:90, padding:10}}><ActivityIndicator size={40} color={Бирюзовый}/></View>
@@ -154,9 +126,6 @@ export function MapGuestScreen() {
                     }
                     {event&&<View  style={{marginHorizontal:16, position:'absolute', bottom:0, marginBottom:76}}>
                         <EventMapItem data={markers[markerItem]} size={92} noEdit type={'guest'}/>
-                    </View>}
-                    {up==1&&<View style={{alignItems:"center", justifyContent:"center", backgroundColor:'#181818', zIndex:9999, position:"absolute", width:width,height:height-statusBarHeight}}>
-                        <View style={{backgroundColor:'#181818CC', borderRadius:90, padding:10}}><ActivityIndicator size={40} color={Бирюзовый}/></View>
                     </View>}
                 </View>
             </KeyboardAvoidingView>
@@ -167,4 +136,4 @@ export function MapGuestScreen() {
             }}/>
         </MainLayout>
     )
-}
+})
