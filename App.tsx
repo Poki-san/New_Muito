@@ -20,7 +20,7 @@ import { observer } from 'mobx-react-lite';
 import { load } from './app/functions/storage';
 import token from './app/model/token';
 
-YaMap.init('9686e034-f846-4d6c-a556-fc6f621bd36a');
+// YaMap.init('9686e034-f846-4d6c-a556-fc6f621bd36a');
 LocaleConfig.locales["ru"] = {
   monthNames: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
   monthNamesShort: ["Янв", "Февр", "Март", "Апрель", "Май", "Июнь", "Июль.", "Авг", "Сент", "Окт", "Нояб", "Дек"],
@@ -32,11 +32,11 @@ LocaleConfig.locales["ru"] = {
 LocaleConfig.defaultLocale = "ru";
 
 const App = observer(() => {
-  // if (__DEV__) {
-  //   console.log('Development');
-  // } else {
-  //   YaMap.init('9686e034-f846-4d6c-a556-fc6f621bd36a');
-  // }
+  if (__DEV__) {
+    console.log('Development');
+  } else {
+    YaMap.init('9686e034-f846-4d6c-a556-fc6f621bd36a');
+  }
   const [appIsReady, setAppIsReady] = useState(false);
   const errRef = useRef<RBSheet>(null);
   async function preload() {

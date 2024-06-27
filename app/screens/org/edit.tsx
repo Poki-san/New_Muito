@@ -37,53 +37,54 @@ export function EditOrgScreen() {
     const [date, setDate] = useState({text:'',server:new Date()})
     return ( 
         <MainLayout isStatusBar backgroundColor='#181818'>
-            <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='always' contentContainerStyle={{flexGrow:1}}>
-                <Formik
-                    onSubmit={async(value)=>{
-                        const bodyFormData = new FormData()
-                        
-                        value?.login != token?.data?.login && bodyFormData.append('login', value?.login)
-                        value?.name && bodyFormData.append('name', value?.name)
-                        value?.last_name && bodyFormData.append('last_name', value?.last_name)
-                        // bodyFormData.append('email', value.email)
-                        value?.telegram?.length > 0 && bodyFormData.append('telegram', value?.telegram)
-                        value?.instagram?.length > 0 && bodyFormData.append('instagram', value?.instagram)
-                        value?.birthday?.length > 0 && bodyFormData.append('birthday', value?.birthday)
-                        console.log(bodyFormData);
-                        
-                        const result = await apiFetchFile('/profile/update',"POST",true,bodyFormData)
-                        // console.log(result);
-                        switch (result?.status) {
-                            case 200:
-                            case 201:
-                            case 202:
-                                token?.userUpdate(result?.user, token?.token)
-                                showToastable({'message':'Изменения успешно сохранены'})
-                                goBack()
-                                break;
-                        
-                            default:
-                                error.Input(true,'Что-то пошло не так!','Упс...', Platform.OS=='ios'?158:150)
-                                break;
-                        }
-                    }}
-                    validationSchema={validations}
-                    initialValues={{
-                        email:token?.data?.email,
-                        name:token?.data?.name,
-                        last_name:token?.data?.last_name,
-                        telegram:token?.data?.telegram,
-                        instagram:token?.data?.instagram,
-                        login:token?.data?.login,
-                        birthday:token?.data?.birthday
-                    }}
-                >
-                    {({values, handleBlur, handleChange, setFieldValue, errors, handleSubmit, touched})=>(
-                        <KeyboardAvoidingView
+            <Formik
+                onSubmit={async(value)=>{
+                    const bodyFormData = new FormData()
+                    
+                    value?.login != token?.data?.login && bodyFormData.append('login', value?.login)
+                    value?.name && bodyFormData.append('name', value?.name)
+                    value?.last_name && bodyFormData.append('last_name', value?.last_name)
+                    // bodyFormData.append('email', value.email)
+                    value?.telegram?.length > 0 && bodyFormData.append('telegram', value?.telegram)
+                    value?.instagram?.length > 0 && bodyFormData.append('instagram', value?.instagram)
+                    value?.birthday?.length > 0 && bodyFormData.append('birthday', value?.birthday)
+                    console.log(bodyFormData);
+                    
+                    const result = await apiFetchFile('/profile/update',"POST",true,bodyFormData)
+                    // console.log(result);
+                    switch (result?.status) {
+                        case 200:
+                        case 201:
+                        case 202:
+                            token?.userUpdate(result?.user, token?.token)
+                            showToastable({'message':'Изменения успешно сохранены'})
+                            goBack()
+                            break;
+                    
+                        default:
+                            error.Input(true,'Что-то пошло не так!','Упс...', Platform.OS=='ios'?158:150)
+                            break;
+                    }
+                }}
+                validationSchema={validations}
+                initialValues={{
+                    email:token?.data?.email,
+                    name:token?.data?.name,
+                    last_name:token?.data?.last_name,
+                    telegram:token?.data?.telegram,
+                    instagram:token?.data?.instagram,
+                    login:token?.data?.login,
+                    birthday:token?.data?.birthday
+                }}
+            >
+                {({values, handleBlur, handleChange, setFieldValue, errors, handleSubmit, touched})=>(
+                    
+                    <KeyboardAvoidingView
                         behavior={Platform.OS === "ios" ? "padding" : undefined}
-                        keyboardVerticalOffset={Platform.OS === "ios" && statusBarHeight}
+                        // keyboardVerticalOffset={Platform.OS === "ios" && statusBarHeight}
                         style={{ flex: 1 }}
                     >
+                    <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled' contentContainerStyle={{flexGrow:1}}>
                         <View style={{marginTop:statusBarHeight+19, marginBottom:9}}>
                             <View style={{marginHorizontal:16, justifyContent:'space-between', flexDirection:"row", alignItems:"center"}}>
                                 <TouchableOpacity activeOpacity={0.7} onPress={goBack} style={{width:42, height:42, alignItems:"center", justifyContent:"center", backgroundColor:'#221E1E80', borderRadius:16}}>
@@ -183,10 +184,10 @@ export function EditOrgScreen() {
                             <ButtonMy text='Сохранить изменения' onPress={handleSubmit} backgroundColor='#88FFF9' colorText='#171717'/>
                         </View>
                         <ModalDel ref={del}/>
-                        </KeyboardAvoidingView>
-                    )}
-                </Formik>
-            </ScrollView>
+                    </ScrollView>
+                </KeyboardAvoidingView>
+                )}
+            </Formik>
         </MainLayout>
     )
 }

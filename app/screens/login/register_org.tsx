@@ -73,7 +73,7 @@ export function RegisterOrgScreen() {
             <MainLayout isStatusBar>
                 <KeyboardAvoidingView
                     behavior={Platform.OS === "ios" ? "padding" : 'height'}
-                    keyboardVerticalOffset={Platform.OS === "ios" && statusBarHeight}
+                    // keyboardVerticalOffset={Platform.OS === "ios" && statusBarHeight}
                     style={{ flex: 1 }}
                 >
                     <Formik
@@ -84,8 +84,8 @@ export function RegisterOrgScreen() {
                                 const bodyFormData = new FormData()
                                 if (value?.login?.length > 0) {
                                     bodyFormData.append('login', value?.login)
-                                    value?.name?.length > 0 && bodyFormData.append('name', value?.name)
-                                    value?.last_name?.length > 0 && bodyFormData.append('last_name', value?.last_name)
+                                    // value?.name?.length > 0 && bodyFormData.append('name', value?.name)
+                                    // value?.last_name?.length > 0 && bodyFormData.append('last_name', value?.last_name)
                                 } else {
                                     bodyFormData.append('name', value?.name)
                                     bodyFormData.append('last_name', value?.last_name)
@@ -251,6 +251,7 @@ export function RegisterOrgScreen() {
                                     touched={touched}
                                 />}
                             </View>}
+                            <View style={{height:70}}/>
                         </ScrollView>)}
                     </Formik>
                 </KeyboardAvoidingView>    

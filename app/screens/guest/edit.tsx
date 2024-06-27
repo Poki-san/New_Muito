@@ -59,7 +59,6 @@ export function EditGuestScreen() {
     
     return ( 
         <MainLayout isStatusBar backgroundColor='#181818'>
-            <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='always' contentContainerStyle={{flexGrow:1}}>
                 <Formik
                     onSubmit={async(value)=>{
                         console.log(activeTagCount);
@@ -121,9 +120,10 @@ export function EditGuestScreen() {
                     {({values, handleChange, handleBlur, setFieldValue, errors, touched, handleSubmit})=>(
                     <KeyboardAvoidingView
                         behavior={Platform.OS === "ios" ? "padding" : undefined}
-                        keyboardVerticalOffset={Platform.OS === "ios" && statusBarHeight}
+                        // keyboardVerticalOffset={Platform.OS === "ios" && statusBarHeight}
                         style={{ flex: 1 }}
                     >
+                    <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='handled' contentContainerStyle={{flexGrow:1}}>
                         <View style={{marginTop:statusBarHeight+19, marginBottom:9}}>
                             <View style={{marginHorizontal:16, justifyContent:'space-between', flexDirection:"row", alignItems:"center"}}>
                                 <TouchableOpacity activeOpacity={0.7} onPress={goBack} style={{width:42, height:42, alignItems:"center", justifyContent:"center", backgroundColor:'#221E1E80', borderRadius:16}}>
@@ -269,9 +269,9 @@ export function EditGuestScreen() {
                             <ButtonMy text='Сохранить изменения' onPress={handleSubmit} backgroundColor='#88FFF9' colorText='#171717'/>
                         </View>
                         <ModalDel ref={del}/>
+                        </ScrollView>
                     </KeyboardAvoidingView>)}
                 </Formik>
-            </ScrollView>
         </MainLayout>
     )
 }

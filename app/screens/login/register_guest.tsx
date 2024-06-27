@@ -95,7 +95,7 @@ export function RegisterGuestScreen() {
             <MainLayout isStatusBar>
                 <KeyboardAvoidingView
                     behavior={Platform.OS === "ios" ? "padding" : 'height'}
-                    keyboardVerticalOffset={Platform.OS === "ios" && statusBarHeight}
+                    // keyboardVerticalOffset={Platform.OS === "ios" && statusBarHeight}
                     style={{ flex: 1 }}
                 >
                     <Formik
@@ -302,7 +302,8 @@ export function RegisterGuestScreen() {
                                   });
                                 navigationRef.current?.dispatch(bottomReset)
                             }}/>}
-                            </ScrollView>)
+                            <View style={{height:60}}/>
+                        </ScrollView>)
                         }
                     </Formik>
                 </KeyboardAvoidingView>

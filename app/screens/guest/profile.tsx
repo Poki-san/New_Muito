@@ -116,15 +116,17 @@ export const ProfileGuestScreen = observer(() => {
                             </View>
                         </View>
                         <Image style={{width:width, height:1, marginVertical:16, opacity:0.9}} source={require('../../../assets/image/line.png')}/>
-                        <View style={{paddingHorizontal:16, width:'100%', gap:8, flex:1}}>
-                            <ProfileBlock text='Редактировать анкету' onPress={()=>navigate('EditGuest')}/>
-                            <ProfileBlock text='Изменить пароль' onPress={()=>navigate('EditPass')}/>
-                            {/* <ProfileBlock text='Инструкция'/> */}
-                            <ProfileBlock text='Помощь' msgIcon={true} onPress={()=>help.current.open()}/>
+                        <View style={{flex:1, width:"100%", justifyContent:'space-between'}}>
+                            <View style={{paddingHorizontal:16, width:'100%', gap:8, flex:1}}>
+                                <ProfileBlock text='Редактировать анкету' onPress={()=>navigate('EditGuest')}/>
+                                <ProfileBlock text='Изменить пароль' onPress={()=>navigate('EditPass')}/>
+                                {/* <ProfileBlock text='Инструкция'/> */}
+                                <ProfileBlock text='Помощь' msgIcon={true} onPress={()=>help.current.open()}/>
+                            </View>
+                            <TouchableOpacity activeOpacity={0.7} onPress={logOut} style={{width:'100%', marginBottom:80, justifyContent:'flex-end'}}>
+                                <Text style={[styles.smallText,{color:"#FFFFFF99", textAlign:'center'}]}>Выйти из аккаунта</Text>
+                            </TouchableOpacity>
                         </View>
-                        <TouchableOpacity activeOpacity={0.7} onPress={logOut} style={{width:'100%', marginBottom:80}}>
-                            <Text style={[styles.smallText,{color:"#FFFFFF99", textAlign:'center'}]}>Выйти из аккаунта</Text>
-                        </TouchableOpacity>
                     </View>
                 </KeyboardAvoidingView>
                 <ModalImg ref={img} selectionLimit={3} onPath={async(path)=>{

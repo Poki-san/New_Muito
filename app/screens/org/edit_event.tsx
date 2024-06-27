@@ -183,7 +183,7 @@ export function EditEventScreen({route}) {
             {({values, errors, touched, setFieldValue, handleChange, handleBlur, handleSubmit})=>(
             <KeyboardAvoidingView
                 behavior={Platform.OS === "ios" ? "padding" : 'height'}
-                keyboardVerticalOffset={Platform.OS === "ios" && statusBarHeight}
+                // keyboardVerticalOffset={Platform.OS === "ios" && statusBarHeight}
                 style={{ flex: 1 }}
             >
                 <ScrollView showsVerticalScrollIndicator={false} scrollEnabled={!choiceMap} keyboardShouldPersistTaps='handled' contentContainerStyle={{flexGrow:1}}>
