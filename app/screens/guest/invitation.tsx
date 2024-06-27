@@ -18,7 +18,7 @@ export function InvitationScreen() {
 
     const onStatus = async(status?:number) => {
         const value = await apiFetch(`/event/invites?page=1${(status === 0 || status === 1) ? `&status=${status}` : ''}`,'GET', true)
-            console.log(value);
+            // console.log(value);
             
         if (value?.status == 200) {
             setEvents(value)
@@ -45,6 +45,7 @@ export function InvitationScreen() {
             setRefresh(false)
         }, 1000);
     }
+    
     return ( 
         <ImageBackground style={{width:width, height:height}} source={require('../../../assets/image/back.png')}>
             <MainLayout isStatusBar>
@@ -154,7 +155,7 @@ export function InvitationScreen() {
                                         backgroundColor:tag==2 ? '#374A4E' : '#374A4E00',
                                         borderRadius:16
                                     }}>
-                                        <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Все <Text style={{color:'#FFFFFF80'}}></Text></Text>
+                                        <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Все <Text style={{color:'#FFFFFF80'}}>{events?.all}</Text></Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity activeOpacity={0.7} onPress={()=>{
                                         setTag(1)
@@ -167,7 +168,7 @@ export function InvitationScreen() {
                                         backgroundColor:tag==1 ? '#374A4E' : '#374A4E00',
                                         borderRadius:16
                                     }}>
-                                        <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Принятые <Text style={{color:'#FFFFFF80'}}></Text></Text>
+                                        <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Принятые <Text style={{color:'#FFFFFF80'}}>{events?.accept}</Text></Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity activeOpacity={0.7} onPress={()=>{
                                         setTag(0)
@@ -180,7 +181,7 @@ export function InvitationScreen() {
                                         backgroundColor:tag==0 ? '#374A4E' : '#374A4E00',
                                         borderRadius:16
                                     }}>
-                                        <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Отправленные <Text style={{color:'#FFFFFF80'}}></Text></Text>
+                                        <Text style={[styles.smallText,{color:'white', textAlign:'center'}]}>Отправленные <Text style={{color:'#FFFFFF80'}}>{events?.send}</Text></Text>
                                     </TouchableOpacity>
                                 </BlurView> 
                             }

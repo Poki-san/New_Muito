@@ -31,9 +31,9 @@ export const MapOrgScreen = observer(() => {
 
     useEffect(() => {
         // console.log(coordinate.imgLoad +' = '+markers.length);
-        if (coordinate.imgLoad>0 && markers.length>0 && coordinate.imgLoad == markers.length) {
+        if (coordinate.imgLoad>0 && markers?.length>0 && coordinate.imgLoad == markers?.length) {
             // console.log('Все изображения загрузились!')
-            setTimeout(() => setUp(2), 1000);
+            setUp(2);
         }
     }, [coordinate.imgLoad])
     return ( 
@@ -50,8 +50,8 @@ export const MapOrgScreen = observer(() => {
                     </BlurView>
                 </View>
                 <View style={{borderTopLeftRadius:16, borderTopRightRadius:16, overflow:"hidden"}}>
-                    {(!loader && markers.length > 0) ? <>
-                        <MapOrg
+                    {(!loader && markers?.length > 0) ? <>
+                        {markers?.length > 0 ? <MapOrg
                             up={up} 
                             markers={markers} 
                             onLoad={() => {
@@ -69,7 +69,22 @@ export const MapOrgScreen = observer(() => {
                                 setMarkerItem(index)
                                 setPeople(true)
                             }}
-                        /> 
+                        /> : 
+                        <MapOrg
+                            up={2}
+                            markers={[]}
+                            onTouchMove={()=>{
+                                if (people) {
+                                    setPeople(false)
+                                }
+                            }}
+                            onPress={(index) => {
+                                setPeople(false)
+                                setMarkerItem(index)
+                                setPeople(true)
+                            }}
+                        />
+                        } 
                     </>
                     :
                     <View style={{alignItems:"center", justifyContent:"center", width:width,height:height-statusBarHeight}}>

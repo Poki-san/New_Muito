@@ -1,6 +1,6 @@
 import { ActivityIndicator, Image, ImageBackground, KeyboardAvoidingView, Linking, Platform, RefreshControl, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { MainLayout, ModalErrScan, PeopleModal, ScanModal, ModalQrCode, ModalWarning, ModalReview, ModalDelEvent } from '../component';
-import { height, statusBarHeight, width, Бирюзовый } from '../GLOBAL';
+import { height, statusBarHeight, width, Бирюзовый, Бирюзовый50 } from '../GLOBAL';
 import { styles } from '../styles';
 import { BlurView } from 'expo-blur';
 import { goBack, navigate } from '../functions/navigate';
@@ -74,7 +74,7 @@ export function EventScreen(props?:{route?:{params:{type?:''}}}) {
     return ( 
         <MainLayout isStatusBar backgroundColor='#181818'>
             {data ? <>
-                <TouchableOpacity activeOpacity={0.7} onPress={async()=>{
+                <TouchableOpacity activeOpacity={0.7} disabled={go} onPress={async()=>{
                     if (type=='org') {
                         setScan(true)
                     } else {
@@ -83,7 +83,7 @@ export function EventScreen(props?:{route?:{params:{type?:''}}}) {
                         } else {
                             if (go==false) {
                                 if (data?.status?.invite == 0) {
-                                    showToastable({message:'Вашу заявку отклонили '})
+                                    showToastable({message:'Вашу заявку отклонили'})
                                 } else {
                                     const value = await apiFetch(`/event/join/${data?.id}`,'GET',true)
                                     if (value?.status == 200) {
@@ -96,9 +96,9 @@ export function EventScreen(props?:{route?:{params:{type?:''}}}) {
                             }
                         }
                     }
-                }} style={styles.buttonEvent}>
+                }} style={[styles.buttonEvent,{backgroundColor:go?Бирюзовый50:Бирюзовый}]}>
                     {type=='org' ? <ScanIcon/> :
-                    !!data?.status?.invite ?  <QRIcon/> :<GOIcon/>}
+                    !!data?.status?.invite ?  <QRIcon/> : <GOIcon go={go}/>}
                 </TouchableOpacity>
                 <ScrollView 
                     showsVerticalScrollIndicator={false} 
@@ -231,7 +231,9 @@ export function EventScreen(props?:{route?:{params:{type?:''}}}) {
                                         {data?.author_full?.instagram && <TouchableOpacity 
                                             activeOpacity={0.7}
                                             onPress={()=>{
-                                                Linking.openURL('https://www.instagram.com/'+data?.author_full?.instagram?.replace('@',''))
+                                                if(!!data?.status?.invite){
+                                                    Linking.openURL('https://www.instagram.com/'+data?.author_full?.instagram?.replace('@',''))
+                                                }
                                             }}
                                         >
                                             <InstaEventIcon/>
@@ -239,7 +241,9 @@ export function EventScreen(props?:{route?:{params:{type?:''}}}) {
                                         {data?.author_full?.telegram && <TouchableOpacity 
                                             activeOpacity={0.7}
                                             onPress={()=>{
-                                                Linking.openURL('https://t.me/'+data?.author_full?.telegram?.replace('@',''))
+                                                if(!!data?.status?.invite){
+                                                    Linking.openURL('https://t.me/'+data?.author_full?.telegram?.replace('@',''))
+                                                }
                                             }}
                                         >
                                             <TGEventIcon/>

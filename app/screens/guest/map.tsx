@@ -50,7 +50,7 @@ export const MapGuestScreen=observer(()=> {
     useEffect(() => {
         // console.log(coordinate.imgLoad, markers.length);
         
-        if (coordinate.imgLoad>0 && markers.length>0 && coordinate.imgLoad == markers.length) {
+        if (coordinate.imgLoad>0 && markers?.length>0 && coordinate.imgLoad == markers?.length) {
             // console.log('Все изображения загрузились!')
             setTimeout(() => setUp(2), 1000);
         }
@@ -92,7 +92,7 @@ export const MapGuestScreen=observer(()=> {
                         </BlurView>
                         {/* <View style={{width:42, height:42}}/> */}
                         <View style={{flexDirection:"row", alignItems:"center", gap:4}}>
-                            {dateTxt.length>0 && <TouchableOpacity onPress={()=>{
+                            {dateTxt?.length>0 && <TouchableOpacity onPress={()=>{
                                     setDate('')
                                     onDate('')
                                 }} style={{borderRadius:16, width:42, alignItems:'center', justifyContent:"center", height:42, backgroundColor:'#00000088'}}>
@@ -103,21 +103,33 @@ export const MapGuestScreen=observer(()=> {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    {(!loader&& markers.length > 0) ? 
-                    <MapGuest 
-                        up={up} 
-                        markers={markers}
-                        onTouchMove={() => setEvent(false)} 
-                        onLoad={() => {
-                            if (coordinate.imgLoad < markers.length) {
-                                coordinate.setLoad(coordinate.imgLoad+1)
-                            }
-                        }}
-                        onPress={(index)=>{
-                            setMarkerItem(index)
-                            setEvent(true)
-                        }}
-                    />
+                    {(!loader&& markers?.length > 0) ? 
+                    <>
+                        {markers?.length > 0 ?<MapGuest 
+                            up={up} 
+                            markers={markers}
+                            onTouchMove={() => setEvent(false)} 
+                            onLoad={() => {
+                                if (coordinate.imgLoad < markers.length) {
+                                    coordinate.setLoad(coordinate.imgLoad+1)
+                                }
+                            }}
+                            onPress={(index)=>{
+                                setMarkerItem(index)
+                                setEvent(true)
+                            }}
+                        /> :
+                        <MapGuest 
+                            up={2} 
+                            markers={[]}
+                            onTouchMove={() => setEvent(false)} 
+                            onPress={(index)=>{
+                                setMarkerItem(index)
+                                setEvent(true)
+                            }}
+                        />
+                        }
+                    </>
                     : 
                     <View style={{alignItems:"center", justifyContent:"center", width:width,height:height-statusBarHeight}}>
                         <View style={{backgroundColor:'#181818CC', borderRadius:90, padding:10}}><ActivityIndicator size={40} color={Бирюзовый}/></View>

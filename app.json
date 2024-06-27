@@ -2,7 +2,7 @@
   "expo": {
     "name": "Muito",
     "slug": "event-party",
-    "version": "2.0.7",
+    "version": "2.0.9",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -17,7 +17,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "buildNumber": "2.47",
+      "buildNumber": "2.48",
       "bundleIdentifier": "event-lux"
     },
     "android": {
@@ -43,6 +43,13 @@
       "expo-build-properties",
       "expo-font",
       "expo-asset",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Приложение получает доступ к вашим фотографиям, чтобы вы могли добавить их в свой профиль.",
+          "cameraPermission": "Приложение получает доступ к вашей камере, чтобы вы могли добавить фотографии в свой профиль."
+        }
+      ],
       [
         "expo-camera",
         {

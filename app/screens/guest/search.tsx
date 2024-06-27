@@ -38,12 +38,12 @@ export function SearchScreen() {
         })();
     },[])
 
-    const onRefresh = async() => {
+    const onRefresh = async(date?:string) => {
         setRefresh(true)
         setTimeout(async() => {
             let uri = '/event?page=1'
-            if (dateTxt?.length > 0 ) {
-                uri += `&date=${dateTxt}`
+            if (date?.length > 0 ) {
+                uri += `&date=${date}`
             }
             if (tag != -1) {
                 uri += `&for=${tag}`
@@ -99,7 +99,7 @@ export function SearchScreen() {
                                         <View style={{flexDirection:"row", alignItems:"center", gap:8}}>
                                             {dateTxt.length>0 && <TouchableOpacity onPress={()=>{
                                                 setDate("")
-                                                onRefresh()
+                                                onRefresh('')
                                             }} style={{borderRadius:16, width:42, alignItems:'center', justifyContent:"center", height:42, backgroundColor:'#00000033'}}>
                                                 <CloseIcon color='#fff'/>
                                             </TouchableOpacity>}
@@ -156,7 +156,7 @@ export function SearchScreen() {
                                 <View style={{flexDirection:"row", alignItems:"center", gap:8}}>
                                     {dateTxt.length>0 && <TouchableOpacity onPress={()=>{
                                         setDate('')
-                                        onRefresh()
+                                        onRefresh('')
                                     }} style={{borderRadius:16, width:42, alignItems:'center', justifyContent:"center", height:42, backgroundColor:'#00000033'}}>
                                         <CloseIcon color='#fff'/>
                                     </TouchableOpacity>}
@@ -187,7 +187,7 @@ export function SearchScreen() {
                                 <Text style={[styles.bodyText,{color:'white',textAlign:"center"}]}>{'По этому запросу ничего не найдено.\nПопробуйте изменить набор фильтров'}</Text>
                                 <TouchableOpacity activeOpacity={0.7} onPress={()=>{
                                     setDate('')
-                                    onRefresh()
+                                    onRefresh('')
                                 }}>
                                     <Text style={[styles.button,{color:Бирюзовый, paddingTop:8}]}>Обновить</Text>
                                 </TouchableOpacity>
@@ -196,7 +196,7 @@ export function SearchScreen() {
                     </ScrollView>}
                 <ModalDatePoint onPress={async(data)=>{
                     setDate(moment(data).format("YYYY-MM-DD"));
-                    onRefresh()
+                    onRefresh(moment(data).format("YYYY-MM-DD"))
                     date?.current?.close()
                 }} ref={date}/>
             </MainLayout>
