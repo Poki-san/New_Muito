@@ -24,7 +24,7 @@ export const Map = memo((props:{onTouchMove?:any, onPress?:any, markers?:any, up
                     key={info?.id}
                     point={info.point}
                     source={{uri:info?.marker}}
-                    scale={3.3}
+                    scale={2.5}
                     onPress={() => onPress(index)}
                 />
             }

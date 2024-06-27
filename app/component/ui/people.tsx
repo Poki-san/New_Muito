@@ -49,7 +49,7 @@ export function PeopleItemMap(props:{data?:{}}) {
         <TouchableOpacity activeOpacity={0.9} onPress={()=>{
             navigate('People',{id:people?.id})
         }}>
-            <Image source={{uri:people?.img[0].uri}} style={{width:width-32, height:width-32, borderRadius:16 }}/>
+            {people?.img.length > 0 && <Image source={{uri:people?.img[0]?.mid}} style={{width:width-32, height:width-32, borderRadius:16 }}/>}
             <View style={{position:"absolute", borderRadius:16, left:8, right:8, bottom:12, backgroundColor:'#00000066', paddingVertical:8, paddingHorizontal:13, flexDirection:"row", justifyContent:"space-between", alignItems:'center'}}>
                 <Text style={[styles.h4,{fontSize:18, color:'white', lineHeight:21.6}]}>{people?.name} <Text style={{color:'#FFFFFF99'}}>{people?.age}</Text></Text>
                 <View style={{flexDirection:"row", alignItems:"center", gap:5}}>
