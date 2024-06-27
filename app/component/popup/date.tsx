@@ -179,10 +179,15 @@ export const ModalDatePoint = forwardRef((props:{onPress?:(date?:string)=>void},
                                     enableSwipeMonths
                                     onDayPress={day => {                                        
                                         setSelected(day.dateString)
+                                        console.log(day.dateString);
+                                        
                                         !!props.onPress&&props.onPress(day.dateString)
                                     }}
                                     style={{ borderRadius:16, paddingVertical:10}}
-                                    markedDates={{[selected]:{selected: true, disableTouchEvent: true, marked:false, color:'#355855'}}}
+                                    markedDates={{
+                                        [selected]:{selected: true, disableTouchEvent: true, marked:false, color:'#355855'},
+                                        ["2024-06-28"]:{disableTouchEvent: true, textColor:'green', color:'green'}
+                                    }}
                                     renderArrow={direction => (
                                         direction==='left' ? 
                                             <View style={{padding:7, alignItems:'center', justifyContent:"center"}}>
@@ -223,7 +228,6 @@ const ThemeCalender = {
       fontSize: 14,
       // fontFamily: "Roboto-Regular",
       lineHeight: 16,
-      color: 'white',
     },
     "stylesheet.calendar.main":{
         container:{

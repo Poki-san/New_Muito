@@ -8,34 +8,42 @@ import { BlurView } from 'expo-blur';
 import coordinate from '../../model/coordinate';
 import { observer } from 'mobx-react-lite';
 import apiFetch from '../../functions/api';
-import {MapOrg} from '../../component/myMap';
+import {Map} from '../../component/myMap';
  
 export const MapOrgScreen = observer(() => {
     // const [countLoad, setCountLoader] = useState(1)
     const [people, setPeople] = useState(false)
     const [markers, setMarkers] = useState([]);
-    const [up, setUp] = useState(1)
+    // const [up, setUp] = useState(1)
     const [markerItem, setMarkerItem] = useState(0);
     const [loader, setLoader] = useState(false)
 
     const handlerNear = async () => {
         const response = await apiFetch('/event/near','GET',true)
-        setMarkers(response?.data)
+        switch (response?.status) {
+            case 200:
+            case 201:
+            case 202:
+                setMarkers(response?.data)
+                break;
+            default:
+                break;
+        }
         setLoader(false)
     }
     useEffect(() => {
-        coordinate.setLoad(0)
+        // coordinate.setLoad(0)
         setLoader(true)
         handlerNear().catch(e => console.log(e))
     }, [])
 
-    useEffect(() => {
-        // console.log(coordinate.imgLoad +' = '+markers.length);
-        if (coordinate.imgLoad>0 && markers?.length>0 && coordinate.imgLoad == markers?.length) {
-            // console.log('Все изображения загрузились!')
-            setUp(2);
-        }
-    }, [coordinate.imgLoad])
+    // useEffect(() => {
+    //     // console.log(coordinate.imgLoad +' = '+markers.length);
+    //     if (coordinate.imgLoad>0 && markers?.length>0 && coordinate.imgLoad == markers?.length) {
+    //         // console.log('Все изображения загрузились!')
+    //         setUp(2);
+    //     }
+    // }, [coordinate.imgLoad])
     return ( 
         <MainLayout isStatusBar backgroundColor='#181818'>
             <KeyboardAvoidingView
@@ -50,15 +58,11 @@ export const MapOrgScreen = observer(() => {
                     </BlurView>
                 </View>
                 <View style={{borderTopLeftRadius:16, borderTopRightRadius:16, overflow:"hidden"}}>
-                    {(!loader && markers?.length > 0) ? <>
-                        {markers?.length > 0 ? <MapOrg
-                            up={up} 
-                            markers={markers} 
-                            onLoad={() => {
-                                if (coordinate.imgLoad < markers.length) {
-                                    coordinate.setLoad(coordinate.imgLoad+1)
-                                }
-                            }}
+                {(!loader&& markers?.length > 0) ? 
+                    <>
+                        {markers?.length > 0 ?<Map 
+                            up={2} 
+                            markers={markers}
                             onTouchMove={()=>{
                                 if (people) {
                                     setPeople(false)
@@ -69,24 +73,14 @@ export const MapOrgScreen = observer(() => {
                                 setMarkerItem(index)
                                 setPeople(true)
                             }}
-                        /> : 
-                        <MapOrg
-                            up={2}
+                        /> :
+                        <Map 
+                            up={2} 
                             markers={[]}
-                            onTouchMove={()=>{
-                                if (people) {
-                                    setPeople(false)
-                                }
-                            }}
-                            onPress={(index) => {
-                                setPeople(false)
-                                setMarkerItem(index)
-                                setPeople(true)
-                            }}
                         />
-                        } 
+                        }
                     </>
-                    :
+                    : 
                     <View style={{alignItems:"center", justifyContent:"center", width:width,height:height-statusBarHeight}}>
                         <View style={{backgroundColor:'#181818CC', borderRadius:90, padding:10}}><ActivityIndicator size={40} color={Бирюзовый}/></View>
                     </View>
@@ -101,14 +95,6 @@ export const MapOrgScreen = observer(() => {
                         <View onTouchStart={()=>setPeople(false)} style={{height:height, width:width,position:"absolute",bottom:74,top:0, zIndex:3}}/>
                     </>
                 }
-
-            {up==1&&
-                <View style={{alignItems:"center", justifyContent:"center", backgroundColor:'#181818', zIndex:9999, position:"absolute", width:width,height:height-statusBarHeight}}>
-                    <View style={{backgroundColor:'#181818CC', borderRadius:90, padding:10}}>
-                        <ActivityIndicator size={40} color={Бирюзовый}/>
-                    </View>
-                </View>
-            }
             </KeyboardAvoidingView>
         </MainLayout>
     )

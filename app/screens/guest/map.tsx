@@ -11,7 +11,7 @@ import { BlurView } from 'expo-blur';
 import apiFetch from '../../functions/api';
 import { useIsFocused } from '@react-navigation/native';
 import moment from 'moment';
-import { MapGuest } from '../../component/myMap';
+import { Map } from '../../component/myMap';
 import { observer } from 'mobx-react-lite';
  
 export const MapGuestScreen=observer(()=> {
@@ -24,37 +24,34 @@ export const MapGuestScreen=observer(()=> {
     const [loader, setLoader] = useState(false)
     const [dateTxt, setDate] = useState('')
 
-    const focus = useIsFocused();
     useEffect(()=>{
-        coordinate.setLoad(0)
-        setLoader(true)
-        if (focus) {
-            (async()=>{
-                const value = await apiFetch('/event/map','GET',true)
-                
-                switch (value?.status) {
-                    case 200:
-                    case 201:
-                    case 202:
-                        setMarkers(value?.data)
-                        break;
-                    default:
-                        break;
-                }
-                setLoader(false)
-                
-            })();
-        }
-    },[focus])
+        (async()=>{
+            setLoader(true)
+            const value = await apiFetch('/event/map','GET',true)
+            console.log(value);
+            
+            switch (value?.status) {
+                case 200:
+                case 201:
+                case 202:
+                    setMarkers(value?.data)
+                    break;
+                default:
+                    break;
+            }
+            setLoader(false)
+            
+        })();
+    },[])
 
-    useEffect(() => {
-        // console.log(coordinate.imgLoad, markers.length);
+    // useEffect(() => {
+    //     // console.log(coordinate.imgLoad, markers.length);
         
-        if (coordinate.imgLoad>0 && markers?.length>0 && coordinate.imgLoad == markers?.length) {
-            // console.log('Все изображения загрузились!')
-            setTimeout(() => setUp(2), 1000);
-        }
-    }, [coordinate.imgLoad])
+    //     if (coordinate.imgLoad>0 && markers?.length>0 && coordinate.imgLoad == markers?.length) {
+    //         // console.log('Все изображения загрузились!')
+    //         setTimeout(() => setUp(2), 1000);
+    //     }
+    // }, [coordinate.imgLoad])
 
     const onDate = async(date?:string) => {
         setLoader(true)
@@ -105,28 +102,18 @@ export const MapGuestScreen=observer(()=> {
                     </View>
                     {(!loader&& markers?.length > 0) ? 
                     <>
-                        {markers?.length > 0 ?<MapGuest 
-                            up={up} 
+                        {markers?.length > 0 ?<Map 
+                            up={2} 
                             markers={markers}
-                            onTouchMove={() => setEvent(false)} 
-                            onLoad={() => {
-                                if (coordinate.imgLoad < markers.length) {
-                                    coordinate.setLoad(coordinate.imgLoad+1)
-                                }
-                            }}
+                            onTouchMove={() => setEvent(false)}
                             onPress={(index)=>{
                                 setMarkerItem(index)
                                 setEvent(true)
                             }}
                         /> :
-                        <MapGuest 
+                        <Map 
                             up={2} 
                             markers={[]}
-                            onTouchMove={() => setEvent(false)} 
-                            onPress={(index)=>{
-                                setMarkerItem(index)
-                                setEvent(true)
-                            }}
                         />
                         }
                     </>

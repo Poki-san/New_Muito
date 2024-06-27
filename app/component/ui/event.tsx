@@ -16,7 +16,7 @@ export function EventItem(props:{tag?:number, size?:number, onDelete?: () => voi
     const del = useRef<RBSheet>()
     const review = useRef<RBSheet>(null)
     const {data} = props
-    console.log(data);
+    // console.log(data);
     
     
     return ( 
