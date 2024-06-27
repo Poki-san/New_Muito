@@ -10,7 +10,7 @@ export const MarkerMap = (props:{info?:any, index?:any, onLoad?:any, onPress?:an
             children={
                 <View style={{borderWidth:1, width: 40, height: 40, overflow:"hidden", borderColor:Бирюзовый, borderRadius:16}}>
                     <Image
-                        onLoad={onLoad}
+                        onLoadEnd={onLoad}
                         source={{uri:info.marker}}
                         style={{
                             width: '100%',

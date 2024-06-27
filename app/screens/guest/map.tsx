@@ -26,10 +26,10 @@ export const MapGuestScreen=observer(()=> {
 
     const focus = useIsFocused();
     useEffect(()=>{
+        coordinate.setLoad(0)
         setLoader(true)
         if (focus) {
             (async()=>{
-                coordinate.setLoad(0)
                 const value = await apiFetch('/event/map','GET',true)
                 
                 switch (value?.status) {
@@ -48,12 +48,11 @@ export const MapGuestScreen=observer(()=> {
     },[focus])
 
     useEffect(() => {
-        console.log(coordinate.imgLoad, markers.length);
+        // console.log(coordinate.imgLoad, markers.length);
         
-        if (coordinate.imgLoad === markers.length) {
+        if (coordinate.imgLoad>0 && markers.length>0 && coordinate.imgLoad == markers.length) {
             // console.log('Все изображения загрузились!')
-            // setTimeout(() => setUp(2), 1500);
-            setUp(2)
+            setTimeout(() => setUp(2), 1000);
         }
     }, [coordinate.imgLoad])
 

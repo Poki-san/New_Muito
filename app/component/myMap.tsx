@@ -17,7 +17,7 @@ export const MapOrg = memo((props:{onTouchMove?:any, onLoad?:any, onPress?:any, 
                 key={up}
                 clusterColor={Бирюзовый}
                 showUserPosition={true}
-                style={{width:width, height:height-statusBarHeight, borderTopLeftRadius:16, borderTopRightRadius:16, overflow:"hidden"}}
+                style={{width:width, height:height-statusBarHeight, borderTopLeftRadius:16, borderTopRightRadius:16, overflow:"hidden", zIndex:3}}
                 initialRegion={{
                     lat: coordinate.lat==0 ? 55.755864 : coordinate.lat,
                     lon: coordinate.lon==0 ? 37.617698 : coordinate.lon,
@@ -65,7 +65,7 @@ export const MapGuest = memo((props:{onTouchMove?:any, onLoad?:any, onPress?:any
                 children={
                     <View key={index} style={{width: 40, height: 40, borderRadius:16, borderColor:Бирюзовый, overflow:"hidden"}}>
                         <Image
-                            onLoad={onLoad}
+                            onLoadEnd={onLoad}
                             source={{uri:info?.marker}}
                             style={{
                                 width: 40,

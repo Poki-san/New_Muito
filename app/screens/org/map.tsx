@@ -20,24 +20,20 @@ export const MapOrgScreen = observer(() => {
 
     const handlerNear = async () => {
         const response = await apiFetch('/event/near','GET',true)
-        coordinate.setLoad(0)
         setMarkers(response?.data)
         setLoader(false)
     }
     useEffect(() => {
+        coordinate.setLoad(0)
         setLoader(true)
         handlerNear().catch(e => console.log(e))
     }, [])
 
     useEffect(() => {
-        console.log(coordinate.imgLoad +' = '+markers.length);
-        if (coordinate.imgLoad === markers.length) {
+        // console.log(coordinate.imgLoad +' = '+markers.length);
+        if (coordinate.imgLoad>0 && markers.length>0 && coordinate.imgLoad == markers.length) {
             // console.log('Все изображения загрузились!')
-            // setLoader(true) 
-            setUp(2)
-            // setTimeout(() => {
-            //     setLoader(false)
-            // }, 15000);
+            setTimeout(() => setUp(2), 1000);
         }
     }, [coordinate.imgLoad])
     return ( 
@@ -90,6 +86,14 @@ export const MapOrgScreen = observer(() => {
                         <View onTouchStart={()=>setPeople(false)} style={{height:height, width:width,position:"absolute",bottom:74,top:0, zIndex:3}}/>
                     </>
                 }
+
+            {up==1&&
+                <View style={{alignItems:"center", justifyContent:"center", backgroundColor:'#181818', zIndex:9999, position:"absolute", width:width,height:height-statusBarHeight}}>
+                    <View style={{backgroundColor:'#181818CC', borderRadius:90, padding:10}}>
+                        <ActivityIndicator size={40} color={Бирюзовый}/>
+                    </View>
+                </View>
+            }
             </KeyboardAvoidingView>
         </MainLayout>
     )
