@@ -1,16 +1,13 @@
-import { ActivityIndicator, Image, View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import { height, statusBarHeight, width,  Бирюзовый } from '../GLOBAL';
 import { ClusteredYamap, Marker } from 'react-native-yamap-plus';
 import coordinate from '../model/coordinate';
 import { memo, useRef } from 'react';
 
-export const Map = memo((props:{onTouchMove?:any, onLoad?:any, onPress?:any, markers?:any, up?:any}) => {
-    const {onTouchMove, onLoad, onPress, up, markers} = props
-    // console.log(up);
-    const ref = useRef();
+export const Map = memo((props:{onTouchMove?:any, onPress?:any, markers?:any, up?:any}) => {
+    const {onTouchMove, onPress, up, markers} = props
     return (<View style={{position:"relative"}}>
         <ClusteredYamap
-            ref={ref}
             key={up}
             clusterColor={Бирюзовый}
             style={{width:width, height:height-statusBarHeight, borderTopLeftRadius:16, borderTopRightRadius:16, overflow:"hidden"}}
@@ -26,21 +23,8 @@ export const Map = memo((props:{onTouchMove?:any, onLoad?:any, onPress?:any, mar
                 <Marker
                     key={info?.id}
                     point={info.point}
-                    source={{uri:info?.base64}}
-                    scale={2.8}
-                    // children={
-                    //     <View key={index} style={{width: 40, height: 40, borderRadius:16, borderColor:Бирюзовый, overflow:"hidden"}}>
-                    //         <Image
-                    //             onLoadEnd={onLoad}
-                    //             source={{uri:info?.marker}}
-                    //             style={{
-                    //                 width: 40,
-                    //                 height: 40,
-                    //                 borderRadius: 16
-                    //             }}
-                    //         />
-                    //     </View>
-                    // }
+                    source={{uri:info?.marker}}
+                    scale={3.3}
                     onPress={() => onPress(index)}
                 />
             }

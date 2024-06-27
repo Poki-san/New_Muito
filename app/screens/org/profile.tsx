@@ -12,11 +12,13 @@ import { ModalEmailHelp } from '../../component/popup/help';
 import { navigate } from '../../functions/navigate';
 import { logOut } from '../../functions/auth';
 import token from '../../model/token';
-import apiFetch from '../../functions/api';
+import apiFetch, { apiFetchFile } from '../../functions/api';
+import { fileExpansion, fileName } from '../../functions/addImage';
  
 export const ProfileScreen = observer(() => {
     const img = useRef<RBSheet>(null)
     const help = useRef<RBSheet>(null)
+    
     return ( 
         <MainLayout isStatusBar backgroundColor='#181818'>
             <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='always' contentContainerStyle={{flexGrow:1}}>
@@ -27,7 +29,7 @@ export const ProfileScreen = observer(() => {
                 >
                     <View style={{width:'100%', flex:1, alignItems:'center', marginTop:statusBarHeight+20}}>
                         <View style={styles.profileCameraContainer}>
-                            {token?.data?.img ? 
+                            {token?.data?.img?.length >0 ? 
                             <>
                                 <Image source={{uri:token?.data?.img[0]?.uri}} style={{width:'100%', height:'100%', borderRadius:16}}/>
                                 <TouchableOpacity activeOpacity={0.7} onPress={async()=>{
@@ -69,7 +71,20 @@ export const ProfileScreen = observer(() => {
                         </TouchableOpacity>
                     </View>
                 </KeyboardAvoidingView>
-                <ModalImg ref={img} onPath={(path)=>avatar.Input(path[0])}/>
+                <ModalImg ref={img} onPath={async(path)=>{
+                     const bodyFormData = new FormData()
+                     bodyFormData.append('images[]', {
+                         uri: path[0],
+                         name: fileName(path[0]),
+                         type: fileExpansion(path[0], 'image')
+                     })
+                     const value = await apiFetchFile('/profile/update',"POST",true,bodyFormData)
+                     
+                     if (value?.status == 202) {
+                         token?.userUpdate(value?.user, token?.token)
+                         img.current?.close()
+                     }
+                }}/>
                 <ModalEmailHelp ref={help}/>
             </ScrollView> 
         </MainLayout>

@@ -185,8 +185,8 @@ export const ModalDatePoint = forwardRef((props:{onPress?:(date?:string)=>void},
                                     }}
                                     style={{ borderRadius:16, paddingVertical:10}}
                                     markedDates={{
-                                        [selected]:{selected: true, disableTouchEvent: true, marked:false, color:'#355855'},
-                                        ["2024-06-28"]:{disableTouchEvent: true, textColor:'green', color:'green'}
+                                        [selected]:{disableTouchEvent: true, marked:false, color:'#355855'},
+                                        // ["2024-06-28"]:{disableTouchEvent: false, selected:true}
                                     }}
                                     renderArrow={direction => (
                                         direction==='left' ? 
@@ -214,8 +214,8 @@ const ThemeCalender = {
     calendarBackground: '#221E1E80',
     todayTextColor: 'white',
     todayBackgroundColor: '#00000066',
-    selectedDayBackgroundColor: '#355855',
-    selectedDayTextColor: '#000',
+    selectedDayBackgroundColor: '#221E1E80',
+    selectedDayTextColor: '#83FDF4',
     dayTextColor:'white',
     textDisabledColor: '#FFFFFF65',
     // textDayHeaderFontFamily: "Roboto-Regular",
@@ -224,11 +224,7 @@ const ThemeCalender = {
     selectedBorderRadius:16,
     // textMonthFontFamily: "Roboto-Medium",
     textMonthFontSize: 18,
-    textDayStyle: {
-      fontSize: 14,
-      // fontFamily: "Roboto-Regular",
-      lineHeight: 16,
-    },
+    textDayFontSize:15,
     "stylesheet.calendar.main":{
         container:{
             paddingLeft: 10,

@@ -1,20 +1,16 @@
-import { ActivityIndicator, Image, KeyboardAvoidingView, Platform, Text, View } from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, Platform, Text, View } from 'react-native';
 import { MainLayout, PeopleItemMap } from '../../component';
 import { height, statusBarHeight, width, Белый, Бирюзовый } from '../../GLOBAL';
-import { ClusteredYamap, Marker } from 'react-native-yamap-plus';
 import { useEffect, useState } from 'react';
 import { styles } from '../../styles';
 import { BlurView } from 'expo-blur';
-import coordinate from '../../model/coordinate';
 import { observer } from 'mobx-react-lite';
 import apiFetch from '../../functions/api';
 import {Map} from '../../component/myMap';
  
 export const MapOrgScreen = observer(() => {
-    // const [countLoad, setCountLoader] = useState(1)
     const [people, setPeople] = useState(false)
     const [markers, setMarkers] = useState([]);
-    // const [up, setUp] = useState(1)
     const [markerItem, setMarkerItem] = useState(0);
     const [loader, setLoader] = useState(false)
 
@@ -32,18 +28,10 @@ export const MapOrgScreen = observer(() => {
         setLoader(false)
     }
     useEffect(() => {
-        // coordinate.setLoad(0)
         setLoader(true)
         handlerNear().catch(e => console.log(e))
     }, [])
 
-    // useEffect(() => {
-    //     // console.log(coordinate.imgLoad +' = '+markers.length);
-    //     if (coordinate.imgLoad>0 && markers?.length>0 && coordinate.imgLoad == markers?.length) {
-    //         // console.log('Все изображения загрузились!')
-    //         setUp(2);
-    //     }
-    // }, [coordinate.imgLoad])
     return ( 
         <MainLayout isStatusBar backgroundColor='#181818'>
             <KeyboardAvoidingView

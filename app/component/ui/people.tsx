@@ -1,5 +1,5 @@
-import { Image, ImageBackground, Linking, Text, TouchableOpacity, View } from 'react-native';
-import { width, Бирюзовый50 } from '../../GLOBAL';
+import { ActivityIndicator, Image, ImageBackground, Linking, Text, TouchableOpacity, View } from 'react-native';
+import { width, Бирюзовый, Бирюзовый50 } from '../../GLOBAL';
 import { styles } from '../../styles';
 import { EditIcon, InstaEventIcon, RegInstaIcon, TGIcon, TelegramIcon } from '../../component/svg/svg';
 import { navigate } from '../../functions/navigate';
@@ -45,7 +45,7 @@ export function PeopleItemMap(props:{data?:{}}) {
         })();
     },[])
     
-    return(people &&
+    return(people ?
         <TouchableOpacity activeOpacity={0.9} onPress={()=>{
             navigate('People',{id:people?.id})
         }}>
@@ -70,6 +70,9 @@ export function PeopleItemMap(props:{data?:{}}) {
                     </TouchableOpacity>}
                 </View>
             </View>
-        </TouchableOpacity>
+        </TouchableOpacity> :
+        <View style={{alignItems:"center", justifyContent:"center", width:width-32}}>
+            <View style={{backgroundColor:'#181818CC', borderRadius:90, padding:10}}><ActivityIndicator size={40} color={Бирюзовый}/></View>
+        </View>
     )
 }

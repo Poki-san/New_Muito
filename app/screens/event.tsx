@@ -4,7 +4,7 @@ import { height, statusBarHeight, width, Бирюзовый, Бирюзовый5
 import { styles } from '../styles';
 import { BlurView } from 'expo-blur';
 import { goBack, navigate } from '../functions/navigate';
-import { BackArrowIcon, EditIcon, GOIcon, InstaEventIcon, MiniHeartIcon, QRIcon, ScanIcon, SettingIcon, TGEventIcon, TrashIcon, WarningIcon } from '../component/svg/svg';
+import { BackArrowIcon, EditIcon, GOIcon, InstaEventIcon, MiniHeartIcon, ProfileMenuIcon, QRIcon, ScanIcon, SettingIcon, TGEventIcon, TrashIcon, WarningIcon } from '../component/svg/svg';
 import { useEffect, useRef, useState } from 'react';
 import RBSheet from '@poki_san/react-native-bottom-sheet';
 import { showToastable } from 'react-native-toastable';
@@ -217,7 +217,12 @@ export function EventScreen(props?:{route?:{params:{type?:''}}}) {
                             </View>}
                             {tag==2 && <View style={{flexDirection:"row", justifyContent:'space-between'}}>
                                 <View style={{flexDirection:"row", gap:8}}>
-                                    <Image style={{width:39, height:39, borderRadius:8, overflow:'hidden'}} source={{uri:data?.author_full?.img[0].small}}/>
+                                    {data?.author_full?.img?.length > 0 ? 
+                                        <Image style={{width:39, height:39, borderRadius:8, overflow:'hidden'}} source={{uri:data?.author_full?.img[0]?.small}}/> :
+                                        <View style={{width:39, height:39, borderRadius:8, overflow:'hidden', alignItems:"center"}}>
+                                            <ProfileMenuIcon/>
+                                        </View>
+                                    }
                                     <View style={{gap:4}}>
                                         <Text style={[styles.bodyText,{color:'white'}]}>{data?.author_full?.login ?? data?.author_full?.name}</Text>
                                         <View style={{flexDirection:"row", alignItems:"center", gap:4}}>
@@ -231,8 +236,12 @@ export function EventScreen(props?:{route?:{params:{type?:''}}}) {
                                         {data?.author_full?.instagram && <TouchableOpacity 
                                             activeOpacity={0.7}
                                             onPress={()=>{
-                                                if(!!data?.status?.invite){
+                                                if (type=='org') {
                                                     Linking.openURL('https://www.instagram.com/'+data?.author_full?.instagram?.replace('@',''))
+                                                } else{
+                                                    if(!!data?.status?.invite){
+                                                        Linking.openURL('https://www.instagram.com/'+data?.author_full?.instagram?.replace('@',''))
+                                                    }
                                                 }
                                             }}
                                         >
@@ -241,8 +250,12 @@ export function EventScreen(props?:{route?:{params:{type?:''}}}) {
                                         {data?.author_full?.telegram && <TouchableOpacity 
                                             activeOpacity={0.7}
                                             onPress={()=>{
-                                                if(!!data?.status?.invite){
+                                                if (type=='org') {
                                                     Linking.openURL('https://t.me/'+data?.author_full?.telegram?.replace('@',''))
+                                                } else{
+                                                    if(!!data?.status?.invite){
+                                                        Linking.openURL('https://t.me/'+data?.author_full?.telegram?.replace('@',''))
+                                                    }
                                                 }
                                             }}
                                         >

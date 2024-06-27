@@ -137,6 +137,7 @@ export const ProfileGuestScreen = observer(() => {
                     const value = await apiFetchFile('/profile/update',"POST",true,bodyFormData)
                     if (value?.status == 202) {
                         token?.userUpdate(value?.user, token?.token)
+                        img.current?.close()
                     }
                 }}/>
                 <ModalEmailHelp ref={help}/>

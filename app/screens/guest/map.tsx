@@ -1,7 +1,6 @@
-import { ActivityIndicator, Image, KeyboardAvoidingView, Platform, Text, TouchableOpacity, View } from 'react-native';
-import { EventItem, EventMapItem, MainLayout, ModalDatePoint } from '../../component';
+import { ActivityIndicator, KeyboardAvoidingView, Platform, Text, TouchableOpacity, View } from 'react-native';
+import { EventMapItem, MainLayout, ModalDatePoint } from '../../component';
 import { height, statusBarHeight, width, Белый, Бирюзовый } from '../../GLOBAL';
-import { ClusteredYamap, Marker } from 'react-native-yamap-plus';
 import { useEffect, useRef, useState } from 'react';
 import coordinate from '../../model/coordinate';
 import { CalendarIcon, CloseIcon } from '../../component/svg/svg';
@@ -9,18 +8,15 @@ import { styles } from '../../styles';
 import RBSheet from '@poki_san/react-native-bottom-sheet';
 import { BlurView } from 'expo-blur';
 import apiFetch from '../../functions/api';
-import { useIsFocused } from '@react-navigation/native';
 import moment from 'moment';
 import { Map } from '../../component/myMap';
 import { observer } from 'mobx-react-lite';
  
 export const MapGuestScreen=observer(()=> {
-    // const [countLoad, setCountLoader] = useState(0)
     const [event, setEvent] = useState(false)
     const date = useRef<RBSheet>(null)
     const [markers, setMarkers] = useState([]);
     const [markerItem, setMarkerItem] = useState(0);
-    const [up, setUp] = useState(1)
     const [loader, setLoader] = useState(false)
     const [dateTxt, setDate] = useState('')
 
@@ -44,19 +40,9 @@ export const MapGuestScreen=observer(()=> {
         })();
     },[])
 
-    // useEffect(() => {
-    //     // console.log(coordinate.imgLoad, markers.length);
-        
-    //     if (coordinate.imgLoad>0 && markers?.length>0 && coordinate.imgLoad == markers?.length) {
-    //         // console.log('Все изображения загрузились!')
-    //         setTimeout(() => setUp(2), 1000);
-    //     }
-    // }, [coordinate.imgLoad])
-
     const onDate = async(date?:string) => {
         setLoader(true)
         setMarkers([])
-        setUp(1)
         coordinate.setLoad(0)
         if (date.length>0) {
             const val = await apiFetch(`/event/map?date=${date}`,'GET', true)
