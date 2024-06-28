@@ -108,7 +108,7 @@ export const MapGuestScreen=observer(()=> {
                         <View style={{backgroundColor:'#181818CC', borderRadius:90, padding:10}}><ActivityIndicator size={40} color={Бирюзовый}/></View>
                     </View>
                     }
-                    {event&&<View style={{position:"absolute", bottom:74, alignItems:"center", zIndex:999, left:0, right:0}}>
+                    {event&&<View style={{position:"absolute", bottom:Platform.OS=='android'? 74:74+statusBarHeight, alignItems:"center", zIndex:999, left:0, right:0}}>
                         <EventMapItem data={markers[markerItem]} size={92} noEdit type={'guest'}/>
                     </View>}
                 </View>
