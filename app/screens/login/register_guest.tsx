@@ -201,6 +201,7 @@ export function RegisterGuestScreen() {
                                             backgroundColor='#FFFFFF00' 
                                             placeholderTextColor={'#FFFFFF99'} 
                                             title='Email' 
+                                            keyboardType='email-address'
                                             style={{borderWidth:1, borderColor:'#FFFFFF99'}}
                                             onChangeText={handleChange('email')}
                                             onBlur={handleBlur('email')}
@@ -312,9 +313,9 @@ export function RegisterGuestScreen() {
                 <TouchableOpacity activeOpacity={0.7} onPress={()=>setStepCamera(false)} style={{borderRadius:90, transform:[{rotate:'90deg'}],backgroundColor:'#221E1E99', padding:6, position:'absolute', top:statusBarHeight+8, zIndex:5, pointerEvents:'box-only', left:16}}>
                     <ModalCloseIcon/>
                 </TouchableOpacity>
-                <Image source={require('../../../assets/image/camera.png')} style={{position:'absolute', width:'100%', height:'100%', top:0, left:0, zIndex:3}}/>
+                <Image source={require('../../../assets/image/camera.png')} style={{position:'absolute', width:'100%', height:height-30, top:0, left:0, zIndex:3}}/>
                 {permission.granted &&<CameraView ref={camera} facing='front' style={{width:'100%', height:'100%', zIndex:1}}/>}
-                <View style={{position:"absolute", zIndex:3, top:0, left:0, right:0, bottom:0, alignItems:'center', justifyContent:'center', width:width, height:height}}>
+                <View style={{position:"absolute", zIndex:3, left:0, right:0, bottom:187, alignItems:'center',  width:width}}>
                     <Text style={[styles.additional,{color:'white', marginTop:180}]}>Постарайтесь не двигаться</Text>
                 </View>
                 <View style={{position:"absolute", zIndex:3, left:0, right:0, bottom:Platform.OS=='ios'?statusBarHeight:20, alignItems:'center', width:width, height:80}}>

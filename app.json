@@ -2,7 +2,7 @@
   "expo": {
     "name": "Muito",
     "slug": "event-party",
-    "version": "2.1.1",
+    "version": "2.1.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -17,7 +17,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "buildNumber": "2.48",
+      "buildNumber": "2.49",
       "bundleIdentifier": "event-lux"
     },
     "android": {
