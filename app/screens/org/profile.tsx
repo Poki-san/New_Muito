@@ -22,11 +22,7 @@ export const ProfileScreen = observer(() => {
     return ( 
         <MainLayout isStatusBar backgroundColor='#181818'>
             <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='always' contentContainerStyle={{flexGrow:1}}>
-                <KeyboardAvoidingView
-                    behavior={Platform.OS === "ios" ? "padding" : 'height'}
-                    keyboardVerticalOffset={Platform.OS === "ios" && statusBarHeight}
-                    style={{ flex: 1 }}
-                >
+                
                     <View style={{width:'100%', flex:1, alignItems:'center', marginTop:statusBarHeight+20}}>
                         <View style={styles.profileCameraContainer}>
                             {token?.data?.img?.length >0 ? 
@@ -72,7 +68,6 @@ export const ProfileScreen = observer(() => {
                             </TouchableOpacity>
                         </View>
                     </View>
-                </KeyboardAvoidingView>
                 <ModalImg ref={img} onPath={async(path)=>{
                      const bodyFormData = new FormData()
                      bodyFormData.append('images[]', {

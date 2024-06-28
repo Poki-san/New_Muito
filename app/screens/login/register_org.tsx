@@ -84,8 +84,8 @@ export function RegisterOrgScreen() {
                                 const bodyFormData = new FormData()
                                 if (value?.login?.length > 0) {
                                     bodyFormData.append('login', value?.login)
-                                    // value?.name?.length > 0 && bodyFormData.append('name', value?.name)
-                                    // value?.last_name?.length > 0 && bodyFormData.append('last_name', value?.last_name)
+                                    value?.name?.length > 0 && bodyFormData.append('name', value?.name)
+                                    value?.last_name?.length > 0 && bodyFormData.append('last_name', value?.last_name)
                                 } else {
                                     bodyFormData.append('name', value?.name)
                                     bodyFormData.append('last_name', value?.last_name)

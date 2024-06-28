@@ -25,11 +25,7 @@ export const ProfileGuestScreen = observer(() => {
     return ( 
         <MainLayout isStatusBar backgroundColor='#181818'>
             <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='always' contentContainerStyle={{flexGrow:1}}>
-                <KeyboardAvoidingView
-                    behavior={Platform.OS === "ios" ? "padding" : 'height'}
-                    keyboardVerticalOffset={Platform.OS === "ios" && statusBarHeight}
-                    style={{ flex: 1 }}
-                >
+                
                     <View style={{width:'100%', flex:1, alignItems:'center', marginTop:statusBarHeight+20}}>
                         <View style={{flexDirection:'row', gap:8}}>
                                 <View style={styles.profileCameraContainer}>
@@ -128,7 +124,6 @@ export const ProfileGuestScreen = observer(() => {
                             </TouchableOpacity>
                         </View>
                     </View>
-                </KeyboardAvoidingView>
                 <ModalImg ref={img} selectionLimit={3} onPath={async(path)=>{
                     const bodyFormData = new FormData()
                     bodyFormData.append('images[]', {
