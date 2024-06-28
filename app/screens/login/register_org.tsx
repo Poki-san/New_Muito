@@ -116,7 +116,7 @@ export function RegisterOrgScreen() {
                                       });
                                     navigationRef.current?.dispatch(bottomReset)
                                 } else {
-                                    setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 300);
+                                    setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 500);
                                 }
                             } else {
                                 const index = step + 1

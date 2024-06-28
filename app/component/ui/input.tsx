@@ -86,9 +86,9 @@ export const Input = forwardRef((props:InputProps, ref)=>{
                 } */}
 
                 {props.securePass &&
-                    <View style={{position:"absolute", right:0}}>
+                    <View onTouchStart={()=>setSecure(!secure)} style={{position:"absolute", right:0, zIndex:9999999999999}}>
                         <TouchableOpacity 
-                            style={{padding:10}}
+                            style={{padding:10, pointerEvents:"box-only"}}
                             activeOpacity={0.7}
                             onPress={()=>setSecure(!secure)}>
                             {secure ? <EyeClose/> : <EyeOpen/>}

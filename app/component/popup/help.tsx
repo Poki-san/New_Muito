@@ -22,6 +22,7 @@ export const ModalEmailHelp = forwardRef((props:{},ref)=>{
                 height={Platform.OS=='ios'?325:310}
                 closeOnDragDown={true}
                 // dragFromTopOnly
+                onClose={()=>setText('')}
                 closeOnPressMask={true} 
                 customStyles={{
                     draggableIcon:{

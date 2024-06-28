@@ -38,15 +38,15 @@ export function SearchScreen() {
         })();
     },[])
 
-    const onRefresh = async(date?:string) => {
+    const onRefresh = async(date?:string, tags?:number) => {
         setRefresh(true)
         setTimeout(async() => {
             let uri = '/event?page=1'
             if (date?.length > 0 ) {
                 uri += `&date=${date}`
             }
-            if (tag != -1) {
-                uri += `&for=${tag}`
+            if (tags != -1) {
+                uri += `&for=${tags}`
             }
             console.log(uri);
             const val = await apiFetch(uri,'GET', true)
@@ -72,7 +72,9 @@ export function SearchScreen() {
                             colors={[Бирюзовый]}
                             tintColor={Бирюзовый}
                             progressBackgroundColor={'#181818'}
-                            onRefresh={onRefresh}
+                            onRefresh={()=>{
+                                onRefresh(dateTxt,tag)
+                            }}
                         />}
                         onEndReached={async()=>{
                             if (meta?.last_page>page) {
@@ -97,9 +99,10 @@ export function SearchScreen() {
                                     <View style={{marginHorizontal:16, marginBottom:8, flexDirection:'row', alignItems:'center', justifyContent:"space-between"}}>
                                         <Text style={[styles.h4, {color:'white'}]}>Мероприятия</Text>
                                         <View style={{flexDirection:"row", alignItems:"center", gap:8}}>
-                                            {dateTxt.length>0 && <TouchableOpacity onPress={()=>{
+                                            {(dateTxt.length>0 || tag!=-1) && <TouchableOpacity onPress={()=>{
                                                 setDate("")
-                                                onRefresh('')
+                                                setTag(-1)
+                                                onRefresh('',-1)
                                             }} style={{borderRadius:16, width:42, alignItems:'center', justifyContent:"center", height:42, backgroundColor:'#00000033'}}>
                                                 <CloseIcon color='#fff'/>
                                             </TouchableOpacity>}
@@ -126,7 +129,7 @@ export function SearchScreen() {
                                 </View>
                                 <Tags default={tag} paddingV={5} style={{paddingHorizontal:16}} onPress={(tags)=>{
                                     setTag(tags)
-                                    onRefresh()
+                                    onRefresh(dateTxt, tags)
                                 }} noBorder data={forParticipants}/>
                                 
                             </>
@@ -145,7 +148,9 @@ export function SearchScreen() {
                             colors={[Бирюзовый]}
                             tintColor={Бирюзовый}
                             progressBackgroundColor={'#181818'}
-                            onRefresh={onRefresh}
+                            onRefresh={()=>{
+                                onRefresh(dateTxt,tag)
+                            }}
                         />}
                         contentContainerStyle={{flexGrow:1}} 
                         showsVerticalScrollIndicator={false}
@@ -156,7 +161,7 @@ export function SearchScreen() {
                                 <View style={{flexDirection:"row", alignItems:"center", gap:8}}>
                                     {dateTxt.length>0 && <TouchableOpacity onPress={()=>{
                                         setDate('')
-                                        onRefresh('')
+                                        onRefresh('', tag)
                                     }} style={{borderRadius:16, width:42, alignItems:'center', justifyContent:"center", height:42, backgroundColor:'#00000033'}}>
                                         <CloseIcon color='#fff'/>
                                     </TouchableOpacity>}
@@ -187,7 +192,7 @@ export function SearchScreen() {
                                 <Text style={[styles.bodyText,{color:'white',textAlign:"center"}]}>{'По этому запросу ничего не найдено.\nПопробуйте изменить набор фильтров'}</Text>
                                 <TouchableOpacity activeOpacity={0.7} onPress={()=>{
                                     setDate('')
-                                    onRefresh('')
+                                    onRefresh('', tag)
                                 }}>
                                     <Text style={[styles.button,{color:Бирюзовый, paddingTop:8}]}>Обновить</Text>
                                 </TouchableOpacity>
@@ -196,7 +201,7 @@ export function SearchScreen() {
                     </ScrollView>}
                 <ModalDatePoint onPress={async(data)=>{
                     setDate(moment(data).format("YYYY-MM-DD"));
-                    onRefresh(moment(data).format("YYYY-MM-DD"))
+                    onRefresh(moment(data).format("YYYY-MM-DD"), tag)
                     date?.current?.close()
                 }} ref={date}/>
             </MainLayout>

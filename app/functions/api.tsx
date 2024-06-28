@@ -58,7 +58,7 @@ async function apiFetch(url:string, method?:string, token?:boolean, values?:obje
                 if (jsonOutput.status != 401) {
                     const result = await jsonOutput.json();
                     if (!!result?.exception) {
-                        setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 300);
+                        setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 500);
                         
                     }
                     return {...result, status:jsonOutput.status};
@@ -72,14 +72,14 @@ async function apiFetch(url:string, method?:string, token?:boolean, values?:obje
                 }
                 
         } catch (err) {
-            setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 300);
+            setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 500);
         } finally {
             preloader.Input(false);
         }
     } else {
         preloader.Input(false);
         const temp = {noInet:true};
-        setTimeout(() => error.Input(true,'Нету подключения к интернету!','Упс!...', Platform.OS=='ios'?175:145), 300);
+        setTimeout(() => error.Input(true,'Нету подключения к интернету!','Упс!...', Platform.OS=='ios'?175:145), 500);
         return temp;
     }
 }
@@ -113,7 +113,7 @@ export async function apiFetchFile(url:string, method:string, token:boolean, val
             if (jsonOutput.status != 401) {
                 const result = await jsonOutput.json();
                 if (!!result?.exception) {
-                    setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 300);
+                    setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 500);
                 }
                 return {...result, status:jsonOutput.status};
             } else {
@@ -129,11 +129,11 @@ export async function apiFetchFile(url:string, method:string, token:boolean, val
             console.log(err);
             
             preloader.Input(false);
-            setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 300);
+            setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 500);
         }
     } else {
         const temp = {noInet:true};
-        setTimeout(() => error.Input(true,'Нету подключения к интернету!','Упс!...', Platform.OS=='ios'?175:145), 300);
+        setTimeout(() => error.Input(true,'Нету подключения к интернету!','Упс!...', Platform.OS=='ios'?175:145), 500);
         preloader.Input(false);
         return temp;
     }
@@ -163,7 +163,7 @@ export async function apiFetchNoStatus(url:string, method?:string, token?:boolea
                 if (jsonOutput.status != 401) {
                     const result = await jsonOutput.json();
                     if (!!result?.exception) {
-                        setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 300);
+                        setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 500);
                         
                     }
                     return result;
@@ -177,14 +177,60 @@ export async function apiFetchNoStatus(url:string, method?:string, token?:boolea
                 }
                 
         } catch (err) {
-            setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 300);
+            setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 500);
         } finally {
             preloader.Input(false);
         }
     } else {
         preloader.Input(false);
         const temp = {noInet:true};
-        setTimeout(() => error.Input(true,'Нету подключения к интернету!','Упс!...', Platform.OS=='ios'?175:145), 300);
+        setTimeout(() => error.Input(true,'Нету подключения к интернету!','Упс!...', Platform.OS=='ios'?175:145), 500);
+        return temp;
+    }
+}
+
+export async function apiFetchString(url:string, method?:string, token?:string, values?:object) {
+    let connect:any;
+    
+    preloader.Input(true);
+    
+    await NetInfo.fetch().then(state => connect = state.isConnected);
+    if (connect) {
+        try {
+            const jsonOutput = await fetch(URL + url, method? {
+                method:method,
+                headers:  {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json;',
+                    'Authorization': `Bearer ${token}`
+                  } ,
+                body: values? JSON.stringify(values) : undefined
+            } : undefined)
+                
+                if (jsonOutput.status != 401) {
+                    const result = await jsonOutput.json();
+                    if (!!result?.exception) {
+                        setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 500);
+                    }
+                    return {...result, status:jsonOutput.status};
+                } else {
+                    user.userClear()
+                    const bottomReset = CommonActions.reset({
+                        index: 0,
+                        routes: [{name: 'Auth'}],
+                    });
+                    navigationRef.current?.dispatch(bottomReset)
+                }
+                
+        } catch (err) {
+            setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 500);
+        } finally {
+            preloader.Input(false);
+        }
+    } else {
+        preloader.Input(false);
+        const temp = {noInet:true};
+        setTimeout(() => error.Input(true,'Нету подключения к интернету!','Упс!...', Platform.OS=='ios'?175:145), 500);
         return temp;
     }
 }

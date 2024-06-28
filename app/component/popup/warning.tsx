@@ -65,7 +65,7 @@ export const ModalWarning = forwardRef((props:{id?:number, onClose?: () => void,
                                 if (value?.status == 201) {
                                     console.log(value);
                                 } else{
-                                    setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 300);
+                                    setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 500);
                                 }
                                 
                             }} backgroundColor='#88FFF9' colorText='#171717'/>

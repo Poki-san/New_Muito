@@ -99,7 +99,7 @@ export function LoginScreen() {
 
                                                 break;
                                             case 422:
-                                                setTimeout(() => error.Input(true, 'Неверный логин или пароль', 'Что-то пошло не так!', Platform.OS=='ios'?175:145), 300);
+                                                setTimeout(() => error.Input(true, 'Неверный логин или пароль', 'Что-то пошло не так!', Platform.OS=='ios'?175:145), 500);
                                                 break;
                                             default:
                                                 error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145)

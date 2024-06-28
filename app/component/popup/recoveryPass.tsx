@@ -7,11 +7,14 @@ import { statusBarHeight, width, Белый50, Фон } from "../../GLOBAL";
 import { styles } from "../../styles";
 import { ModalCloseIcon } from "../svg/svg";
 import { showToastable } from "react-native-toastable";
-import apiFetch from "../../functions/api";
+import apiFetch, { apiFetchString } from "../../functions/api";
 import error from "../../model/error";
 import token from "../../model/token";
 import { Formik } from "formik";
 import * as yup from 'yup'
+import NetInfo from "@react-native-community/netinfo"
+import { CommonActions } from "@react-navigation/native";
+import { navigationRef } from "../../navigate/navigateProps";
 
 /**
  * Модалка для восстановления пароля
@@ -57,18 +60,18 @@ export const ModalRecovery = forwardRef((props:{},ref)=>{
                             <View style={{marginHorizontal:16}}>
                                 <Text style={[styles.h4,{color:'white', textAlign:'center', fontSize:18}]}>Укажите email для восстановления пароля</Text>
                             </View>
-                            <Input value={email} onChangeText={setEmail} backgroundColor={Фон} style={{borderWidth:1}} title='Email'/>
+                            <Input value={email} onChangeText={setEmail} backgroundColor={Фон} keyboardType='email-address' style={{borderWidth:1}} title='Email'/>
                             <ButtonMy text='Отправить' onPress={async()=>{
                                 const value = await apiFetch('/email/send-code',"POST",false,{email:email})
                                 switch (value?.status) {
                                     case 200:
                                         ref.current?.close()
-                                        setTimeout(() => code.current.open(), 300);
+                                        setTimeout(() => code.current.open(), 500);
                                         setEmailCode(email)
                                         break;
                                     default:
                                         ref.current?.close()
-                                        setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 300);
+                                        setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 500);
                                         break;
                                 }
                             }} backgroundColor='#88FFF9' colorText='#171717'/>
@@ -90,6 +93,7 @@ export const ModalRecoveryCode = forwardRef((props:{email:string, onPress?:()=>v
     const newPass = useRef<RBSheet>()
     const [code, setCode] = useState(['','','',''])
     const [err, setErr] = useState('')
+    const [token, setToken] = useState('')
     const refInput = {
         one:useRef<TextInput>(null),
         two:useRef<TextInput>(null),
@@ -193,7 +197,7 @@ export const ModalRecoveryCode = forwardRef((props:{email:string, onPress?:()=>v
 
                             <Text style={[styles.bodyText,{color:Белый50, textAlign:'center', marginVertical:(err.length != 0)?-4:6}]}>Введите код из письма</Text>
                            
-                            <ButtonMy text='Сохранить изменения' onPress={async()=>{
+                            <ButtonMy text='Отправить' onPress={async()=>{
                                 setErr('')
                                 // Проверка введен код полностью
                                 if (code[0].length != 0 && code[1].length != 0 && code[2].length != 0 && code[3].length != 0) {
@@ -202,9 +206,10 @@ export const ModalRecoveryCode = forwardRef((props:{email:string, onPress?:()=>v
                                     switch (value?.status) {
                                         case 200:
                                         case 201:
-                                            token.userInput(value?.user, value?.token)
+                                        case 202:
+                                            setToken(value?.token)
                                             ref.current?.close()
-                                            setTimeout(() => newPass.current.open(), 300);
+                                            setTimeout(() => newPass.current.open(), 500);
                                             break;
                                         default:
                                             setErr('Не верный код')
@@ -228,7 +233,7 @@ export const ModalRecoveryCode = forwardRef((props:{email:string, onPress?:()=>v
                     </KeyboardAvoidingView>
                 </ScrollView>
             </RBSheet>
-            <ModalNewPass ref={newPass} email={props.email}/>
+            <ModalNewPass ref={newPass} email={props.email} token={token}/>
         </>
     )
 })
@@ -241,7 +246,10 @@ const validations = yup.object().shape({
  * Модалка для восстановления пароля
  * @param ref для взаимодействия с модальным окном
  */
-export const ModalNewPass = forwardRef((props:{email:string},ref)=>{
+export const ModalNewPass = forwardRef((props:{email:string, token?:string},ref)=>{
+
+    // console.log(props.token);
+    
     return (
         <RBSheet
             ref={ref}
@@ -274,17 +282,18 @@ export const ModalNewPass = forwardRef((props:{email:string},ref)=>{
                     <View style={{alignItems:"center", marginBottom:10}}><ModalCloseIcon/></View>
                     <Formik 
                         onSubmit={async(value)=>{
-                            const result = await apiFetch('/email/password','POST',true,{password:value?.password})                            
+                            let connect:any;
+                            const result = await apiFetchString('/email/new-password','POST',props.token,{password:value?.password}) 
+                            console.log(result);                           
                             switch (result?.status) {
                                 case 200:
                                 case 201:
-                                    token?.userClear()
                                     ref.current?.close()
                                     showToastable({'message':'Ваш пароль успешно изменен'})
                                     break;
                                 default:
                                     break;
-                            }
+                                }
                         }}
                         validationSchema={validations}
                         initialValues={{

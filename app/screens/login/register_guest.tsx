@@ -139,7 +139,7 @@ export function RegisterGuestScreen() {
                                         });
                                         setStep(val=>val+1)
                                     }  else if (result?.status == 422) {
-                                        setTimeout(() => error.Input(true, 'Такой пользователь уже есть!', 'Упс!...', Platform.OS=='ios'?175:145), 300);
+                                        setTimeout(() => error.Input(true, 'Такой пользователь уже есть!', 'Упс!...', Platform.OS=='ios'?175:145), 500);
                                     } else {
                                         error.Input(true,'Такой пользователь уже есть','Упс...', Platform.OS=='ios'?158 :150)
                                     }

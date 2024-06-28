@@ -117,7 +117,7 @@ export function PeopleScreen({ route }) {
                                                                 goBack()
                                                                 break;
                                                             default:
-                                                                setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 300);
+                                                                setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 500);
                                                                 break;
                                                         }
                                                     } else {
@@ -130,7 +130,7 @@ export function PeopleScreen({ route }) {
                                                                 goBack()
                                                                 break;
                                                             default:
-                                                                setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 300);
+                                                                setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 500);
                                                                 break;
                                                         }
                                                     }

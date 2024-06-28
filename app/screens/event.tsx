@@ -46,11 +46,11 @@ export function EventScreen(props?:{route?:{params:{type?:''}}}) {
                 setPeople(true)
                 setPeopleScan(response)
             } else {
-                setTimeout(() => errScan.current?.open(), 300);
+                setTimeout(() => errScan.current?.open(), 500);
             }
         } catch (e) {
             console.log(e)
-            setTimeout(() => errScan.current?.open(), 300);
+            setTimeout(() => errScan.current?.open(), 500);
         }
         
       };
@@ -90,7 +90,7 @@ export function EventScreen(props?:{route?:{params:{type?:''}}}) {
                                         showToastable({message:'Ваша заявка отпралена'})
                                         setGo(true)
                                     } else {
-                                        setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 300);
+                                        setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 500);
                                     }
                                 }
                             }
@@ -274,14 +274,14 @@ export function EventScreen(props?:{route?:{params:{type?:''}}}) {
                     // setTimeout(() => {
                     //     // setPeople(true)
                     //     errScan.current?.open()
-                    // }, 300);
+                    // }, 500);
                     
                 }} onRequestClose={()=>setScan(false)}/>}
                 {people&&<PeopleModal data={peopleScan} visible={people} onRequestClose={()=>setPeople(false)}/>}
                 <ModalDelEvent ref={del} id={data?.id} onDelete={goBack}/>
                 <ModalErrScan ref={errScan} onPress={()=>{
                     errScan?.current?.close()
-                    setTimeout(() => setScan(true), 300);
+                    setTimeout(() => setScan(true), 500);
                 }}/>
                 <ModalQrCode ref={qr} value={data?.link_invitation}/>
                 <ModalWarning ref={warning} onClose={()=>setAlert(false)} type={'Жалоба на эвент'} id={data?.id} uri={'/complaint/event'}/>

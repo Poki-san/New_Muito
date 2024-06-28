@@ -16,6 +16,7 @@ export const Map = memo((props:{onTouchMove?:any, onPress?:any, markers?:any, up
                 lon: coordinate.lon==0 ? 37.617698 : coordinate.lon,
                 zoom: 8
             }}
+            onTouchStart={onTouchMove}
             onTouchMove={onTouchMove}
             clusteredMarkers={markers}
             showUserPosition={true}
@@ -24,7 +25,7 @@ export const Map = memo((props:{onTouchMove?:any, onPress?:any, markers?:any, up
                     key={info?.id}
                     point={info.point}
                     source={{uri:info?.marker}}
-                    scale={2.5}
+                    scale={2.3}
                     onPress={() => onPress(index)}
                 />
             }

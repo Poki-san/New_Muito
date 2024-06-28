@@ -89,7 +89,7 @@ export function LikeItem(props?:{data?:{}, onHidden?:()=>void}) {
                                                 break;
                                         
                                             default:
-                                                setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 300);
+                                                setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 500);
                                                 break;
                                         }
                                     }} style={{flexDirection:"row", gap:7, alignItems:"center"}}>
