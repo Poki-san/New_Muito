@@ -23,7 +23,8 @@ const validations = yup.object().shape({
     title:yup.string().required('Обязательное поле'),
     address:yup.string().required('Обязательное поле'),
     date_event:yup.string().required('Обязательное поле'),
-    time:yup.string().required('Обязательное поле')
+    time:yup.string().required('Обязательное поле'),
+    description:yup.string().required('Обязательное поле'),
 })
 
 export function EditEventScreen({route}) {
@@ -307,6 +308,7 @@ export function EditEventScreen({route}) {
                                         placeholderTextColor={'#FFFFFF99'}
                                         style={[styles.bodyText,{ borderRadius:16, borderWidth:1, borderTopLeftRadius:16, borderColor:'#FFFFFF99', borderTopRightRadius:16, maxHeight:230, color:'white', paddingVertical:Platform.OS=='ios'?13:7, paddingLeft:17}]}
                                     />
+                                    {(!!errors.description && touched.description)&&<Text style={[styles.smallText,{color:'#FF000086', paddingLeft:14}]}>{errors.description}</Text>}
                                 </View>
                                 {data?.for_participants?.length > 0 && <View style={{gap:8, marginTop:8}}>
                                     <Text style={[styles.h4,{color:'#FFFFFF'}]}>Для участниц:</Text>

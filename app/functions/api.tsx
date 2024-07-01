@@ -163,7 +163,7 @@ export async function apiFetchNoStatus(url:string, method?:string, token?:boolea
                 if (jsonOutput.status != 401) {
                     const result = await jsonOutput.json();
                     if (!!result?.exception) {
-                        setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 500);
+                        // setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 500);
                         
                     }
                     return result;
@@ -177,14 +177,14 @@ export async function apiFetchNoStatus(url:string, method?:string, token?:boolea
                 }
                 
         } catch (err) {
-            setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 500);
+            // setTimeout(() => error.Input(true, 'Что-то пошло не так!', 'Упс!...', Platform.OS=='ios'?175:145), 500);
         } finally {
             preloader.Input(false);
         }
     } else {
         preloader.Input(false);
         const temp = {noInet:true};
-        setTimeout(() => error.Input(true,'Нету подключения к интернету!','Упс!...', Platform.OS=='ios'?175:145), 500);
+        // setTimeout(() => error.Input(true,'Нету подключения к интернету!','Упс!...', Platform.OS=='ios'?175:145), 500);
         return temp;
     }
 }

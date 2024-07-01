@@ -15,6 +15,21 @@ export function LikeItem(props?:{data?:{}, onHidden?:()=>void}) {
     const [index, setIndex] = useState(0)  
     const [more, setMore] =useState(false)
     const refSlider = useRef<ICarouselInstance>(null)
+    const [count, setCount] =useState('0')
+    
+    if (!!props.data?.user?.count_instagram && props.data?.user?.count_instagram?.toString()?.length != 0) {        
+        let countTmp = props.data?.user?.count_instagram / 1000
+        if (countTmp.toString().split('.')[0].length > 0 && countTmp.toString().split('.')[0]!='0') {
+            let countTwo = countTmp / 1000
+            if (countTwo.toString().split('.')[0].length != 0 && countTwo.toString().split('.')[0]!='0') {
+                console.log(countTwo.toString().split('.')[0]+"М");
+                setCount(countTwo.toString().split('.')[0]+"М");
+            } else {
+                console.log(countTmp.toString().split('.')[0]+"К");
+                setCount(countTmp.toString().split('.')[0]+"К");
+            }
+        }
+    }
 
     const warning = useRef<RBSheet>(null)
     const [alert, setAlert] =useState(false)
@@ -134,7 +149,7 @@ export function LikeItem(props?:{data?:{}, onHidden?:()=>void}) {
                                                 Linking.openURL('https://www.instagram.com/'+props.data?.user?.instagram?.replace('@',''))
                                             }}
                                         >
-                                            {props.data?.user?.count_instagram && <Text style={[styles.smallText,{fontFamily:'PoppinsSemiBold', color:Бирюзовый50}]}>{props.data?.user?.count_instagram}</Text>}
+                                            {count != '0'&&<Text style={[styles.smallText,{fontFamily:'PoppinsSemiBold', color:Бирюзовый50}]}>{count}</Text>}
                                             <RegInstaIcon/>
                                         </TouchableOpacity>}
                                         {props.data?.user?.telegram && <TouchableOpacity 

@@ -26,7 +26,7 @@ export function AddEventCatalogScreen() {
                 }
             })();
         }
-    },[])
+    },[focus])
     
     const onRefresh = async() => {
         setRefresh(true)
@@ -41,7 +41,7 @@ export function AddEventCatalogScreen() {
             setRefresh(false)
         }, 1000);
     }
-    console.log(data);
+    // console.log(data);
     
     return ( 
         <ImageBackground style={{width:width, height:height}} source={require('../../../assets/image/back.png')}>

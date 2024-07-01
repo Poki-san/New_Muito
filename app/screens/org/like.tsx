@@ -10,6 +10,7 @@ import apiFetch from '../../functions/api';
 import CardStack, { Card } from "react-native-card-stack-swiper";
 import token from '../../model/token';
 import { LikeItem } from '../../component/ui/likeItem';
+import { useIsFocused } from '@react-navigation/native';
  
 export function LikeScreen() {
     const [bid, setBid] = useState([])
@@ -18,7 +19,7 @@ export function LikeScreen() {
     const warning = useRef<RBSheet>(null)
     const [noWoman, setNoWoman] =useState(true)
     const [refresh, setRefreshing] = useState(false)
-
+    const focus = useIsFocused();
     const onRefresh = () => {
         setRefreshing(true);
         setBid([])
@@ -53,8 +54,8 @@ export function LikeScreen() {
             if (refresh) {
                 setBid([])
                 const value = await apiFetch('/event/bid','GET',true)
-                if (value.status === 200){
-                    if (value.data?.length == 0) {
+                if (value?.status === 200){
+                    if (value?.data?.length == 0) {
                         setNoWoman(true)
                     } else {
                         setBid(value.data)
@@ -70,18 +71,22 @@ export function LikeScreen() {
     }
 
     useEffect(()=>{
-        (async()=>{
-            const value = await apiFetch('/event/bid','GET',true)
-            if (value.status === 200){
-                if (value.data?.length == 0) {
-                    setNoWoman(true)
-                } else {
-                    setBid(value.data)
-                    setNoWoman(false)
+        if (focus) {
+            (async()=>{
+                const value = await apiFetch('/event/bid','GET',true)
+                console.log(value?.data[0]?.user);
+                
+                if (value?.status === 200){
+                    if (value?.data?.length == 0) {
+                        setNoWoman(true)
+                    } else {
+                        setNoWoman(false)
+                        setBid(value?.data)
+                    }
                 }
-            }
-        })();
-    },[])
+            })();
+        }
+    },[focus])
     // console.log(bid);
     
     return ( 

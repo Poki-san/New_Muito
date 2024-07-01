@@ -43,7 +43,6 @@ const App = observer(() => {
     try {
       
       Font.loadAsync({
-        'OswaldMedium': require('./assets/fonts/Oswald-Medium.ttf'),
         'Poppins': require('./assets/fonts/Poppins-Regular.ttf'),
         'PoppinsMedium': require('./assets/fonts/Poppins-Medium.ttf'),
         'PoppinsSemiBold': require('./assets/fonts/Poppins-SemiBold.ttf'),

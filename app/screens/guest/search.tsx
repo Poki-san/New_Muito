@@ -12,6 +12,7 @@ import apiFetch from '../../functions/api';
 import moment from 'moment';
 import token from '../../model/token';
 import { BackHandlerFirstScreen } from '../../navigate/navigateProps';
+import { useIsFocused } from '@react-navigation/native';
 
 export function SearchScreen() {
     const date = useRef<RBSheet>(null)
@@ -22,21 +23,25 @@ export function SearchScreen() {
     const [data, setData] = useState([])
     const [forParticipants, setForParticipants] = useState([])
     const [refresh, setRefresh] = useState(false)
+    const focus = useIsFocused()
     
     useEffect(()=>{
-        (async()=>{
-            const value = await apiFetch(`/event?page=1`,'GET', true)
-            
-            if (value?.status == 200) {
-                setDate('')
-                setMeta(value.meta)
-                setData(value.data)
-                setForParticipants(value?.forParticipants)
-                setPage(1)
-            }
-            
-        })();
-    },[])
+        if (focus) {
+            (async()=>{
+                const value = await apiFetch(`/event?page=1`,'GET', true)
+                
+                if (value?.status == 200) {
+                    setDate('')
+                    setTag(-1)
+                    setMeta(value.meta)
+                    setData(value.data)
+                    setForParticipants(value?.forParticipants)
+                    setPage(1)
+                }
+                
+            })();
+        }
+    },[focus])
 
     const onRefresh = async(date?:string, tags?:number) => {
         setRefresh(true)
@@ -159,9 +164,10 @@ export function SearchScreen() {
                             <View style={{marginHorizontal:16, marginBottom:8, flexDirection:'row', alignItems:'center', justifyContent:"space-between"}}>
                                 <Text style={[styles.h4, {color:'white'}]}>Мероприятия</Text>
                                 <View style={{flexDirection:"row", alignItems:"center", gap:8}}>
-                                    {dateTxt.length>0 && <TouchableOpacity onPress={()=>{
+                                    {(dateTxt.length>0 || tag!=-1) && <TouchableOpacity onPress={()=>{
                                         setDate('')
-                                        onRefresh('', tag)
+                                        setTag(-1)
+                                        onRefresh('', -1)
                                     }} style={{borderRadius:16, width:42, alignItems:'center', justifyContent:"center", height:42, backgroundColor:'#00000033'}}>
                                         <CloseIcon color='#fff'/>
                                     </TouchableOpacity>}
@@ -184,7 +190,11 @@ export function SearchScreen() {
                                     </View>
                                 </TouchableOpacity>
                             </View> */}
-                            <Image source={require('../../../assets/image/line.png')} style={{height:1}}/>
+                            <Image source={require('../../../assets/image/line.png')} style={{height:1, marginBottom:16}}/>
+                            <Tags default={tag} paddingV={5} style={{paddingHorizontal:16}} onPress={(tags)=>{
+                                setTag(tags)
+                                onRefresh(dateTxt, tags)
+                            }} noBorder data={forParticipants}/>
                         </View>
                         
                         <View style={{flex:1}}>
@@ -192,13 +202,15 @@ export function SearchScreen() {
                                 <Text style={[styles.bodyText,{color:'white',textAlign:"center"}]}>{'По этому запросу ничего не найдено.\nПопробуйте изменить набор фильтров'}</Text>
                                 <TouchableOpacity activeOpacity={0.7} onPress={()=>{
                                     setDate('')
-                                    onRefresh('', tag)
+                                    setTag(-1)
+                                    onRefresh('', -1)
                                 }}>
-                                    <Text style={[styles.button,{color:Бирюзовый, paddingTop:8}]}>Обновить</Text>
+                                    <Text style={[styles.button,{color:Бирюзовый, paddingTop:8}]}>Сбросить фильтр</Text>
                                 </TouchableOpacity>
                             </BlurView>
                         </View>
-                    </ScrollView>}
+                    </ScrollView>
+                }
                 <ModalDatePoint onPress={async(data)=>{
                     setDate(moment(data).format("YYYY-MM-DD"));
                     onRefresh(moment(data).format("YYYY-MM-DD"), tag)

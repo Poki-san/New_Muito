@@ -967,19 +967,17 @@ export function ScanIcon(props) {
   )
 }
 
-export function ArrowCalendarLeft(props) {
+export function ArrowCalendarLeft({color="#fff"}) {
   return (
     <Svg
       width={24}
       height={24}
       viewBox="0 0 24 24"
       fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
     >
       <Path
         d="M14.75 17.5L9.25 12l5.5-5.5"
-        stroke="#fff"
+        stroke={color}
         strokeOpacity={0.6}
         strokeWidth={1.5}
         strokeLinecap="round"
@@ -989,19 +987,17 @@ export function ArrowCalendarLeft(props) {
   )
 }
 
-export function ArrowCalendarRight(props) {
+export function ArrowCalendarRight({color="#fff"}) {
   return (
     <Svg
       width={24}
       height={24}
       viewBox="0 0 24 24"
       fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
     >
       <Path
         d="M9.25 6.5l5.5 5.5-5.5 5.5"
-        stroke="#fff"
+        stroke={color}
         strokeWidth={1.5}
         strokeLinecap="round"
         strokeLinejoin="round"

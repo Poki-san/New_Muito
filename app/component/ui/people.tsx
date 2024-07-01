@@ -8,7 +8,22 @@ import apiFetch from '../../functions/api';
 import { date } from 'yup';
  
 export function PeopleItem(props:{data?:{}}) {
-    console.log(props.data?.img[0]);
+    const [count, setCount] =useState('0')
+    
+    if (!!props.data?.count_instagram && props.data?.count_instagram?.toString()?.length != 0) {        
+        let countTmp = props.data?.count_instagram / 1000
+        if (countTmp.toString().split('.')[0].length > 0 && countTmp.toString().split('.')[0]!='0') {
+            let countTwo = countTmp / 1000
+            if (countTwo.toString().split('.')[0].length != 0 && countTwo.toString().split('.')[0]!='0') {
+                console.log(countTwo.toString().split('.')[0]+"М");
+                setCount(countTwo.toString().split('.')[0]+"М");
+            } else {
+                console.log(countTmp.toString().split('.')[0]+"К");
+                setCount(countTmp.toString().split('.')[0]+"К");
+            }
+        }
+    }
+    
     
     return ( 
         <TouchableOpacity onPress={()=>navigate('People',{id:props.data?.id})} activeOpacity={0.7}>  
@@ -19,7 +34,7 @@ export function PeopleItem(props:{data?:{}}) {
                 overflow:'hidden'
             }} source={{uri:props.data?.img[0]?.small}}>
                 {props.data?.instagram &&<View style={styles.instaContainer}>
-                    {props.data?.count_instagram&&<Text style={[styles.smallText,{color:Бирюзовый50, fontFamily:"PoppinsSemiBold"}]}>{props.data?.count_instagram}</Text>}
+                    {count != '0'&&<Text style={[styles.smallText,{color:Бирюзовый50, fontFamily:"PoppinsSemiBold"}]}>{count}</Text>}
                     <RegInstaIcon/>
                 </View>}
                 <View style={styles.tgContainer}>
@@ -31,7 +46,9 @@ export function PeopleItem(props:{data?:{}}) {
 }
 
 export function PeopleItemMap(props:{data?:{}}) {
+    
     const [people, setPeople] = useState(null)
+    const [count, setCount] =useState('0')
 
     useEffect(()=>{
         (async()=>{
@@ -41,9 +58,24 @@ export function PeopleItemMap(props:{data?:{}}) {
                 // console.log(value.data);
                 
                 setPeople(value.data)
+                if (!!value.data?.count_instagram && value.data?.count_instagram?.toString()?.length != 0) {        
+                    let countTmp = value.data?.count_instagram / 1000
+                    if (countTmp.toString().split('.')[0].length > 0 && countTmp.toString().split('.')[0]!='0') {
+                        let countTwo = countTmp / 1000
+                        if (countTwo.toString().split('.')[0].length != 0 && countTwo.toString().split('.')[0]!='0') {
+                            console.log(countTwo.toString().split('.')[0]+"М");
+                            setCount(countTwo.toString().split('.')[0]+"М");
+                        } else {
+                            console.log(countTmp.toString().split('.')[0]+"К");
+                            setCount(countTmp.toString().split('.')[0]+"К");
+                        }
+                    }
+                }
             }
         })();
     },[])
+    
+   
     
     return(people ?
         <TouchableOpacity activeOpacity={0.9} onPress={()=>{
@@ -60,7 +92,7 @@ export function PeopleItemMap(props:{data?:{}}) {
                             Linking.openURL('https://www.instagram.com/'+people?.instagram?.replace('@',''))
                         }}
                     >
-                        <Text style={[styles.smallText,{fontFamily:'PoppinsSemiBold', color:Бирюзовый50}]}>{people?.count_instagram}</Text>
+                        {count != '0'&&<Text style={[styles.smallText,{fontFamily:'PoppinsSemiBold', color:Бирюзовый50}]}>{count}</Text>}
                         <InstaEventIcon color={"#83FDF4"} opacity={1}/>
                     </TouchableOpacity>}
                     {people?.telegram && <TouchableOpacity activeOpacity={0.7} onPress={()=>{

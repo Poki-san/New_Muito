@@ -20,6 +20,7 @@ export function PeopleScreen({ route }) {
     const animHeight = new Animated.Value(0)
     const warning = useRef<RBSheet>(null)
     const animRotate = new Animated.Value(0)
+    
     const Rotate = animRotate.interpolate({
         inputRange:[0,1],
         outputRange:["0deg","180deg"]
@@ -57,6 +58,7 @@ export function PeopleScreen({ route }) {
     }
 
     const [people, setPeople] = useState(null)
+    const [count, setCount] =useState('0')
 
     useEffect(()=>{
         (async()=>{
@@ -64,6 +66,19 @@ export function PeopleScreen({ route }) {
             
             if (value?.status == 200) {
                 setPeople(value.data)
+                if (!!value.data?.count_instagram && value.data?.count_instagram?.toString()?.length != 0) {        
+                    let countTmp = value.data?.count_instagram / 1000
+                    if (countTmp.toString().split('.')[0].length > 0 && countTmp.toString().split('.')[0]!='0') {
+                        let countTwo = countTmp / 1000
+                        if (countTwo.toString().split('.')[0].length != 0 && countTwo.toString().split('.')[0]!='0') {
+                            console.log(countTwo.toString().split('.')[0]+"М");
+                            setCount(countTwo.toString().split('.')[0]+"М");
+                        } else {
+                            console.log(countTmp.toString().split('.')[0]+"К");
+                            setCount(countTmp.toString().split('.')[0]+"К");
+                        }
+                    }
+                }
             }
         })();
     },[])
@@ -180,7 +195,7 @@ export function PeopleScreen({ route }) {
                                                             Linking.openURL('https://www.instagram.com/'+people?.instagram?.replace('@',''))
                                                         }}
                                                     >
-                                                        {people?.count_instagram && <Text style={[styles.smallText,{fontFamily:'PoppinsSemiBold', color:Бирюзовый50}]}>{people?.count_instagram}</Text>}
+                                                        {count != '0' && <Text style={[styles.smallText,{fontFamily:'PoppinsSemiBold', color:Бирюзовый50}]}>{count}</Text>}
                                                         <RegInstaIcon/>
                                                     </TouchableOpacity>}
                                                     {people?.telegram && <TouchableOpacity 

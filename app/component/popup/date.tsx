@@ -6,6 +6,8 @@ import { styles } from "../../styles";
 import {  ArrowCalendarLeft, ArrowCalendarRight, ModalCloseIcon } from "../svg/svg";
 import { Calendar,CalendarUtils } from "react-native-calendars";
 import { ButtonMy } from "../ui/ButtonMy";
+import apiFetch, { apiFetchNoStatus } from "../../functions/api";
+import moment from "moment";
 
 /**
  * Модалка для вызова дат
@@ -27,7 +29,7 @@ export const ModalDate = forwardRef((props:{onPeroid?:(start?:string, end?:strin
                 arr = {...arr, [end_date]:{selected: true, disableTouchEvent:true, startingDay: false, endingDay: true, textColor:'white', color:'#528e8a'}}
                 flag = false
             } else {
-                arr = {...arr, [date]:{selected: true, disableTouchEvent:true, startingDay: false, endingDay: false, textColor:'white', color:'#3d5f5d'}}
+                arr = {...arr, [date]:{selected: true, disableTouchEvent:false, startingDay: false, endingDay: false, textColor:'white', color:'#3d5f5d'}}
             }  
         }
         setSelected(arr)
@@ -37,7 +39,7 @@ export const ModalDate = forwardRef((props:{onPeroid?:(start?:string, end?:strin
         <>
             <RBSheet
                 ref={ref}
-                height={Platform.OS=='ios'? 549:519}
+                height={Platform.OS=='ios'? 550:520}
                 closeOnDragDown={true}
                 // dragFromTopOnly
                 onClose={()=>{
@@ -108,7 +110,7 @@ export const ModalDate = forwardRef((props:{onPeroid?:(start?:string, end?:strin
                                     renderArrow={direction => (
                                         direction==='left' ? 
                                             <View style={{padding:7, alignItems:'center', justifyContent:"center"}}>
-                                                <ArrowCalendarLeft/>
+                                                <ArrowCalendarLeft color="#FFFFFF99"/>
                                             </View> : 
                                             <View style={{padding:7, alignItems:'center', justifyContent:"center"}}>
                                                 <ArrowCalendarRight/>
@@ -140,15 +142,37 @@ export const ModalDate = forwardRef((props:{onPeroid?:(start?:string, end?:strin
  */
 export const ModalDatePoint = forwardRef((props:{onPress?:(date?:string)=>void},ref)=>{
     const [selected, setSelected] = useState('')
+    const [dates, setDates] = useState({})
+    const [loading, setLoading] = useState(false)
+    
     return (
         <>
             <RBSheet
                 ref={ref}
-                height={Platform.OS=='ios'? 430:400}
+                height={Platform.OS=='ios'? 460:420}
                 closeOnDragDown={true}
                 // dragFromTopOnly
                 onClose={()=>setSelected('')}
+                onOpen={async()=>{
+                    setLoading(true)
+                    const date = new Date()
+                    console.log(moment(date).format("YYYY-MM"));
+                    
+                    const result = await apiFetchNoStatus(`/event/calendar?date=${moment(date).format("YYYY-MM").toString()}`,'GET',true)
+                    if (result) {
+                        if (result?.length > 0) {
+                            let obj
+                            result?.forEach(element => {
+                               obj = {...obj, [element]:{disableTouchEvent: false, selected:true}} 
+                            });
+                            
+                            setDates(obj)
+                        }
+                    }
+                    setLoading(false)
+                }}
                 closeOnPressMask={true} 
+                
                 customStyles={{
                     draggableIcon:{
                         backgroundColor:Белый50,
@@ -165,7 +189,7 @@ export const ModalDatePoint = forwardRef((props:{onPress?:(date?:string)=>void},
                         backgroundColor:Фон
                     }
                 }}>
-                <ScrollView scrollEnabled={false} style={{flexGrow:1}} keyboardShouldPersistTaps='always'>
+                {!loading && <ScrollView scrollEnabled={false} style={{flexGrow:1}} keyboardShouldPersistTaps='always'>
                     <KeyboardAvoidingView
                         behavior={Platform.OS === "ios" ? "padding" : undefined}
                         keyboardVerticalOffset={Platform.OS === "ios" && statusBarHeight}
@@ -177,6 +201,57 @@ export const ModalDatePoint = forwardRef((props:{onPress?:(date?:string)=>void},
                                 <Calendar
                                     firstDay={1}
                                     enableSwipeMonths
+                                    onPressArrowRight={async(method,values)=>{
+                                        setDates({})
+                                        let month = values.getMonth() + 2
+                                        let date
+                                        if (month == 13) {
+                                            console.log(`${values.getFullYear()+1}-01`);
+                                            date = `${values.getFullYear()+1}-01`
+                                        } else {
+                                            console.log(`${values.getFullYear()}-${month.toString().length==1?"0":''}${month}`);
+                                            date = `${values.getFullYear()}-${month.toString().length==1?"0":''}${month}`
+                                        }
+                                        const result = await apiFetchNoStatus(`/event/calendar?date=${date}`,'GET',true)
+                                        
+                                        if (result) {
+                                            if (result?.length > 0) {
+                                                let obj
+                                                result?.forEach(element => {
+                                                   obj = {...obj, [element]:{disableTouchEvent: false, selected:true}} 
+                                                });
+                                                
+                                                setDates(obj)
+                                            }
+                                        }
+                                        
+                                        method()
+                                    }}
+                                    onPressArrowLeft={async(method,values)=>{
+                                        setDates({})
+                                        let month = values.getMonth()
+                                        let date
+                                        if (month == 0) {
+                                            console.log(`${values.getFullYear()-1}-12`);
+                                            date = `${values.getFullYear()-1}-12`
+                                        } else {
+                                            console.log(`${values.getFullYear()}-${month.toString().length==1?"0":''}${month}`);
+                                            date = `${values.getFullYear()}-${month.toString().length==1?"0":''}${month}`
+                                        }
+                                        const result = await apiFetchNoStatus(`/event/calendar?date=${date}`,'GET',true)
+                                        if (result) {
+                                            if (result?.length > 0) {
+                                                let obj
+                                                result?.forEach(element => {
+                                                   obj = {...obj, [element]:{disableTouchEvent: false, selected:true}} 
+                                                });
+                                                
+                                                setDates(obj)
+                                            }
+                                        }
+
+                                        method()
+                                    }}
                                     onDayPress={day => {                                        
                                         setSelected(day.dateString)
                                         console.log(day.dateString);
@@ -186,15 +261,15 @@ export const ModalDatePoint = forwardRef((props:{onPress?:(date?:string)=>void},
                                     style={{ borderRadius:16, paddingVertical:10}}
                                     markedDates={{
                                         [selected]:{disableTouchEvent: true, marked:false, color:'#355855'},
-                                        // ["2024-06-28"]:{disableTouchEvent: false, selected:true}
+                                        ...dates                                  
                                     }}
                                     renderArrow={direction => (
                                         direction==='left' ? 
                                             <View style={{padding:7, alignItems:'center', justifyContent:"center"}}>
-                                                <ArrowCalendarLeft/>
+                                                <ArrowCalendarLeft color="#FFFFFF99"/>
                                             </View> : 
                                             <View style={{padding:7, alignItems:'center', justifyContent:"center"}}>
-                                                <ArrowCalendarRight/>
+                                                <ArrowCalendarRight color="#85FDFB"/>
                                             </View>
                                         )
                                     }
@@ -203,7 +278,7 @@ export const ModalDatePoint = forwardRef((props:{onPress?:(date?:string)=>void},
                             </View>
                         </View>
                     </KeyboardAvoidingView>
-                </ScrollView>
+                </ScrollView>}
             </RBSheet>
         </>
     )

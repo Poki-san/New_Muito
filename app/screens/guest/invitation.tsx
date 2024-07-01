@@ -7,6 +7,7 @@ import { PlusIcon } from '../../component/svg/svg';
 import { useEffect, useState } from 'react';
 import { navigate } from '../../functions/navigate';
 import apiFetch from '../../functions/api';
+import { useIsFocused } from '@react-navigation/native';
  
 export function InvitationScreen() {
     const [tag, setTag] = useState(2)
@@ -15,6 +16,7 @@ export function InvitationScreen() {
     const [meta, setMeta] = useState({})
     const [page, setPage] = useState(1)
     const [refresh, setRefresh] = useState(false)
+    const focus = useIsFocused()
 
     const onStatus = async(status?:number) => {
         const value = await apiFetch(`/event/invites?page=1${(status === 0 || status === 1) ? `&status=${status}` : ''}`,'GET', true)
@@ -29,8 +31,10 @@ export function InvitationScreen() {
     }
 
     useEffect(()=>{
-        onStatus(tag)
-    },[])
+        if (focus) {
+            onStatus(tag)
+        }
+    },[focus])
     const onRefresh = async() => {
         setRefresh(true)
         setTimeout(async() => {
